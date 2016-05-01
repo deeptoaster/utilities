@@ -156,8 +156,8 @@ Installation:
 Media
 =====
 
-Clementine
-----------
+Audacious
+---------
 
     sudo apt-get install audacious xubuntu-restricted-extras
 
@@ -167,6 +167,15 @@ Add keyboard shortcuts:
 *   `XF86AudioStop` => `audacious -s`
 *   `XF86AudioPrev` => `audacious -r`
 *   `XF86AudioNext` => `audacious -f`
+
+
+Mixxx
+-----
+
+1.      sudo apt-get install libjack-jackd2-dev
+2.      sudo apt-get install portaudio19-dev
+3.      sudo apt-get build-dep mixxx
+4.      sudo apt-get install libfaad-dev libmp4v2-dev
 
 
 Bluetooth

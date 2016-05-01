@@ -1,0 +1,7 @@
+[build-menu]
+FT_00_LB=LaTeX -> _DVI
+FT_00_CM=latex --file-line-error-style "%f" && rm "%e.aux" "%e.log" "%e.out"
+FT_00_WD=
+FT_01_LB=LaTeX -> _PDF
+FT_01_CM=pdflatex --file-line-error-style "%f" && rm "%e.aux" "%e.log" "%e.out"
+FT_01_WD=
