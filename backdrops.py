@@ -9,12 +9,12 @@ from PIL import ImageFont
 column1 = ['Fuck off', 'Piss off', 'Get in the sea', 'Tie your dick to a tractor', 'Step on an upturned plug', 'I\'d like to back over you with a tractor', 'Your face looks like spoiled gammon', 'I hope you shit yourself to death', 'Bite a pylon', 'Kindly die', 'Have you not fucked off yet', 'Suck an exhaust pipe', 'Cycle 100 miles underwater with no oxygen supply', 'Die in a bin fire', 'Step on a Lego brick']
 column1 += ['You did an absolutely horrible job', 'You should be ashamed of yourself', 'All you do is talk', 'You never had a chance', 'You have zero cred', 'Love watching you fail', 'What a dope', 'You need a new pair of glasses', 'You graduated last in your class', 'You\'ve got a lot of problems', 'No imagination', 'You are dumb as a rock', ]
 column2 = ['you appalling', 'you deluded', 'you glistening', 'you deplorable', 'you absurd', 'you utter', 'you contemptible', 'you horrendous', 'you lizardy', 'you hopeless', 'you unacceptable']
-column2 += ['you total', 'you strictly']
+column2 += ['you boring', 'you irrelevant', 'you terrible', 'you desperate', 'you total', 'you strictly']
 column3 = ['prick-faced', 'ham-faced', 'toss-faced', 'idiot', 'cunt-faced', 'spinogelatinous', 'flubber-faced', 'fraudulent', 'plum-faced', 'spoon-faced', 'dish-faced', 'cock-nosed', 'shapeshifting']
-column3 += ['liberal', 'hokey', 'goofball', 'boring', 'irrelevant', 'highly-overrated', 'terrible', 'uncomfortable-looking', 'desperate', 'third-rate']
-column4 = ['twunt', 'spunktrumpet', 'fucktard', 'bastard', 'cockwomble', 'shitweasel', 'robot made of gammon', 'thundercunt', 'ponce', 'cock', 'moontwat', 'cockweasel', 'pissweasel', 'wankspangle', 'vomitpustule', 'quimwifffle', 'wankstain', 'spunkrocket', 'wanksack doused in piss', 'dicksplash', 'Etonian reptile', 'cocksplurt', 'cut-price Goebbels']
+column3 += ['liberal', 'hokey', 'goofball', 'highly-overrated', 'uncomfortable-looking', 'third-rate']
+column4 = ['twunt', 'spunktrumpet', 'fucktard', 'bastard', 'cockwomble', 'shitweasel', 'robot made of gammon', 'thundercunt', 'ponce', 'cock', 'moontwat', 'cockweasel', 'pissweasel', 'wankspangle', 'vomitpustule', 'quimwiffle', 'wankstain', 'spunkrocket', 'wanksack doused in piss', 'dicksplash', 'Etonian reptile', 'cocksplurt', 'cut-price Goebbels']
 column4 += ['clown', 'garbage', 'atheist', 'guy', 'dummy', 'dope', 'hypocrite', 'lightweight', 'loser']
-req = urllib2.Request('https://www.reddit.com/r/EarthPorn+SpacePorn/.json')
+req = urllib2.Request('https://www.reddit.com/r/EarthPorn/.json')
 req.add_header('User-Agent', 'Paperbot/2.0')
 porns = json.load(urllib2.urlopen(req))['data']['children']
 insult = random.choice(column1).split() + random.choice(column2).split() + random.choice(column3).split() + random.choice(column4).split()

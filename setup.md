@@ -51,7 +51,7 @@ Add ` && rm "%e.aux" "%e.log" "%e.out"` to the end of each LaTeX build command.
 Geany plugins
 -------------
 
-    sudo apt-get install geany-plugins geany-plugin-markdown
+    sudo apt install geany-plugins geany-plugin-markdown
 
 Set Web helper preview pane to *Sidebar*.
 
@@ -76,7 +76,7 @@ Unity
 
 Installation:
 
-1.      sudo apt-get install wine1.7 playonlinux
+1.      sudo apt install wine1.7 playonlinux
 2.  In PlayOnLinux, go to *Install > Install a non-listed program*.
 3.  Check *Install some libraries* and select `POL_Install_tahoma`.
 4.  Go through the full Unity 5 installation wizard.
@@ -99,7 +99,7 @@ LAMP stack
 Apache
 ------
 
-    sudo apt-get install apache2
+    sudo apt install apache2
 
 To allow sites from mounted USB devices, change `APACHE_RUN_USER` and
 `APACHE_RUN_GROUP` in /etc/apache2/envvars to the current user and group,
@@ -134,7 +134,7 @@ Enable automatic virtual hosts:
 PHP
 ---
 
-    sudo apt-get install php5 php5-curl php5-gd php5-mcrypt
+    sudo apt install php php-curl php-gd php-mcrypt libapache2-mod-php
 
 Enable short tags by changing to `short_open_tag = On` in
 /etc/php5/apache2/php.ini.
@@ -148,7 +148,7 @@ MySQL
 
 Installation:
 
-1.      sudo apt-get install mysql-server php5-mysql
+1.      sudo apt install mysql-server php5-mysql
 2.      sudo mysql_install_db
 3.      sudo mysql_secure_installation
 
@@ -159,7 +159,7 @@ Media
 Audacious
 ---------
 
-    sudo apt-get install audacious xubuntu-restricted-extras
+    sudo apt install audacious xubuntu-restricted-extras
 
 Add keyboard shortcuts:
 
@@ -172,10 +172,10 @@ Add keyboard shortcuts:
 Mixxx
 -----
 
-1.      sudo apt-get install libjack-jackd2-dev
-2.      sudo apt-get install portaudio19-dev
-3.      sudo apt-get build-dep mixxx
-4.      sudo apt-get install libfaad-dev libmp4v2-dev
+1.      sudo apt install libjack-jackd2-dev
+2.      sudo apt install portaudio19-dev
+3.      sudo apt build-dep mixxx
+4.      sudo apt install libfaad-dev libmp4v2-dev
 
 
 Bluetooth
@@ -183,7 +183,7 @@ Bluetooth
 
 Installation:
 
-1.      sudo apt-get install pulseaudio-module-bluetooth
+1.      sudo apt install pulseaudio-module-bluetooth
 2.  Add `Disable=Socket` under `[General]` to /etc/bluetooth/audio.conf.
 3.      gsettings get org.blueman.plugins.powermanager auto-power-on
 
@@ -191,7 +191,7 @@ Installation:
 Webcam
 ------
 
-    sudo apt-get install guvcview
+    sudo apt install guvcview
 
 Change file paths in *Video > File* and *Photo > File* to default locations in
 ~/Videos and ~/Pictures, respectively.
@@ -200,7 +200,7 @@ Change file paths in *Video > File* and *Photo > File* to default locations in
 Fonts
 -----
 
-    sudo apt-get install ubuntustudio-font-meta
+    sudo apt install ubuntustudio-font-meta
 
 
 System
@@ -212,14 +212,14 @@ App Grid
 Installation:
 
 1.      sudo add-apt-repository ppa:appgrid/stable
-2.      sudo apt-get update
-3.      sudo apt-get install appgrid
+2.      sudo apt update
+3.      sudo apt install appgrid
 
 
 Power Statistics
 ----------------
 
-    sudo apt-get install gnome-power-manager
+    sudo apt install gnome-power-manager
 
 Show in menus by commenting out the `OnlyShowIn` line in
 /usr/share/applications/gnome-power-statistics.desktop.
@@ -230,7 +230,7 @@ VirtualBox
 
 Installation:
 
-1.      sudo apt-get install virtualbox
+1.      sudo apt install virtualbox
 2.  Download and install extension pack from
     <https://www.virtualbox.org/wiki/Downloads>.
 
@@ -247,7 +247,7 @@ Miscellaneous
 Backups
 -------
 
-    sudo apt-get install deja-dup
+    sudo apt install deja-dup
 
 Add Thunar custom actions:
 
@@ -261,7 +261,7 @@ Desktop sharing
 
 Installation:
 
-1.      sudo apt-get install vino
+1.      sudo apt install vino
 2.      gsettings set org.gnome.Vino require-encryption false
 
 Show in menus by commenting out the `OnlyShowIn` line in
@@ -278,12 +278,12 @@ Enable backlight controls:
 1.  Change to `GRUB_CMDLINE_LINUX="acpi_osi=Linux acpi_backlight=vendor"` in
     /etc/default/grub.
 2.      sudo update-grub
-3.      sudo apt-get install xbacklight
+3.      sudo apt install xbacklight
 4.  Enable *Power manager settings > General > Handle display brightness keys*.
 
 Enable inverted colors:
 
-1.      sudo apt-get install xcalib
+1.      sudo apt install xcalib
 2.  Add keyboard shortcut `Ctrl+Alt+Super+8` => `xcalib -i -a`.
 
 
