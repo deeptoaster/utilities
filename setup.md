@@ -71,28 +71,6 @@ Installation:
     /usr/share/geany/geanypy/plugins.
 
 
-Unity
------
-
-Installation:
-
-1.      sudo apt install wine1.7 playonlinux
-2.  In PlayOnLinux, go to *Install > Install a non-listed program*.
-3.  Check *Install some libraries* and select `POL_Install_tahoma`.
-4.  Go through the full Unity 5 installation wizard.
-
-Geany development:
-
-1.  Copy the following script to a file called geany.sh in the virtual drive:
-
-        #!/bin/bash
-        /usr/bin/geany +$2 "`wine winepath -u "$1"`"
-
-2.  Open `Edit > Preferences > External Tools`.
-3.  Select geany.sh for *External Script Editor*.
-4.  Enter `"$(File)" $(Line)` for *External Script Editor Args*.
-
-
 LAMP stack
 ==========
 
@@ -137,10 +115,10 @@ PHP
     sudo apt install php php-curl php-gd php-mcrypt libapache2-mod-php
 
 Enable short tags by changing to `short_open_tag = On` in
-/etc/php5/apache2/php.ini.
+/etc/php/7.0/apache2/php.ini.
 
 Enable short tags by changing to `display_errors = On` in
-/etc/php5/apache2/php.ini.
+/etc/php/7.0/apache2/php.ini.
 
 
 MySQL
@@ -188,59 +166,6 @@ Installation:
 3.      gsettings get org.blueman.plugins.powermanager auto-power-on
 
 
-Webcam
-------
-
-    sudo apt install guvcview
-
-Change file paths in *Video > File* and *Photo > File* to default locations in
-~/Videos and ~/Pictures, respectively.
-
-
-Fonts
------
-
-    sudo apt install ubuntustudio-font-meta
-
-
-System
-======
-
-App Grid
---------
-
-Installation:
-
-1.      sudo add-apt-repository ppa:appgrid/stable
-2.      sudo apt update
-3.      sudo apt install appgrid
-
-
-Power Statistics
-----------------
-
-    sudo apt install gnome-power-manager
-
-Show in menus by commenting out the `OnlyShowIn` line in
-/usr/share/applications/gnome-power-statistics.desktop.
-
-
-VirtualBox
-----------
-
-Installation:
-
-1.      sudo apt install virtualbox
-2.  Download and install extension pack from
-    <https://www.virtualbox.org/wiki/Downloads>.
-
-USB access:
-
-1.  Add `woot` to `vboxusers` group in /etc/group.
-2.  Check *Settings > USB > Enable USB 2.0 (EHCI) Controller* for each OS that
-    supports it.
-
-
 Miscellaneous
 =============
 
@@ -285,6 +210,58 @@ Enable inverted colors:
 
 1.      sudo apt install xcalib
 2.  Add keyboard shortcut `Ctrl+Alt+Super+8` => `xcalib -i -a`.
+
+
+Fonts
+-----
+
+    sudo apt install ubuntustudio-font-meta
+
+
+Power Statistics
+----------------
+
+    sudo apt install gnome-power-manager
+
+Show in menus by commenting out the `OnlyShowIn` line in
+/usr/share/applications/gnome-power-statistics.desktop.
+
+
+Thunderbird
+-----------
+
+Add-ons:
+
+*   Enigmail
+*   Provider for Google Calendar
+*   gContactSync
+*   Lightning
+*   Thunderbird Conversations
+
+
+VirtualBox
+----------
+
+Installation:
+
+1.      sudo apt install virtualbox
+2.  Download and install extension pack from
+    <https://www.virtualbox.org/wiki/Downloads>.
+
+USB access:
+
+1.  Add `woot` to `vboxusers` group in /etc/group.
+2.  Check *Settings > USB > Enable USB 2.0 (EHCI) Controller* for each OS that
+    supports it.
+
+
+Webcam
+------
+
+    sudo apt install guvcview
+
+Change file paths in *Video > File* and *Photo > File* to default locations in
+~/Videos and ~/Pictures, respectively.
 
 
 Window manager
