@@ -52,5 +52,9 @@ EX_01_LB=_View DVI File
 EX_01_CM=zathura "%e.dvi"
 EX_01_WD=
 EOF
+wget https://raw.githubusercontent.com/hotice/webupd8/master/install-google-fonts
+chmod +x install-google-fonts
+./install-google-fonts
+rm install-google-fonts
 echo "set editing-mode vi" > ~/.inputrc
 sudo update-alternatives --set editor /usr/bin/vim.tiny

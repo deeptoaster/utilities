@@ -178,7 +178,8 @@ Add Thunar custom actions:
 
 *   `Revert to Previous Version` => `deja-dup --restore %F` on all but
     *Directories*.
-*   `Restore Missing Files` => `deja-dup --restore-missing %f` on *Directories*.
+*   `Restore Missing Files` => `deja-dup --restore-missing %f` on
+    *Directories*.
 
 
 Desktop sharing
@@ -215,7 +216,9 @@ Enable inverted colors:
 Fonts
 -----
 
-    sudo apt install ubuntustudio-font-meta
+The Ubuntu Studio fonts are available from `ubuntustudio-font-meta`. Google Web
+Fonts are available from
+`https://raw.githubusercontent.com/hotice/webupd8/master/install-google-fonts`.
 
 
 Power Statistics
@@ -270,8 +273,8 @@ Window manager
 Enable unfocused scrolling by unchecking *Window Manager Tweaks >
 Accessibility > Raise windows when any mouse button is pressed*.
 
-Enable scrollwheel to shade on window title by checking *Window Manager Tweaks >
-Accessibility > Use mouse wheel on title bar to roll up the window*.
+Enable scrollwheel to shade on window title by checking *Window Manager Tweaks
+> Accessibility > Use mouse wheel on title bar to roll up the window*.
 
 Add keyboard shortcuts:
 
