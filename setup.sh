@@ -3,7 +3,7 @@ sudo add-apt-repository ppa:dockbar-main/ppa
 sudo add-apt-repository ppa:numix/ppa
 sudo bash -c 'echo "deb http://download.opensuse.org/repositories/home:/Horst3180/xUbuntu_16.04/ /" >> /etc/apt/sources.list.d/arc-theme.list'
 sudo apt update
-sudo apt purge evince file-roller gigolo gmusicbrowser gnome-mines gnome-sudoku mousepad mugshot parole software-center thunar-volman
+sudo apt purge evince file-roller gigolo gmusicbrowser gnome-mines gnome-sudoku mousepad mugshot parole software-center thunar-volman thunderbird
 sudo apt --purge autoremove
 sudo apt dist-upgrade
 sudo apt install apache2 arc-theme audacious blender cryptsetup deja-dup geany geany-plugin-markdown geany-plugins gimp git gnome-disk-utility gnome-power-manager gnumeric gnupg2 gparted guvcview inkscape lmms numix-icon-theme-circle php php-curl php-gd php-mcrypt ubuntustudio-font-meta xarchiver xcalib xfce4-dockbarx-plugin zathura
@@ -20,6 +20,7 @@ xfconf-query -c keyboard-layout -p /Default/XkbLayout -n -t string -s us,ru
 xfconf-query -c keyboard-layout -p /Default/XkbOptions/Group -n -t string -s grp:win_space_toggle
 xfconf-query -c keyboard-layout -p /Default/XkbVariant -n -t string -s mac,phonetic
 xfconf-query -c thunar -p /last-location-bar -n -t string -s ThunarLocationButtons
+xfconf-query -c thunar -p /last-show-hidden -n -t bool -s true
 xfconf-query -c thunar -p /last-view -n -t string -s ThunarDetailsView
 xfconf-query -c xfce4-keyboard-shortcuts -p /commands/custom/F1 -n -t string -s 'xfce4-terminal --drop-down'
 xfconf-query -c xfce4-keyboard-shortcuts -p '/commands/custom/<Primary><Alt><Super>8' -n -t string -s 'xcalib -i -a'
@@ -37,7 +38,7 @@ xfconf-query -c xfce4-panel -p /panels/panel-0/background-style -n -t uint -s 1
 xfconf-query -c xfce4-panel -p /panels/panel-0/disable-struts -n -t bool -s true
 xfconf-query -c xfce4-panel -p /panels/panel-0/length -n -t uint -s 100
 xfconf-query -c xfce4-panel -p /panels/panel-0/plugin-ids -n -t int -t int -t int -t int -t int -t int -t int -t int -t int -s 1 -s 2 -s 3 -s 4 -s 5 -s 6 -s 7 -s 8 -s 9
-xfconf-query -c xfce4-panel -p /panels/panel-0/position -n -t string -s "p=6;x=0;y=0"
+xfconf-query -c xfce4-panel -p /panels/panel-0/position -n -t string -s 'p=6;x=0;y=0'
 xfconf-query -c xfce4-panel -p /panels/panel-0/position-locked -n -t bool -s true
 xfconf-query -c xfce4-panel -p /panels/panel-0/size -n -t uint -s 24
 xfconf-query -c xfce4-panel -p /panels/panel-0/span-monitors -n -t bool -s false
@@ -58,6 +59,25 @@ xfconf-query -c xfce4-panel -p /plugins/plugin-7 -n -t string -s indicator
 xfconf-query -c xfce4-panel -p /plugins/plugin-8 -n -t string -s xfce4-orageclock-plugin
 xfconf-query -c xfce4-panel -p /plugins/plugin-9 -n -t string -s pager
 xfconf-query -c xfce4-panel -p /plugins/plugin-9/rows -n -t uint -s 2
+xfconf-query -c xfwm4 -p /general/button_layout -n -t string -s 'CMH|O'
+xfconf-query -c xfwm4 -p /general/frame_opacity -n -t int -s 80
+xfconf-query -c xfwm4 -p /general/mousewheel_rollup -n -t bool -s true
+xfconf-query -c xfwm4 -p /general/popup_opacity -n -t int -s 80
+xfconf-query -c xfwm4 -p /general/raise_with_any_button -n -t bool -s false
+xfconf-query -c xfwm4 -p /general/show_dock_shadow -n -t bool -s false
+xfconf-query -c xfwm4 -p /general/show_popup_shadow -n -t bool -s true
+xfconf-query -c xfwm4 -p /general/snap_to_windows -n -t bool -s true
+xfconf-query -c xfwm4 -p /general/title_font -n -t string -s 'Neuropol 9'
+xfconf-query -c xfwm4 -p /general/workspace_count -n -t int -s 4
+xfconf-query -c xfwm4 -p /general/wrap_cycle -n -t bool -s false
+xfconf-query -c xfwm4 -p /general/wrap_layout -n -t bool -s false
+xfconf-query -c xfwm4 -p /general/wrap_windows -n -t bool -s false
+xfconf-query -c xsettings -p /Gtk/ButtonImages -n -t bool -s false
+xfconf-query -c xsettings -p /Gtk/CursorThemeName -n -t string -s DMZ-Black
+xfconf-query -c xsettings -p /Gtk/DecorationLayout -n -t string -s close,maximize,minimize:menu
+xfconf-query -c xsettings -p /Gtk/FontName -n -t string -s 'Droid Sans 10'
+xfconf-query -c xsettings -p /Gtk/MenuImages -n -t bool -s false
+xfconf-query -c xsettings -p /Net/IconThemeName -n -t string -s Numix-Circle
 cp config/xfce4-orageclock-plugin-8.rc ~/.config/xfce4/panel/xfce4-orageclock-plugin-8.rc
 cp config/dockbarx-3.rc ~/.config/xfce4/panel/dockbarx-3.rc
 gconftool --load ~/Documents/utilities/config/dockbarx
