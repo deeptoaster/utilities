@@ -14,6 +14,9 @@ sudo a2enconf vhosts
 sudo sed -ri 's/^(display_errors|short_open_tag) = Off$/\1 = On/' /etc/php/7.0/apache2/php.ini
 sudo service apache2 restart
 gsettings set org.blueman.plugins.powermanager auto-power-on false
+rsync -Ir config/geany ~/.config
+rsync -Ir config/Thunar ~/.config
+rsync -Ir config/xfce4 ~/.config
 xfconf-query -c keyboard-layout -p /Default/XkbDisable -n -t bool -s false
 xfconf-query -c keyboard-layout -p /Default/XkbLayout -n -t string -s us,ru
 xfconf-query -c keyboard-layout -p /Default/XkbOptions/Group -n -t string -s grp:win_space_toggle
@@ -79,19 +82,19 @@ xfconf-query -c xsettings -p /Gtk/DecorationLayout -n -t string -s close,maximiz
 xfconf-query -c xsettings -p /Gtk/FontName -n -t string -s 'Droid Sans 10'
 xfconf-query -c xsettings -p /Gtk/MenuImages -n -t bool -s false
 xfconf-query -c xsettings -p /Net/IconThemeName -n -t string -s Numix-Circle
-cp config/xfce4-orageclock-plugin-8.rc ~/.config/xfce4/panel/xfce4-orageclock-plugin-8.rc
-cp config/dockbarx-3.rc ~/.config/xfce4/panel/dockbarx-3.rc
-gconftool --load ~/Documents/utilities/config/dockbarx
-xfce4-panel --restart
+gconftool --load config/dockbarx
 cp config/face ~/.face
 sudo update-alternatives --set editor /usr/bin/vim.tiny
 sudo update-alternatives --set x-cursor-theme /usr/share/icons/DMZ-Black/cursor.theme
 echo "set editing-mode vi" > ~/.inputrc
 wget -O ~/.config/geany/colorschemes/monokai.conf https://raw.githubusercontent.com/codebrainz/geany-themes/master/colorschemes/monokai.conf
-cp config/filetypes.latex .config/geany/filedefs/filetypes.latex
 git config --global user.name "Deep Toaster"
 git config --global user.email yizhenwilliam@gmail.com
 wget https://raw.githubusercontent.com/hotice/webupd8/master/install-google-fonts
 chmod +x install-google-fonts
 ./install-google-fonts
 rm install-google-fonts
+for type in Bold Light Medium Regular Retina
+do
+	wget -O ~/.fonts/FiraCode-${type}.ttf https://github.com/tonsky/FiraCode/blob/master/distr/ttf/FiraCode-${type}.ttf?raw=true
+done

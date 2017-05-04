@@ -1,0 +1,40 @@
+<?xml encoding="UTF-8" version="1.0"?>
+<actions>
+  <action>
+    <icon>Terminal</icon>
+    <name>Ouvrir un terminal ici</name>
+    <command>exo-open --working-directory %f --launch TerminalEmulator</command>
+    <description>Example for a custom action</description>
+    <patterns>*</patterns>
+    <directories/>
+  </action>
+  <action>
+    <icon>filefind</icon>
+    <name>Rechercher dans ce dossier</name>
+    <command>catfish --path=%f</command>
+    <description>Search for files within this folder</description>
+    <patterns>*</patterns>
+    <directories/>
+  </action>
+  <action>
+    <icon></icon>
+    <name>Revenir à la version précédente...</name>
+    <command>deja-dup --restore %F</command>
+    <description></description>
+    <patterns>*</patterns>
+    <audio-files/>
+    <image-files/>
+    <other-files/>
+    <text-files/>
+    <video-files/>
+  </action>
+  <action>
+    <icon></icon>
+    <name>Restauration des fichiers manquants...</name>
+    <command>deja-dup --restore-missing %f</command>
+    <description></description>
+    <patterns>*</patterns>
+    <directories/>
+    <text-files/>
+  </action>
+</actions>
