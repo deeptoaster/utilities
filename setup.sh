@@ -6,8 +6,7 @@ sudo apt update
 sudo apt purge evince file-roller gigolo gmusicbrowser gnome-mines gnome-sudoku mousepad mugshot parole software-center thunar-volman thunderbird
 sudo apt --purge autoremove
 sudo apt dist-upgrade
-sudo apt install apache2 arc-theme audacious blender cryptsetup deja-dup geany geany-plugin-markdown geany-plugins gimp git gnome-disk-utility gnome-power-manager gnumeric gnupg2 gparted guvcview inkscape lmms numix-icon-theme-circle php php-curl php-gd php-mcrypt ubuntustudio-font-meta xarchiver xcalib xfce4-dockbarx-plugin zathura
-sudo sed -i 's/^OnlyShowIn=/#OnlyShowIn=/' /usr/share/applications/gnome-power-statistics.desktop
+sudo apt install apache2 arc-theme audacious blender cryptsetup deja-dup geany geany-plugin-markdown geany-plugins gimp git gnome-disk-utility gnupg2 gparted guvcview inkscape lmms numix-icon-theme-circle php php-curl php-gd php-mcrypt ubuntustudio-font-meta xarchiver xcalib xfce4-dockbarx-plugin zathura
 sudo a2enmod rewrite
 sudo a2enmod vhost_alias
 sudo cp config/vhosts.conf /etc/apache2/conf-available/vhosts.conf
@@ -22,7 +21,9 @@ xfconf-query -c keyboard-layout -p /Default/XkbVariant -n -t string -s mac,phone
 xfconf-query -c thunar -p /last-location-bar -n -t string -s ThunarLocationButtons
 xfconf-query -c thunar -p /last-show-hidden -n -t bool -s true
 xfconf-query -c thunar -p /last-view -n -t string -s ThunarDetailsView
-xfconf-query -c xfce4-keyboard-shortcuts -p /commands/custom/F1 -n -t string -s 'xfce4-terminal --drop-down'
+xfconf-query -c xfce4-desktop -p /commands/custom/F1 -n -t string -s 'xfce4-terminal --drop-down'
+xfconf-query -c xfce4-keyboard-shortcuts -p /desktop-icons/style -n -t int -s 0
+xfconf-query -c xfce4-keyboard-shortcuts -p /desktop-menu -n -t bool -s false
 xfconf-query -c xfce4-keyboard-shortcuts -p '/commands/custom/<Primary><Alt><Super>8' -n -t string -s 'xcalib -i -a'
 xfconf-query -c xfce4-keyboard-shortcuts -p '/commands/custom/<Super>e' -n -t string -s geany
 xfconf-query -c xfce4-keyboard-shortcuts -p /commands/custom/XF86AudioNext -n -t string -s 'audacious -f'
@@ -82,11 +83,15 @@ cp config/xfce4-orageclock-plugin-8.rc ~/.config/xfce4/panel/xfce4-orageclock-pl
 cp config/dockbarx-3.rc ~/.config/xfce4/panel/dockbarx-3.rc
 gconftool --load ~/Documents/utilities/config/dockbarx
 xfce4-panel --restart
+cp config/face ~/.face
+sudo update-alternatives --set editor /usr/bin/vim.tiny
+sudo update-alternatives --set x-cursor-theme /usr/share/icons/DMZ-Black/cursor.theme
+echo "set editing-mode vi" > ~/.inputrc
 wget -O ~/.config/geany/colorschemes/monokai.conf https://raw.githubusercontent.com/codebrainz/geany-themes/master/colorschemes/monokai.conf
 cp config/filetypes.latex .config/geany/filedefs/filetypes.latex
+git config --global user.name "Deep Toaster"
+git config --global user.email yizhenwilliam@gmail.com
 wget https://raw.githubusercontent.com/hotice/webupd8/master/install-google-fonts
 chmod +x install-google-fonts
 ./install-google-fonts
 rm install-google-fonts
-echo "set editing-mode vi" > ~/.inputrc
-sudo update-alternatives --set editor /usr/bin/vim.tiny
