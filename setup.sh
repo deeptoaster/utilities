@@ -6,7 +6,7 @@ sudo apt update
 sudo apt purge evince file-roller gigolo gmusicbrowser gnome-mines gnome-sudoku mousepad mugshot parole software-center thunar-volman thunderbird
 sudo apt --purge autoremove
 sudo apt dist-upgrade
-sudo apt install apache2 arc-theme audacious blender cryptsetup deja-dup geany geany-plugin-markdown geany-plugins gimp git gnome-disk-utility gnupg2 gparted guvcview inkscape lmms numix-icon-theme-circle php php-curl php-gd php-mcrypt ubuntustudio-font-meta xarchiver xcalib xfce4-dockbarx-plugin zathura
+sudo apt install apache2 arc-theme audacious blender conky-all cryptsetup deja-dup geany geany-plugin-markdown geany-plugins gimp git gnome-disk-utility gnupg2 gparted guvcview inkscape lmms numix-icon-theme-circle php php-curl php-gd php-mcrypt ubuntustudio-fonts virtualbox xarchiver xcalib xfce4-dockbarx-plugin zathura
 sudo a2enmod rewrite
 sudo a2enmod vhost_alias
 sudo cp config/vhosts.conf /etc/apache2/conf-available/vhosts.conf
@@ -14,9 +14,7 @@ sudo a2enconf vhosts
 sudo sed -ri 's/^(display_errors|short_open_tag) = Off$/\1 = On/' /etc/php/7.0/apache2/php.ini
 sudo service apache2 restart
 gsettings set org.blueman.plugins.powermanager auto-power-on false
-rsync -Ir config/geany ~/.config
-rsync -Ir config/Thunar ~/.config
-rsync -Ir config/xfce4 ~/.config
+rsync -Ir config/geany config/orage config/Thunar config/xfce4 ~/.config
 xfconf-query -c keyboard-layout -p /Default/XkbDisable -n -t bool -s false
 xfconf-query -c keyboard-layout -p /Default/XkbLayout -n -t string -s us,ru
 xfconf-query -c keyboard-layout -p /Default/XkbOptions/Group -n -t string -s grp:win_space_toggle
@@ -24,15 +22,41 @@ xfconf-query -c keyboard-layout -p /Default/XkbVariant -n -t string -s mac,phone
 xfconf-query -c thunar -p /last-location-bar -n -t string -s ThunarLocationButtons
 xfconf-query -c thunar -p /last-show-hidden -n -t bool -s true
 xfconf-query -c thunar -p /last-view -n -t string -s ThunarDetailsView
-xfconf-query -c xfce4-desktop -p /commands/custom/F1 -n -t string -s 'xfce4-terminal --drop-down'
-xfconf-query -c xfce4-keyboard-shortcuts -p /desktop-icons/style -n -t int -s 0
-xfconf-query -c xfce4-keyboard-shortcuts -p /desktop-menu -n -t bool -s false
+xfconf-query -c xfce4-desktop -p /desktop-icons/style -n -t int -s 0
+xfconf-query -c xfce4-desktop -p /desktop-menu/show -n -t bool -s false
+xfconf-query -c xfce4-desktop -p /windowlist-menu/show -n -t bool -s false
 xfconf-query -c xfce4-keyboard-shortcuts -p '/commands/custom/<Primary><Alt><Super>8' -n -t string -s 'xcalib -i -a'
 xfconf-query -c xfce4-keyboard-shortcuts -p '/commands/custom/<Super>e' -n -t string -s geany
+xfconf-query -c xfce4-keyboard-shortcuts -p /commands/custom/F1 -n -t string -s 'xfce4-terminal --drop-down'
 xfconf-query -c xfce4-keyboard-shortcuts -p /commands/custom/XF86AudioNext -n -t string -s 'audacious -f'
 xfconf-query -c xfce4-keyboard-shortcuts -p /commands/custom/XF86AudioPlay -n -t string -s 'audacious -t'
 xfconf-query -c xfce4-keyboard-shortcuts -p /commands/custom/XF86AudioPrev -n -t string -s 'audacious -r'
 xfconf-query -c xfce4-keyboard-shortcuts -p /commands/custom/XF86Music -n -t string -s audacious
+xfconf-query -c xfce4-keyboard-shortcuts -p '/xfwm/custom/<Primary><Alt>KP_1' -n -t string -s tile_down_left_key
+xfconf-query -c xfce4-keyboard-shortcuts -p '/xfwm/custom/<Primary><Alt>KP_2' -n -t string -s tile_down_key
+xfconf-query -c xfce4-keyboard-shortcuts -p '/xfwm/custom/<Primary><Alt>KP_3' -n -t string -s tile_down_right_key
+xfconf-query -c xfce4-keyboard-shortcuts -p '/xfwm/custom/<Primary><Alt>KP_4' -n -t string -s tile_left_key
+xfconf-query -c xfce4-keyboard-shortcuts -p '/xfwm/custom/<Primary><Alt>KP_5' -n -t string -s fill_window_key
+xfconf-query -c xfce4-keyboard-shortcuts -p '/xfwm/custom/<Primary><Alt>KP_6' -n -t string -s tile_right_key
+xfconf-query -c xfce4-keyboard-shortcuts -p '/xfwm/custom/<Primary><Alt>KP_7' -n -t string -s tile_up_left_key
+xfconf-query -c xfce4-keyboard-shortcuts -p '/xfwm/custom/<Primary><Alt>KP_8' -n -t string -s tile_up_key
+xfconf-query -c xfce4-keyboard-shortcuts -p '/xfwm/custom/<Primary><Alt>KP_9' -n -t string -s tile_up_right_key
+xfconf-query -c xfce4-keyboard-shortcuts -p '/xfwm/custom/<Primary><Shift><Alt>Down' -n -t string -s move_window_down_workspace_key
+xfconf-query -c xfce4-keyboard-shortcuts -p '/xfwm/custom/<Primary><Shift><Alt>Left' -n -t string -s move_window_left_workspace_key
+xfconf-query -c xfce4-keyboard-shortcuts -p '/xfwm/custom/<Primary><Shift><Alt>Right' -n -t string -s move_window_right_workspace_key
+xfconf-query -c xfce4-keyboard-shortcuts -p '/xfwm/custom/<Primary><Shift><Alt>Up' -n -t string -s move_window_up_workspace_key
+xfconf-query -c xfce4-keyboard-shortcuts -p '/xfwm/custom/<Primary><Shift>F1' -n -t string -s move_window_workspace_1_key
+xfconf-query -c xfce4-keyboard-shortcuts -p '/xfwm/custom/<Primary><Shift>F10' -n -t string -s move_window_workspace_10_key
+xfconf-query -c xfce4-keyboard-shortcuts -p '/xfwm/custom/<Primary><Shift>F11' -n -t string -s move_window_workspace_11_key
+xfconf-query -c xfce4-keyboard-shortcuts -p '/xfwm/custom/<Primary><Shift>F12' -n -t string -s move_window_workspace_12_key
+xfconf-query -c xfce4-keyboard-shortcuts -p '/xfwm/custom/<Primary><Shift>F2' -n -t string -s move_window_workspace_2_key
+xfconf-query -c xfce4-keyboard-shortcuts -p '/xfwm/custom/<Primary><Shift>F3' -n -t string -s move_window_workspace_3_key
+xfconf-query -c xfce4-keyboard-shortcuts -p '/xfwm/custom/<Primary><Shift>F4' -n -t string -s move_window_workspace_4_key
+xfconf-query -c xfce4-keyboard-shortcuts -p '/xfwm/custom/<Primary><Shift>F5' -n -t string -s move_window_workspace_5_key
+xfconf-query -c xfce4-keyboard-shortcuts -p '/xfwm/custom/<Primary><Shift>F6' -n -t string -s move_window_workspace_6_key
+xfconf-query -c xfce4-keyboard-shortcuts -p '/xfwm/custom/<Primary><Shift>F7' -n -t string -s move_window_workspace_7_key
+xfconf-query -c xfce4-keyboard-shortcuts -p '/xfwm/custom/<Primary><Shift>F8' -n -t string -s move_window_workspace_8_key
+xfconf-query -c xfce4-keyboard-shortcuts -p '/xfwm/custom/<Primary><Shift>F9' -n -t string -s move_window_workspace_9_key
 xfconf-query -c xfce4-panel -p / -r -R
 xfconf-query -c xfce4-panel -p /configver -n -t int -s 2
 xfconf-query -c xfce4-panel -p /panels -n -t uint -s 1
@@ -87,6 +111,7 @@ cp config/face ~/.face
 sudo update-alternatives --set editor /usr/bin/vim.tiny
 sudo update-alternatives --set x-cursor-theme /usr/share/icons/DMZ-Black/cursor.theme
 echo "set editing-mode vi" > ~/.inputrc
+mkdir -p ~/.config/geany/colorschemes
 wget -O ~/.config/geany/colorschemes/monokai.conf https://raw.githubusercontent.com/codebrainz/geany-themes/master/colorschemes/monokai.conf
 git config --global user.name "Deep Toaster"
 git config --global user.email yizhenwilliam@gmail.com
@@ -94,6 +119,7 @@ wget https://raw.githubusercontent.com/hotice/webupd8/master/install-google-font
 chmod +x install-google-fonts
 ./install-google-fonts
 rm install-google-fonts
+mkdir -p ~/.fonts
 for type in Bold Light Medium Regular Retina
 do
 	wget -O ~/.fonts/FiraCode-${type}.ttf https://github.com/tonsky/FiraCode/blob/master/distr/ttf/FiraCode-${type}.ttf?raw=true
