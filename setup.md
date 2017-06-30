@@ -146,6 +146,11 @@ Add keyboard shortcuts:
 *   `XF86AudioPrev` => `audacious -r`
 *   `XF86AudioNext` => `audacious -f`
 
+Enable the following plugins:
+
+*   Status Icon
+*   Scrobbler 2.0
+
 
 Mixxx
 -----
@@ -218,7 +223,16 @@ Fonts
 
 The Ubuntu Studio fonts are available from `ubuntustudio-font-meta`. Google Web
 Fonts are available from
-`https://raw.githubusercontent.com/hotice/webupd8/master/install-google-fonts`.
+`https://github.com/hotice/webupd8/blob/master/install-google-fonts`. Fira Code
+is available from `https://github.com/tonsky/FiraCode`.
+
+
+Peripherals
+-----------
+
+To disable the trackpad, comment out the `SoftButtonAreas` and
+`SecondarySoftButtonAreas` lines in
+/usr/share/X11/xorg.conf.d/70-synaptics.conf.
 
 
 Power Statistics
@@ -228,18 +242,6 @@ Power Statistics
 
 Show in menus by commenting out the `OnlyShowIn` line in
 /usr/share/applications/gnome-power-statistics.desktop.
-
-
-Thunderbird
------------
-
-Add-ons:
-
-*   Enigmail
-*   Provider for Google Calendar
-*   gContactSync
-*   Lightning
-*   Thunderbird Conversations
 
 
 VirtualBox

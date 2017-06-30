@@ -14,7 +14,7 @@ sudo a2enconf vhosts
 sudo sed -ri 's/^(display_errors|short_open_tag) = Off$/\1 = On/' /etc/php/7.0/apache2/php.ini
 sudo service apache2 restart
 gsettings set org.blueman.plugins.powermanager auto-power-on false
-rsync -Ir config/geany config/orage config/Thunar config/xfce4 ~/.config
+rsync -Ir config/geany config/gtk-3.0 config/orage config/Thunar config/xfce4 ~/.config
 xfconf-query -c keyboard-layout -p /Default/XkbDisable -n -t bool -s false
 xfconf-query -c keyboard-layout -p /Default/XkbLayout -n -t string -s us,ru
 xfconf-query -c keyboard-layout -p /Default/XkbOptions/Group -n -t string -s grp:win_space_toggle
