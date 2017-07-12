@@ -3,15 +3,18 @@ sudo add-apt-repository ppa:dockbar-main/ppa
 sudo add-apt-repository ppa:numix/ppa
 sudo bash -c 'echo "deb http://download.opensuse.org/repositories/home:/Horst3180/xUbuntu_16.04/ /" >> /etc/apt/sources.list.d/arc-theme.list'
 sudo apt update
-sudo apt purge evince file-roller gigolo gmusicbrowser gnome-mines gnome-sudoku mousepad mugshot parole software-center thunar-volman thunderbird
+sudo apt purge catfish evince file-roller gigolo gmusicbrowser gnome-mines gnome-sudoku mousepad mugshot parole pidgin sgt-puzzles simple-scan software-center thunar-volman thunderbird xfce4-dict
 sudo apt --purge autoremove
 sudo apt dist-upgrade
-sudo apt install apache2 arc-theme audacious blender conky-all cryptsetup deja-dup geany geany-plugin-markdown geany-plugins gimp git gnome-disk-utility gnupg2 gparted guvcview inkscape lmms numix-icon-theme-circle php php-curl php-gd php-mcrypt ubuntustudio-fonts virtualbox xarchiver xcalib xfce4-dockbarx-plugin zathura
+sudo apt install apache2 arc-theme audacious blender conky-all cryptsetup deja-dup ffmpeg geany geany-plugin-markdown geany-plugins gimp git gnome-disk-utility gnupg2 gparted guvcview inkscape lmms numix-icon-theme-circle php php-curl php-gd php-mcrypt php-xml ubuntustudio-fonts virtualbox virtualbox-ext-pack xarchiver xcalib xfce4-dockbarx-plugin zathura
 sudo a2enmod rewrite
 sudo a2enmod vhost_alias
 sudo cp config/vhosts.conf /etc/apache2/conf-available/vhosts.conf
 sudo a2enconf vhosts
 sudo sed -ri 's/^(display_errors|short_open_tag) = Off$/\1 = On/' /etc/php/7.0/apache2/php.ini
+sudo mv /var/www/html/* ~/Public
+sudo rmdir /var/www/html
+sudo ln -s ~/Public /var/www/html
 sudo service apache2 restart
 gsettings set org.blueman.plugins.powermanager auto-power-on false
 rsync -Ir config/geany config/gtk-3.0 config/orage config/Thunar config/xfce4 ~/.config
