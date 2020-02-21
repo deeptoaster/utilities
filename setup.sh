@@ -16,6 +16,7 @@ sudo sed -ri 's/^(display_errors|short_open_tag) = Off$/\1 = On/' /etc/php/*/*/p
 sudo mv /var/www/html/* ~/Public
 sudo rmdir /var/www/html
 sudo ln -s ~/Public /var/www/html
+sudo ln -s orage.sh /etc/cron.hourly/orage
 sudo service apache2 restart
 sudo bash -c 'echo "Path=/usr/share/fritzing/parts" >> /usr/share/applications/fritzing.desktop'
 sudo cp config/80synclient /etc/X11/Xsession.d/80synclient
