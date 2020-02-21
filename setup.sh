@@ -1,13 +1,14 @@
 #!/bin/bash
 sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 0DF731E45CE24F27EEEB1450EFDC8610341D9410
 sudo add-apt-repository ppa:dockbar-main/ppa
+sudo add-apt-repository ppa:git-ftp/ppa
 sudo add-apt-repository ppa:numix/ppa
 sudo bash -c 'echo deb http://repository.spotify.com stable non-free | sudo tee /etc/apt/sources.list.d/spotify.list'
 sudo apt update
 sudo apt purge catfish evince file-roller gigolo gmusicbrowser gnome-mines gnome-sudoku mousepad mugshot parole pidgin sgt-puzzles simple-scan software-center thunar-volman thunderbird xfce4-dict
 sudo apt --purge autoremove
 sudo apt dist-upgrade
-sudo apt install apache2 arc-theme blender conky-all cryptsetup deja-dup ffmpeg fritzing fritzing-parts geany geany-plugin-markdown geany-plugins gimp git gnome-disk-utility gnupg2 gparted guvcview inkscape lmms numix-icon-theme-circle php php-curl php-gd php-mcrypt php-sqlite3 php-xml redshift spotify-client ubuntustudio-fonts virtualbox virtualbox-ext-pack xarchiver xcalib xfce4-dockbarx-plugin zathura
+sudo apt install apache2 arc-theme blender conky-all cryptsetup deja-dup geany geany-plugin-markdown geany-plugins gimp git git-ftp gnome-disk-utility gnupg2 gparted guvcview inkscape lmms numix-icon-theme-circle php php-curl php-gd php-mcrypt php-sqlite3 php-xml redshift spotify-client ubuntustudio-fonts virtualbox virtualbox-ext-pack xarchiver xcalib xfce4-dockbarx-plugin zathura
 sudo a2enmod rewrite
 sudo a2enmod vhost_alias
 sudo cp config/vhosts.conf /etc/apache2/conf-available/vhosts.conf
@@ -18,7 +19,6 @@ sudo rmdir /var/www/html
 sudo ln -s ~/Public /var/www/html
 sudo ln -s orage.sh /etc/cron.hourly/orage
 sudo service apache2 restart
-sudo bash -c 'echo "Path=/usr/share/fritzing/parts" >> /usr/share/applications/fritzing.desktop'
 sudo cp config/80synclient /etc/X11/Xsession.d/80synclient
 gsettings set org.blueman.plugins.powermanager auto-power-on false
 rsync -Ir config/autostart config/geany config/guvcview2 config/gtk-3.0 config/orage config/Thunar config/xfce4 ~/.config
@@ -35,10 +35,6 @@ xfconf-query -c xfce4-desktop -p /windowlist-menu/show -n -t bool -s false
 xfconf-query -c xfce4-keyboard-shortcuts -p '/commands/custom/<Primary><Alt><Super>8' -n -t string -s 'xcalib -i -a'
 xfconf-query -c xfce4-keyboard-shortcuts -p '/commands/custom/<Super>e' -n -t string -s geany
 xfconf-query -c xfce4-keyboard-shortcuts -p /commands/custom/F1 -n -t string -s 'xfce4-terminal --drop-down'
-xfconf-query -c xfce4-keyboard-shortcuts -p /commands/custom/XF86AudioNext -n -t string -s 'audacious -f'
-xfconf-query -c xfce4-keyboard-shortcuts -p /commands/custom/XF86AudioPlay -n -t string -s 'audacious -t'
-xfconf-query -c xfce4-keyboard-shortcuts -p /commands/custom/XF86AudioPrev -n -t string -s 'audacious -r'
-xfconf-query -c xfce4-keyboard-shortcuts -p /commands/custom/XF86Music -n -t string -s audacious
 xfconf-query -c xfce4-keyboard-shortcuts -p '/xfwm/custom/<Primary><Alt>KP_1' -n -t string -s tile_down_left_key
 xfconf-query -c xfce4-keyboard-shortcuts -p '/xfwm/custom/<Primary><Alt>KP_2' -n -t string -s tile_down_key
 xfconf-query -c xfce4-keyboard-shortcuts -p '/xfwm/custom/<Primary><Alt>KP_3' -n -t string -s tile_down_right_key
