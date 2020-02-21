@@ -1,23 +1,26 @@
 #!/bin/bash
+sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 0DF731E45CE24F27EEEB1450EFDC8610341D9410
 sudo add-apt-repository ppa:dockbar-main/ppa
 sudo add-apt-repository ppa:numix/ppa
-sudo bash -c 'echo "deb http://download.opensuse.org/repositories/home:/Horst3180/xUbuntu_16.04/ /" >> /etc/apt/sources.list.d/arc-theme.list'
+sudo bash -c 'echo deb http://repository.spotify.com stable non-free | sudo tee /etc/apt/sources.list.d/spotify.list'
 sudo apt update
 sudo apt purge catfish evince file-roller gigolo gmusicbrowser gnome-mines gnome-sudoku mousepad mugshot parole pidgin sgt-puzzles simple-scan software-center thunar-volman thunderbird xfce4-dict
 sudo apt --purge autoremove
 sudo apt dist-upgrade
-sudo apt install apache2 arc-theme audacious blender conky-all cryptsetup deja-dup ffmpeg geany geany-plugin-markdown geany-plugins gimp git gnome-disk-utility gnupg2 gparted guvcview inkscape lmms numix-icon-theme-circle php php-curl php-gd php-mcrypt php-xml ubuntustudio-fonts virtualbox virtualbox-ext-pack xarchiver xcalib xfce4-dockbarx-plugin zathura
+sudo apt install apache2 arc-theme blender conky-all cryptsetup deja-dup ffmpeg fritzing fritzing-parts geany geany-plugin-markdown geany-plugins gimp git gnome-disk-utility gnupg2 gparted guvcview inkscape lmms numix-icon-theme-circle php php-curl php-gd php-mcrypt php-sqlite3 php-xml redshift spotify-client ubuntustudio-fonts virtualbox virtualbox-ext-pack xarchiver xcalib xfce4-dockbarx-plugin zathura
 sudo a2enmod rewrite
 sudo a2enmod vhost_alias
 sudo cp config/vhosts.conf /etc/apache2/conf-available/vhosts.conf
 sudo a2enconf vhosts
-sudo sed -ri 's/^(display_errors|short_open_tag) = Off$/\1 = On/' /etc/php/7.0/apache2/php.ini
+sudo sed -ri 's/^(display_errors|short_open_tag) = Off$/\1 = On/' /etc/php/*/*/php.ini
 sudo mv /var/www/html/* ~/Public
 sudo rmdir /var/www/html
 sudo ln -s ~/Public /var/www/html
 sudo service apache2 restart
+sudo bash -c 'echo "Path=/usr/share/fritzing/parts" >> /usr/share/applications/fritzing.desktop'
+sudo cp config/80synclient /etc/X11/Xsession.d/80synclient
 gsettings set org.blueman.plugins.powermanager auto-power-on false
-rsync -Ir config/geany config/gtk-3.0 config/orage config/Thunar config/xfce4 ~/.config
+rsync -Ir config/autostart config/geany config/guvcview2 config/gtk-3.0 config/orage config/Thunar config/xfce4 ~/.config
 xfconf-query -c keyboard-layout -p /Default/XkbDisable -n -t bool -s false
 xfconf-query -c keyboard-layout -p /Default/XkbLayout -n -t string -s us,ru
 xfconf-query -c keyboard-layout -p /Default/XkbOptions/Group -n -t string -s grp:win_space_toggle
@@ -117,7 +120,7 @@ echo "set editing-mode vi" > ~/.inputrc
 mkdir -p ~/.config/geany/colorschemes
 wget -O ~/.config/geany/colorschemes/monokai.conf https://raw.githubusercontent.com/codebrainz/geany-themes/master/colorschemes/monokai.conf
 git config --global user.name "Deep Toaster"
-git config --global user.email yizhenwilliam@gmail.com
+git config --global user.email deeptoaster@gmail.com
 wget https://raw.githubusercontent.com/hotice/webupd8/master/install-google-fonts
 chmod +x install-google-fonts
 ./install-google-fonts

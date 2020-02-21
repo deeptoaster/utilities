@@ -37,6 +37,16 @@ Alternatively, the installation of geany-plugins (see below) should include a
 full, correctly-placed install of TeX Live.
 
 
+Fritzing
+--------
+
+Installation:
+
+1.      `sudo apt install fritzing fritzing-parts`
+2.  Append `Path=/usr/share/fritzing/parts` to
+    /usr/share/applications/fritzing.desktop.
+
+
 Geany
 -----
 
