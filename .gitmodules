@@ -1,0 +1,3 @@
+[submodule "conky-rings"]
+	path = conky-rings
+	url = ssh://git@github.com/DThought/conky-rings

@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Application
-Name=Redshift
-Exec=redshift -l geoclue2
+Name=Conky
+Exec=sh -c "sleep 10 && conky"
 StartupNotify=false
 Terminal=false
 Hidden=false

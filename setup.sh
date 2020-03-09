@@ -11,15 +11,14 @@ sudo apt dist-upgrade
 sudo apt install apache2 arc-theme blender conky-all cryptsetup deja-dup geany geany-plugin-markdown geany-plugins gimp git git-ftp gnome-disk-utility gnupg2 gparted guvcview inkscape lmms numix-icon-theme-circle php php-curl php-gd php-mcrypt php-sqlite3 php-xml redshift spotify-client ubuntustudio-fonts virtualbox virtualbox-ext-pack xarchiver xcalib xfce4-dockbarx-plugin zathura
 sudo a2enmod rewrite
 sudo a2enmod vhost_alias
-sudo cp config/vhosts.conf /etc/apache2/conf-available/vhosts.conf
+sudo ln -rs config/vhosts.conf /etc/apache2/conf-available/vhosts.conf
 sudo a2enconf vhosts
 sudo sed -ri 's/^(display_errors|short_open_tag) = Off$/\1 = On/' /etc/php/*/*/php.ini
 sudo mv /var/www/html/* ~/Public
 sudo rmdir /var/www/html
 sudo ln -s ~/Public /var/www/html
-sudo ln -s orage.sh /etc/cron.hourly/orage
 sudo service apache2 restart
-sudo cp config/80synclient /etc/X11/Xsession.d/80synclient
+sudo ln -rs orage.sh /etc/cron.hourly/orage
 gsettings set org.blueman.plugins.powermanager auto-power-on false
 rsync -Ir config/autostart config/geany config/guvcview2 config/gtk-3.0 config/orage config/Thunar config/xfce4 ~/.config
 xfconf-query -c keyboard-layout -p /Default/XkbDisable -n -t bool -s false
@@ -110,7 +109,10 @@ xfconf-query -c xsettings -p /Gtk/FontName -n -t string -s 'Droid Sans 10'
 xfconf-query -c xsettings -p /Gtk/MenuImages -n -t bool -s false
 xfconf-query -c xsettings -p /Net/IconThemeName -n -t string -s Numix-Circle
 gconftool --load config/dockbarx
-cp config/face ~/.face
+ln -rs config/face ~/.face
+ln -rs conky-rings/conkyrc ~/.conkyrc
+mkdir -p ~/.lua/scripts
+ln -rs conky-rings/rings.lua ~/.lua/scripts/rings.lua
 sudo update-alternatives --set editor /usr/bin/vim.tiny
 sudo update-alternatives --set x-cursor-theme /usr/share/icons/DMZ-Black/cursor.theme
 echo "set editing-mode vi" > ~/.inputrc
