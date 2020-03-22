@@ -92,6 +92,7 @@ xfconf-query -c xfce4-panel -p /plugins/plugin-7 -n -t string -s indicator
 xfconf-query -c xfce4-panel -p /plugins/plugin-8 -n -t string -s xfce4-orageclock-plugin
 xfconf-query -c xfce4-panel -p /plugins/plugin-9 -n -t string -s pager
 xfconf-query -c xfce4-panel -p /plugins/plugin-9/rows -n -t uint -s 2
+xfconf-query -c xfce4-session -p /general/SaveOnExit -n -t bool -s false
 xfconf-query -c xfwm4 -p /general/button_layout -n -t string -s 'CMH|O'
 xfconf-query -c xfwm4 -p /general/frame_opacity -n -t int -s 80
 xfconf-query -c xfwm4 -p /general/mousewheel_rollup -n -t bool -s true
