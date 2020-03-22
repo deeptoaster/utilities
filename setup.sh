@@ -9,6 +9,7 @@ sudo apt purge catfish evince file-roller gigolo gmusicbrowser gnome-mines gnome
 sudo apt --purge autoremove
 sudo apt dist-upgrade
 sudo apt install apache2 arc-theme blender conky-all cryptsetup deja-dup geany geany-plugin-markdown geany-plugins gimp git git-ftp gnome-disk-utility gnupg2 gparted guvcview inkscape lmms numix-icon-theme-circle php php-curl php-gd php-mcrypt php-sqlite3 php-xml redshift spotify-client ubuntustudio-fonts virtualbox virtualbox-ext-pack xarchiver xcalib xfce4-dockbarx-plugin zathura
+sudo apt --no-install-recommends install gnome-control-center gnome-session
 sudo a2enmod rewrite
 sudo a2enmod vhost_alias
 sudo ln -rs config/vhosts.conf /etc/apache2/conf-available/vhosts.conf
@@ -20,6 +21,7 @@ sudo ln -s ~/Public /var/www/html
 sudo service apache2 restart
 sudo ln -rs orage.sh /etc/cron.hourly/orage
 sudo ln -rs power.sh /etc/cron.hourly/power
+sudo ln -rs config/lightdm-gtk-greeter.conf /etc/lightdm/lightdm-gtk-greeter.conf
 gsettings set org.blueman.plugins.powermanager auto-power-on false
 rsync -Ir config/autostart config/geany config/guvcview2 config/gtk-3.0 config/orage config/Thunar config/xfce4 ~/.config
 xfconf-query -c keyboard-layout -p /Default/XkbDisable -n -t bool -s false
@@ -109,7 +111,11 @@ xfconf-query -c xsettings -p /Gtk/DecorationLayout -n -t string -s close,maximiz
 xfconf-query -c xsettings -p /Gtk/FontName -n -t string -s 'Droid Sans 10'
 xfconf-query -c xsettings -p /Gtk/MenuImages -n -t bool -s false
 xfconf-query -c xsettings -p /Net/IconThemeName -n -t string -s Numix-Circle
+xfconf-query -c xsettings -p /Net/ThemeName -n -t string -s Arc-Dark
 gconftool --load config/dockbarx
+ln -rs backdrops ~/Images/backdrops
+ln -rs backdrops/city.png ~/Images/city.png
+ln -rs backdrops/map.png ~/Images/map.png
 ln -rs config/face ~/.face
 ln -rs conky-rings/conkyrc ~/.conkyrc
 mkdir -p ~/.lua/scripts
