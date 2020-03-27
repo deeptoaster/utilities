@@ -19,8 +19,6 @@ sudo mv /var/www/html/* ~/Public
 sudo rmdir /var/www/html
 sudo ln -s ~/Public /var/www/html
 sudo service apache2 restart
-sudo ln -rs orage.sh /etc/cron.hourly/orage
-sudo ln -rs power.sh /etc/cron.hourly/power
 sudo ln -rs config/lightdm-gtk-greeter.conf /etc/lightdm/lightdm-gtk-greeter.conf
 gsettings set org.blueman.plugins.powermanager auto-power-on false
 rsync -Ir config/autostart config/geany config/guvcview2 config/gtk-3.0 config/orage config/Thunar config/xfce4 ~/.config
@@ -34,6 +32,9 @@ xfconf-query -c thunar -p /last-view -n -t string -s ThunarDetailsView
 xfconf-query -c xfce4-desktop -p /desktop-icons/style -n -t int -s 0
 xfconf-query -c xfce4-desktop -p /desktop-menu/show -n -t bool -s false
 xfconf-query -c xfce4-desktop -p /windowlist-menu/show -n -t bool -s false
+xfconf-query -c xfce4-keyboard-shortcuts -p /commands/custom/XF86AudioNext -n -t string -s 'dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Next'
+xfconf-query -c xfce4-keyboard-shortcuts -p /commands/custom/XF86AudioPlay -n -t string -s 'dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause'
+xfconf-query -c xfce4-keyboard-shortcuts -p /commands/custom/XF86AudioPrev -n -t string -s 'dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Previous'
 xfconf-query -c xfce4-keyboard-shortcuts -p '/commands/custom/<Primary><Alt><Super>8' -n -t string -s 'xcalib -i -a'
 xfconf-query -c xfce4-keyboard-shortcuts -p '/commands/custom/<Super>e' -n -t string -s geany
 xfconf-query -c xfce4-keyboard-shortcuts -p /commands/custom/F1 -n -t string -s 'xfce4-terminal --drop-down'
@@ -123,10 +124,12 @@ mkdir -p ~/.lua/scripts
 ln -rs conky-rings/rings.lua ~/.lua/scripts/rings.lua
 sudo update-alternatives --set editor /usr/bin/vim.tiny
 sudo update-alternatives --set x-cursor-theme /usr/share/icons/DMZ-Black/cursor.theme
-echo "set editing-mode vi" > ~/.inputrc
+echo 'set editing-mode vi' > ~/.inputrc
+mkdir -p ~/Documents/orage
+(crontab -l ; echo "0 * * * * $(pwd)/orage.sh" ; echo "0 * * * * $(pwd)/power.sh") | crontab -
 mkdir -p ~/.config/geany/colorschemes
 wget -O ~/.config/geany/colorschemes/monokai.conf https://raw.githubusercontent.com/codebrainz/geany-themes/master/colorschemes/monokai.conf
-git config --global user.name "Deep Toaster"
+git config --global user.name 'Deep Toaster'
 git config --global user.email deeptoaster@gmail.com
 wget https://raw.githubusercontent.com/hotice/webupd8/master/install-google-fonts
 chmod +x install-google-fonts
