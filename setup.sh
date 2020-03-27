@@ -126,7 +126,7 @@ sudo update-alternatives --set editor /usr/bin/vim.tiny
 sudo update-alternatives --set x-cursor-theme /usr/share/icons/DMZ-Black/cursor.theme
 echo 'set editing-mode vi' > ~/.inputrc
 mkdir -p ~/Documents/orage
-(crontab -l ; echo "0 * * * * $(pwd)/orage.sh" ; echo "0 * * * * $(pwd)/power.sh") | crontab -
+(crontab -l; echo "0 * * * * $(pwd)/orage.sh"; echo "0 * * * * $(pwd)/power.sh") | crontab -
 mkdir -p ~/.config/geany/colorschemes
 wget -O ~/.config/geany/colorschemes/monokai.conf https://raw.githubusercontent.com/codebrainz/geany-themes/master/colorschemes/monokai.conf
 git config --global user.name 'Deep Toaster'
