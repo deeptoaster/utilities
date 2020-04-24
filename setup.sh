@@ -1,14 +1,15 @@
 #!/bin/bash
 sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 0DF731E45CE24F27EEEB1450EFDC8610341D9410
-sudo add-apt-repository ppa:dockbar-main/ppa
+sudo add-apt-repository ppa:xuzhen666/dockbarx
 sudo add-apt-repository ppa:git-ftp/ppa
 sudo add-apt-repository ppa:numix/ppa
-sudo bash -c 'echo deb http://repository.spotify.com stable non-free | sudo tee /etc/apt/sources.list.d/spotify.list'
+wget -O - https://download.spotify.com/debian/pubkey.gpg | sudo apt-key add - 
+echo deb http://repository.spotify.com stable non-free | sudo tee /etc/apt/sources.list.d/spotify.list
 sudo apt update
-sudo apt purge catfish evince file-roller gigolo gmusicbrowser gnome-mines gnome-sudoku mousepad mugshot parole pidgin sgt-puzzles simple-scan software-center thunar-volman thunderbird xfce4-dict
+sudo apt purge atril catfish engrampa gigolo gnome-mines gnome-software gnome-sudoku mousepad mugshot parole pidgin sgt-puzzles simple-scan thunar-volman thunderbird xfce4-dict
 sudo apt --purge autoremove
 sudo apt dist-upgrade
-sudo apt install apache2 arc-theme blender conky-all cryptsetup deja-dup geany geany-plugin-markdown geany-plugins gimp git git-ftp gnome-disk-utility gnupg2 gparted guvcview inkscape lmms numix-icon-theme-circle php php-curl php-gd php-mcrypt php-sqlite3 php-xml redshift spotify-client ubuntustudio-fonts virtualbox virtualbox-ext-pack xarchiver xcalib xfce4-dockbarx-plugin zathura
+sudo apt install apache2 arc-theme blender conky-all cryptsetup deja-dup gconf2 geany geany-plugins gimp git git-ftp gnome-disk-utility gnupg2 gparted guvcview inkscape lmms numix-icon-theme-circle php php-curl php-gd php-sqlite3 php-xml redshift spotify-client ubuntustudio-fonts virtualbox virtualbox-ext-pack xarchiver xcalib xfce4-dockbarx-plugin zathura
 sudo apt --no-install-recommends install gnome-control-center gnome-session
 sudo a2enmod rewrite
 sudo a2enmod vhost_alias
@@ -19,8 +20,8 @@ sudo mv /var/www/html/* ~/Public
 sudo rmdir /var/www/html
 sudo ln -s ~/Public /var/www/html
 sudo service apache2 restart
-sudo ln -rs config/lightdm-gtk-greeter.conf /etc/lightdm/lightdm-gtk-greeter.conf
-gsettings set org.blueman.plugins.powermanager auto-power-on false
+sudo ln -frs config/lightdm-gtk-greeter.conf /etc/lightdm/lightdm-gtk-greeter.conf
+#gsettings set org.blueman.plugins.powermanager auto-power-on false
 rsync -Ir config/autostart config/geany config/guvcview2 config/gtk-3.0 config/orage config/Thunar config/xfce4 ~/.config
 xfconf-query -c keyboard-layout -p /Default/XkbDisable -n -t bool -s false
 xfconf-query -c keyboard-layout -p /Default/XkbLayout -n -t string -s us,ru
@@ -134,7 +135,7 @@ git config --global user.email deeptoaster@gmail.com
 wget https://raw.githubusercontent.com/hotice/webupd8/master/install-google-fonts
 chmod +x install-google-fonts
 ./install-google-fonts
-rm install-google-fonts
+rm -f fonts-master install-google-fonts
 mkdir -p ~/.fonts
 for type in Bold Light Medium Regular Retina; do
 	wget -O ~/.fonts/FiraCode-${type}.ttf https://github.com/tonsky/FiraCode/blob/master/distr/ttf/FiraCode-${type}.ttf?raw=true
