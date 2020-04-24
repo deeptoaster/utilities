@@ -14,7 +14,7 @@ sudo a2enmod rewrite
 sudo a2enmod vhost_alias
 sudo ln -rs config/vhosts.conf /etc/apache2/conf-available/vhosts.conf
 sudo a2enconf vhosts
-sudo sed -ri 's/^(display_errors|short_open_tag) = Off$/\1 = On/' /etc/php/*/*/php.ini
+sudo sed -Ei 's/^(display_errors|short_open_tag) = Off$/\1 = On/' /etc/php/*/*/php.ini
 sudo mv /var/www/html/* ~/Public
 sudo rmdir /var/www/html
 sudo ln -s ~/Public /var/www/html
@@ -136,7 +136,6 @@ chmod +x install-google-fonts
 ./install-google-fonts
 rm install-google-fonts
 mkdir -p ~/.fonts
-for type in Bold Light Medium Regular Retina
-do
+for type in Bold Light Medium Regular Retina; do
 	wget -O ~/.fonts/FiraCode-${type}.ttf https://github.com/tonsky/FiraCode/blob/master/distr/ttf/FiraCode-${type}.ttf?raw=true
 done
