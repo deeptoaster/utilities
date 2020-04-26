@@ -1,17 +1,16 @@
 [Configuration]
-ColorForeground=#b7b7b7
+BackgroundDarkness=0.8
+BackgroundMode=TERMINAL_BACKGROUND_TRANSPARENT
 ColorBackground=#131926
-ColorBoldUseDefault=FALSE
+ColorForeground=#b7b7b7
 ColorPalette=#000000;#aa0000;#44aa44;#aa5500;#0039aa;#aa22aa;#1a92aa;#aaaaaa;#777777;#ff8787;#4ce64c;#ded82c;#295fcc;#cc58cc;#4ccce6;#ffffff
 FontName=DejaVu Sans Mono 10
-TabActivityColor=#0f4999
 DropdownWidth=100
-DropdownPosition=0
 DropdownAlwaysShowTabs=FALSE
 DropdownAnimationTime=100
+DropdownKeepOpenDefault=TRUE
+DropdownPosition=0
 DropdownStatusIcon=FALSE
 DropdownToggleFocus=FALSE
-DropdownKeepOpenDefault=TRUE
-BackgroundMode=TERMINAL_BACKGROUND_TRANSPARENT
-BackgroundDarkness=0.800000
-
+MiscShowUnsafePasteDialog=FALSE
+TabActivityColor=#ffffff
