@@ -9,7 +9,7 @@ sudo apt update
 sudo apt purge atril catfish engrampa gigolo gnome-mines gnome-software gnome-sudoku mousepad mugshot parole pidgin sgt-puzzles simple-scan thunar-volman thunderbird xfce4-dict xfce4-notes
 sudo apt --purge autoremove
 sudo apt dist-upgrade
-sudo apt install apache2 arc-theme blender conky-all cryptsetup deja-dup gconf2 geany geany-plugins gimp git git-ftp gnome-disk-utility gnupg2 gparted guvcview inkscape lmms numix-icon-theme-circle orage php php-curl php-gd php-sqlite3 php-xml redshift spotify-client ubuntustudio-fonts virtualbox virtualbox-ext-pack xarchiver xcalib xfce4-dockbarx-plugin zathura
+sudo apt install apache2 arc-theme blender conky-all cryptsetup deja-dup geany geany-plugins gimp git git-ftp gnome-disk-utility gnupg2 gparted guvcview inkscape lmms numix-icon-theme-circle orage php php-curl php-gd php-sqlite3 php-xml redshift spotify-client ubuntustudio-fonts virtualbox virtualbox-ext-pack xarchiver xcalib xfce4-dockbarx-plugin zathura
 sudo apt --no-install-recommends install gnome-control-center gnome-session
 sudo a2enmod rewrite
 sudo a2enmod vhost_alias
@@ -21,12 +21,13 @@ sudo rmdir /var/www/html
 sudo ln -s ~/Public /var/www/html
 sudo service apache2 restart
 sudo ln -frs config/lightdm-gtk-greeter.conf /etc/lightdm/lightdm-gtk-greeter.conf
-#gsettings set org.blueman.plugins.powermanager auto-power-on false
 rsync -Ir config/autostart config/geany config/guvcview2 config/gtk-3.0 config/orage config/Thunar config/xfce4 ~/.config
+gsettings set org.blueman.plugins.powermanager auto-power-on false
+gsettings set org.dockbarx.dockbarx theme Deep
 xfconf-query -c keyboard-layout -p /Default/XkbDisable -n -t bool -s false
 xfconf-query -c keyboard-layout -p /Default/XkbLayout -n -t string -s us,ru
 xfconf-query -c keyboard-layout -p /Default/XkbOptions/Group -n -t string -s grp:win_space_toggle
-xfconf-query -c keyboard-layout -p /Default/XkbVariant -n -t string -s mac,phonetic
+xfconf-query -c keyboard-layout -p /Default/XkbVariant -n -t string -s mac,mac
 xfconf-query -c thunar -p /last-location-bar -n -t string -s ThunarLocationButtons
 xfconf-query -c thunar -p /last-show-hidden -n -t bool -s true
 xfconf-query -c thunar -p /last-view -n -t string -s ThunarDetailsView
@@ -97,6 +98,11 @@ xfconf-query -c xfce4-panel -p /plugins/plugin-8 -n -t string -s indicator
 xfconf-query -c xfce4-panel -p /plugins/plugin-9 -n -t string -s xfce4-orageclock-plugin
 xfconf-query -c xfce4-panel -p /plugins/plugin-10 -n -t string -s pager
 xfconf-query -c xfce4-panel -p /plugins/plugin-10/rows -n -t uint -s 2
+xfconf-query -c xfce4-power-manager -p /xfce4-power-manager/dpms-enabled -n -t bool -s false
+xfconf-query -c xfce4-power-manager -p /xfce4-power-manager/general-notification -n -t bool -s true
+xfconf-query -c xfce4-power-manager -p /xfce4-power-manager/inactivity-on-ac -n -t uint -s 15
+xfconf-query -c xfce4-power-manager -p /xfce4-power-manager/sleep-button-action -n -t uint -s 1
+xfconf-query -c xfce4-screensaver -p /saver/enabled -n -t bool -s false
 xfconf-query -c xfce4-session -p /general/SaveOnExit -n -t bool -s false
 xfconf-query -c xfwm4 -p /general/button_layout -n -t string -s 'CMH|O'
 xfconf-query -c xfwm4 -p /general/frame_opacity -n -t int -s 80
@@ -119,7 +125,6 @@ xfconf-query -c xsettings -p /Gtk/FontName -n -t string -s 'Droid Sans 10'
 xfconf-query -c xsettings -p /Gtk/MenuImages -n -t bool -s false
 xfconf-query -c xsettings -p /Net/IconThemeName -n -t string -s Numix-Circle
 xfconf-query -c xsettings -p /Net/ThemeName -n -t string -s Arc-Dark
-gconftool --load config/dockbarx
 ln -rs backdrops ~/Images/backdrops
 ln -rs backdrops/city.png ~/Images/city.png
 ln -rs backdrops/map.png ~/Images/map.png
@@ -133,7 +138,7 @@ echo 'set editing-mode vi' > ~/.inputrc
 mkdir -p ~/Documents/orage
 (crontab -l; echo "0 * * * * $(pwd)/orage.sh"; echo "0 * * * * $(pwd)/power.sh") | crontab -
 mkdir -p ~/.config/geany/colorschemes
-wget -O ~/.config/geany/colorschemes/monokai.conf https://raw.githubusercontent.com/codebrainz/geany-themes/master/colorschemes/monokai.conf
+wget -O ~/.config/geany/colorschemes/inkpot.conf https://raw.githubusercontent.com/codebrainz/geany-themes/master/colorschemes/inkpot.conf
 git config --global user.name 'Deep Toaster'
 git config --global user.email deeptoaster@gmail.com
 wget https://raw.githubusercontent.com/hotice/webupd8/master/install-google-fonts
