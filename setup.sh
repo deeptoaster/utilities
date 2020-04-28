@@ -9,7 +9,7 @@ sudo apt update
 sudo apt purge atril catfish engrampa gigolo gnome-mines gnome-software gnome-sudoku mousepad mugshot parole pidgin sgt-puzzles simple-scan thunar-volman thunderbird xfce4-dict xfce4-notes
 sudo apt --purge autoremove
 sudo apt dist-upgrade
-sudo apt install apache2 arc-theme blender conky-all cryptsetup deja-dup geany geany-plugins gimp git git-ftp gnome-disk-utility gnupg2 gparted guvcview inkscape lmms numix-icon-theme-circle orage php php-curl php-gd php-sqlite3 php-xml redshift spotify-client ubuntustudio-fonts virtualbox virtualbox-ext-pack xarchiver xcalib xfce4-dockbarx-plugin zathura
+sudo apt install apache2 arc-theme blender conky-all cryptsetup deja-dup geany geany-plugins gimp git git-ftp gnome-disk-utility gnupg2 gparted guvcview lmms numix-icon-theme-circle orage php php-curl php-gd php-sqlite3 php-xml redshift spotify-client ubuntustudio-fonts virtualbox virtualbox-ext-pack xarchiver xcalib xfce4-dockbarx-plugin zathura
 sudo apt --no-install-recommends install gnome-control-center gnome-session
 sudo a2enmod rewrite
 sudo a2enmod vhost_alias
@@ -98,11 +98,14 @@ xfconf-query -c xfce4-panel -p /plugins/plugin-8 -n -t string -s indicator
 xfconf-query -c xfce4-panel -p /plugins/plugin-9 -n -t string -s xfce4-orageclock-plugin
 xfconf-query -c xfce4-panel -p /plugins/plugin-10 -n -t string -s pager
 xfconf-query -c xfce4-panel -p /plugins/plugin-10/rows -n -t uint -s 2
-xfconf-query -c xfce4-power-manager -p /xfce4-power-manager/dpms-enabled -n -t bool -s false
+xfconf-query -c xfce4-power-manager -p /xfce4-power-manager/blank-on-ac -n -t uint -s 0
+xfconf-query -c xfce4-power-manager -p /xfce4-power-manager/dpms-on-ac-off -n -t uint -s 15
+xfconf-query -c xfce4-power-manager -p /xfce4-power-manager/dpms-on-ac-sleep -n -t uint -s 0
 xfconf-query -c xfce4-power-manager -p /xfce4-power-manager/general-notification -n -t bool -s true
-xfconf-query -c xfce4-power-manager -p /xfce4-power-manager/inactivity-on-ac -n -t uint -s 15
+xfconf-query -c xfce4-power-manager -p /xfce4-power-manager/inactivity-on-ac -n -t uint -s 60
 xfconf-query -c xfce4-power-manager -p /xfce4-power-manager/sleep-button-action -n -t uint -s 1
 xfconf-query -c xfce4-screensaver -p /saver/enabled -n -t bool -s false
+xfconf-query -c xfce4-screensaver -p /saver/idle-activation/enabled -n -t bool -s false
 xfconf-query -c xfce4-session -p /general/SaveOnExit -n -t bool -s false
 xfconf-query -c xfwm4 -p /general/button_layout -n -t string -s 'CMH|O'
 xfconf-query -c xfwm4 -p /general/frame_opacity -n -t int -s 80
@@ -121,7 +124,7 @@ xfconf-query -c xfwm4 -p /general/wrap_windows -n -t bool -s false
 xfconf-query -c xsettings -p /Gtk/ButtonImages -n -t bool -s false
 xfconf-query -c xsettings -p /Gtk/CursorThemeName -n -t string -s DMZ-Black
 xfconf-query -c xsettings -p /Gtk/DecorationLayout -n -t string -s close,maximize,minimize:menu
-xfconf-query -c xsettings -p /Gtk/FontName -n -t string -s 'Droid Sans 10'
+xfconf-query -c xsettings -p /Gtk/FontName -n -t string -s 'Roboto 10'
 xfconf-query -c xsettings -p /Gtk/MenuImages -n -t bool -s false
 xfconf-query -c xsettings -p /Net/IconThemeName -n -t string -s Numix-Circle
 xfconf-query -c xsettings -p /Net/ThemeName -n -t string -s Arc-Dark
@@ -147,5 +150,5 @@ chmod +x install-google-fonts
 rm -f fonts-master install-google-fonts
 mkdir -p ~/.fonts
 for type in Bold Light Medium Regular Retina; do
-	wget -O ~/.fonts/FiraCode-${type}.ttf https://github.com/tonsky/FiraCode/blob/master/distr/ttf/FiraCode-${type}.ttf?raw=true
+  wget -O ~/.fonts/FiraCode-${type}.ttf https://github.com/tonsky/FiraCode/blob/master/distr/ttf/FiraCode-${type}.ttf?raw=true
 done
