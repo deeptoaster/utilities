@@ -9,7 +9,7 @@ sudo apt update
 sudo apt purge atril catfish engrampa gigolo gnome-mines gnome-software gnome-sudoku mousepad mugshot parole pidgin sgt-puzzles simple-scan thunar-volman thunderbird xfce4-dict xfce4-notes
 sudo apt --purge autoremove
 sudo apt dist-upgrade
-sudo apt install apache2 arc-theme blender conky-all cryptsetup deja-dup geany geany-plugins gimp git git-ftp gnome-disk-utility gnupg2 gparted guvcview lmms numix-icon-theme-circle orage php php-curl php-gd php-sqlite3 php-xml redshift spotify-client ubuntustudio-fonts virtualbox virtualbox-ext-pack xarchiver xcalib xfce4-dockbarx-plugin zathura
+sudo apt install apache2 arc-theme blender conky-all cryptsetup deja-dup geany geany-plugins gimp git git-ftp gnome-disk-utility gnupg2 gparted guvcview inkscape lmms numix-icon-theme-circle orage php php-curl php-gd php-sqlite3 php-xml redshift spotify-client ubuntustudio-fonts virtualbox virtualbox-ext-pack xarchiver xcalib xfce4-dockbarx-plugin zathura
 sudo apt --no-install-recommends install gnome-control-center gnome-session
 sudo a2enmod rewrite
 sudo a2enmod vhost_alias
@@ -24,6 +24,12 @@ sudo ln -frs config/lightdm-gtk-greeter.conf /etc/lightdm/lightdm-gtk-greeter.co
 rsync -Ir config/autostart config/geany config/guvcview2 config/gtk-3.0 config/orage config/Thunar config/xfce4 ~/.config
 gsettings set org.blueman.plugins.powermanager auto-power-on false
 gsettings set org.dockbarx.dockbarx theme Deep
+gsettings set org.gnome.DejaDup backend 'remote'
+gsettings set org.gnome.DejaDup exclude-list "@as []"
+gsettings set org.gnome.DejaDup include-list "['/media/woot/ZERO/LiberKey/MyDocuments', '/media/woot/ONE/LiberKey/MyDocuments']"
+gsettings set org.gnome.DejaDup periodic true
+gsettings set org.gnome.DejaDup.Remote folder ''
+gsettings set org.gnome.DejaDup.Remote uri 'davs://deeptoaster%40gmail.com@dav.box.com/dav/deja-dup'
 xfconf-query -c keyboard-layout -p /Default/XkbDisable -n -t bool -s false
 xfconf-query -c keyboard-layout -p /Default/XkbLayout -n -t string -s us,ru
 xfconf-query -c keyboard-layout -p /Default/XkbOptions/Group -n -t string -s grp:win_space_toggle
