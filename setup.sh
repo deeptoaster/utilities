@@ -20,6 +20,7 @@ sudo mv /var/www/html/* ~/Public
 sudo rmdir /var/www/html
 sudo ln -s ~/Public /var/www/html
 sudo service apache2 restart
+sudo ln -rs config/71-synaptics.conf /usr/share/X11/xorg.conf.d/71-synaptics.conf
 sudo ln -frs config/lightdm-gtk-greeter.conf /etc/lightdm/lightdm-gtk-greeter.conf
 rsync -Ir config/autostart config/geany config/guvcview2 config/gtk-3.0 config/orage config/Thunar config/xfce4 ~/.config
 gsettings set org.blueman.plugins.powermanager auto-power-on false
@@ -118,6 +119,7 @@ xfconf-query -c xfwm4 -p /general/frame_opacity -n -t int -s 80
 xfconf-query -c xfwm4 -p /general/mousewheel_rollup -n -t bool -s true
 xfconf-query -c xfwm4 -p /general/popup_opacity -n -t int -s 80
 xfconf-query -c xfwm4 -p /general/raise_with_any_button -n -t bool -s false
+xfconf-query -c xfwm4 -p /general/scroll_workspaces -n -t bool -s false
 xfconf-query -c xfwm4 -p /general/show_dock_shadow -n -t bool -s false
 xfconf-query -c xfwm4 -p /general/show_popup_shadow -n -t bool -s true
 xfconf-query -c xfwm4 -p /general/snap_to_windows -n -t bool -s true
