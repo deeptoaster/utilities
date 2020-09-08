@@ -9,7 +9,7 @@ sudo apt update
 sudo apt purge atril catfish engrampa gigolo gnome-mines gnome-software gnome-sudoku mousepad mugshot parole pidgin sgt-puzzles simple-scan thunar-volman thunderbird xfce4-dict xfce4-notes
 sudo apt --purge autoremove
 sudo apt dist-upgrade
-sudo apt install apache2 arc-theme blender conky-all cryptsetup deja-dup geany geany-plugins gimp git git-ftp gnome-disk-utility gnupg2 gparted guvcview inkscape lmms numix-icon-theme-circle orage php php-curl php-gd php-sqlite3 php-xml redshift spotify-client ubuntustudio-fonts virtualbox virtualbox-ext-pack xarchiver xcalib xfce4-dockbarx-plugin zathura
+sudo apt install apache2 arc-theme blender conky-all cryptsetup deja-dup geany geany-plugins gimp git git-ftp gnome-disk-utility gnupg2 gparted guvcview inkscape lmms numix-icon-theme-circle orage php php-curl php-gd php-sqlite3 php-xml redshift spotify-client steam-installer ubuntustudio-fonts virtualbox virtualbox-ext-pack xarchiver xcalib xfce4-dockbarx-plugin zathura
 sudo apt --no-install-recommends install gnome-control-center gnome-session
 sudo a2enmod rewrite
 sudo a2enmod vhost_alias
@@ -91,6 +91,7 @@ xfconf-query -c xfce4-panel -p /plugins/plugin-1/button-title -n -t string -s ' 
 xfconf-query -c xfce4-panel -p /plugins/plugin-2 -n -t string -s places
 xfconf-query -c xfce4-panel -p /plugins/plugin-2/button-label -n -t string -s ' Emplacements '
 xfconf-query -c xfce4-panel -p /plugins/plugin-2/show-button-type -n -t int -s 1
+xfconf-query -c xfce4-panel -p /plugins/plugin-2/show-recent -n -t bool -s false
 xfconf-query -c xfce4-panel -p /plugins/plugin-3 -n -t string -s dockbarx
 xfconf-query -c xfce4-panel -p /plugins/plugin-3/expand -n -t bool -s true
 xfconf-query -c xfce4-panel -p /plugins/plugin-4 -n -t string -s systray
@@ -147,7 +148,7 @@ sudo update-alternatives --set editor /usr/bin/vim.tiny
 sudo update-alternatives --set x-cursor-theme /usr/share/icons/DMZ-Black/cursor.theme
 echo 'set editing-mode vi' > ~/.inputrc
 mkdir -p ~/Documents/orage
-(crontab -l; echo "0 * * * * $(pwd)/orage.sh"; echo "0 * * * * $(pwd)/power.sh") | crontab -
+echo -e "0 * * * * $(pwd)/orage.sh\n0 * * * * $(pwd)/power.sh\n" | crontab -
 mkdir -p ~/.config/geany/colorschemes
 wget -O ~/.config/geany/colorschemes/inkpot.conf https://raw.githubusercontent.com/codebrainz/geany-themes/master/colorschemes/inkpot.conf
 git config --global user.name 'Deep Toaster'
