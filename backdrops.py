@@ -1,7 +1,7 @@
 #!/usr/bin/python
 import json
 import random
-import urllib2
+import requests
 from PIL import Image
 from PIL import ImageDraw
 from PIL import ImageFont
@@ -14,9 +14,7 @@ column3 = ['prick-faced', 'ham-faced', 'toss-faced', 'idiot', 'cunt-faced', 'spi
 column3 += ['liberal', 'hokey', 'goofball', 'highly-overrated', 'uncomfortable-looking', 'third-rate']
 column4 = ['twunt', 'spunktrumpet', 'fucktard', 'bastard', 'cockwomble', 'shitweasel', 'robot made of gammon', 'thundercunt', 'ponce', 'cock', 'moontwat', 'cockweasel', 'pissweasel', 'wankspangle', 'vomitpustule', 'quimwiffle', 'wankstain', 'spunkrocket', 'wanksack doused in piss', 'dicksplash', 'Etonian reptile', 'cocksplurt', 'cut-price Goebbels']
 column4 += ['clown', 'garbage', 'atheist', 'guy', 'dummy', 'dope', 'hypocrite', 'lightweight', 'loser']
-req = urllib2.Request('https://www.reddit.com/r/EarthPorn/.json')
-req.add_header('User-Agent', 'Paperbot/2.0')
-porns = json.load(urllib2.urlopen(req))['data']['children']
+porns = requests.get('https://www.reddit.com/r/SpacePorn/.json', headers={'User-Agent': 'PaperBot/2.0'}).json()['data']['children']
 insult = random.choice(column1).split() + random.choice(column2).split() + random.choice(column3).split() + random.choice(column4).split()
 for porn in porns:
   url = porn['data']['url']
@@ -25,16 +23,16 @@ for porn in porns:
       url = url + '.jpg'
     else:
       continue
-  img = Image.open(urllib2.urlopen(url))
-  #~ w, h = img.size
-  #~ size = w / 50
-  #~ font = ImageFont.truetype("/usr/share/fonts/truetype/freefont/FreeSans.ttf", size)
-  #~ draw = ImageDraw.Draw(img)
-  #~ draw.text((w * 0.3, h * 0.3), ' '.join(insult[:len(insult) / 2 + 2]), font=font)
-  #~ draw.text((w * 0.3, h * 0.3 + size * 1.5), ' '.join(insult[len(insult) / 2 + 2:]), font=font)
-  #~ img.crop((0, 0, int(w * 0.8), int(h * 0.8))).save('/home/woot/Documents/backdrops/haut-gauche', 'PNG')
-  #~ img.crop((int(w * 0.2), 0, w, int(h * 0.8))).save('/home/woot/Documents/backdrops/haut-droite', 'PNG')
-  #~ img.crop((0, int(h * 0.2), int(w * 0.8), h)).save('/home/woot/Documents/backdrops/bas-gauche', 'PNG')
-  #~ img.crop((int(w * 0.2), int(h * 0.2), w, h)).save('/home/woot/Documents/backdrops/bas-droite', 'PNG')
+  img = Image.open(requests.get(url, stream=True).raw)
+  w, h = img.size
+  size = w / 50
+  font = ImageFont.truetype("/usr/share/fonts/truetype/freefont/FreeSans.ttf", int(size))
+  draw = ImageDraw.Draw(img)
+  draw.text((w * 0.3, h * 0.3), ' '.join(insult[:int(len(insult) / 2) + 2]), font=font)
+  draw.text((w * 0.3, h * 0.3 + size * 1.5), ' '.join(insult[int(len(insult) / 2) + 2:]), font=font)
+  # ~ img.crop((0, 0, int(w * 0.8), int(h * 0.8))).save('/home/woot/Documents/backdrops/haut-gauche', 'PNG')
+  # ~ img.crop((int(w * 0.2), 0, w, int(h * 0.8))).save('/home/woot/Documents/backdrops/haut-droite', 'PNG')
+  # ~ img.crop((0, int(h * 0.2), int(w * 0.8), h)).save('/home/woot/Documents/backdrops/bas-gauche', 'PNG')
+  # ~ img.crop((int(w * 0.2), int(h * 0.2), w, h)).save('/home/woot/Documents/backdrops/bas-droite', 'PNG')
   img.save('/home/woot/Documents/backdrops/porn', 'PNG')
   break
