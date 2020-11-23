@@ -1,0 +1,13 @@
+[Unit]
+Description=Battery charging warning
+Requires=upower.service
+After=upower.service
+
+[Service]
+Type=oneshot
+ExecStart=/bin/true
+ExecStop=$PWD/power.sh
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
