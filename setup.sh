@@ -35,6 +35,10 @@ gsettings set org.gnome.DejaDup include-list "['/media/woot/ZERO/LiberKey/MyDocu
 gsettings set org.gnome.DejaDup periodic true
 gsettings set org.gnome.DejaDup.Remote folder ''
 gsettings set org.gnome.DejaDup.Remote uri 'davs://deeptoaster%40gmail.com@dav.box.com/dav/deja-dup'
+gsettings set org.gnome.settings-daemon.plugins.media-keys custom-keybindings "['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/']"
+gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ binding F1
+gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ command 'xfce4-terminal --drop-down'
+gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ name Terminal
 xfconf-query -c keyboard-layout -p /Default/XkbDisable -n -t bool -s false
 xfconf-query -c keyboard-layout -p /Default/XkbLayout -n -t string -s us,ru
 xfconf-query -c keyboard-layout -p /Default/XkbOptions/Group -n -t string -s grp:win_space_toggle
