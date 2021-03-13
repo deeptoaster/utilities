@@ -1,16 +1,22 @@
 #!/bin/bash
 sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 0DF731E45CE24F27EEEB1450EFDC8610341D9410
-sudo add-apt-repository ppa:xuzhen666/dockbarx
 sudo add-apt-repository ppa:git-ftp/ppa
 sudo add-apt-repository ppa:numix/ppa
+sudo add-apt-repository ppa:xuzhen666/dockbarx
 wget -O - https://download.spotify.com/debian/pubkey.gpg | sudo apt-key add -
 echo deb http://repository.spotify.com stable non-free | sudo tee /etc/apt/sources.list.d/spotify.list
 sudo apt update
 sudo apt purge atril catfish engrampa gigolo gnome-mines gnome-software gnome-sudoku mousepad mugshot parole pidgin sgt-puzzles simple-scan thunar-volman thunderbird xfce4-dict xfce4-notes
 sudo apt --purge autoremove
 sudo apt dist-upgrade
-sudo apt install apache2 arc-theme blender conky-all cryptsetup deja-dup geany geany-plugins gimp git git-ftp gnome-disk-utility gnupg2 gparted guvcview inkscape lmms numix-icon-theme-circle orage php php-curl php-gd php-sqlite3 php-xml redshift spotify-client steam-installer ubuntustudio-fonts virtualbox virtualbox-ext-pack xarchiver xcalib xfce4-dockbarx-plugin zathura
+sudo apt install apache2 arc-theme blender conky-all cryptsetup deja-dup gimp git git-ftp gnome-disk-utility gnupg2 gparted guvcview inkscape lmms nodejs npm numix-icon-theme-circle orage php php-curl php-gd php-sqlite3 php-xml redshift spotify-client steam-installer ubuntustudio-fonts virtualbox virtualbox-ext-pack xarchiver xcalib xfce4-dockbarx-plugin zathura
 sudo apt --no-install-recommends install gnome-control-center gnome-session
+wget -O atom.deb https://atom.io/download/deb
+sudo dpkg -i atom.deb
+sudo apt install --fix-broken
+rm -f atom.deb
+apm install atom-ide-ui ide-typescript linter-eslint minimap platformio-ide-terminal prettier-atom vim-mode-plus
+npm install -g autoprefixer postcss typescript
 sudo a2enmod rewrite
 sudo a2enmod vhost_alias
 sudo ln -rs config/vhosts.conf /etc/apache2/conf-available/vhosts.conf
@@ -20,6 +26,7 @@ sudo mv /var/www/html/* ~/Public
 sudo rmdir /var/www/html
 sudo ln -s ~/Public /var/www/html
 sudo service apache2 restart
+sudo cp config/config.cson ~/.atom
 sudo ln -rs config/71-synaptics.conf /usr/share/X11/xorg.conf.d/71-synaptics.conf
 sudo ln -frs config/lightdm-gtk-greeter.conf /etc/lightdm/lightdm-gtk-greeter.conf
 PWD_ESCAPED=$(sed 's/[&/\]/\\&/g' <<< $(pwd))

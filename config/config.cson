@@ -1,0 +1,30 @@
+"*":
+  core:
+    autoHideMenuBar: true
+  editor:
+    fontFamily: "Fira Code"
+    softWrap: true
+    softWrapAtPreferredLineLength: true
+  "ide-typescript":
+    typeScriptServer:
+      path: "/usr/local/bin/tsserver"
+  "linter-eslint":
+    scopes: [
+      "source.js"
+      "source.jsx"
+      "source.js.jsx"
+      "source.flow"
+      "source.babel"
+      "source.js-semantic"
+      "source.ts"
+      "source.tsx"
+    ]
+  "prettier-atom":
+    formatOnSaveOptions:
+      enabled: true
+    useEslint: true
+  "vim-mode-plus":
+    askOptInToEditorScrollPastEnd: false
+    groupChangesWhenLeavingInsertMode: false
+  welcome:
+    showOnStartup: false
