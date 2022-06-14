@@ -1,22 +1,24 @@
 #!/bin/bash
+set -x
+trap read debug
 sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 0DF731E45CE24F27EEEB1450EFDC8610341D9410
 sudo add-apt-repository ppa:git-ftp/ppa
 sudo add-apt-repository ppa:numix/ppa
 sudo add-apt-repository ppa:xuzhen666/dockbarx
-wget -O - https://download.spotify.com/debian/pubkey.gpg | sudo apt-key add -
+wget -O - https://download.spotify.com/debian/pubkey_5E3C45D7B312C643.gpg | sudo apt-key add -
 echo deb http://repository.spotify.com stable non-free | sudo tee /etc/apt/sources.list.d/spotify.list
 sudo apt update
-sudo apt purge atril catfish engrampa gigolo gnome-mines gnome-software gnome-sudoku mousepad mugshot parole pidgin sgt-puzzles simple-scan thunar-volman thunderbird xfce4-dict xfce4-notes
+sudo apt purge thunar-volman
 sudo apt --purge autoremove
 sudo apt dist-upgrade
-sudo apt install apache2 arc-theme black blender conky-all cryptsetup deja-dup gimp git git-ftp gnome-disk-utility gnupg2 gparted guvcview inkscape lmms nodejs npm numix-icon-theme-circle orage php php-curl php-gd php-sqlite3 php-xml redshift spotify-client steam-installer ubuntustudio-fonts virtualbox virtualbox-ext-pack xarchiver xcalib xfce4-dockbarx-plugin zathura
+sudo apt install apache2 arc-theme black blender blueman conky-all cryptsetup deja-dup gimp git git-ftp gnome-disk-utility gnupg2 gparted guvcview inkscape lmms nodejs npm numix-icon-theme-circle php php-curl php-gd php-sqlite3 php-xml redshift spotify-client steam-installer ubuntustudio-fonts virtualbox virtualbox-ext-pack xarchiver xcalib xfce4-dockbarx-plugin zathura
 sudo apt --no-install-recommends install gnome-control-center gnome-session
 wget -O atom.deb https://atom.io/download/deb
 sudo dpkg -i atom.deb
 sudo apt install --fix-broken
 rm -f atom.deb
 apm install atom-ide-ui highlight-selected ide-typescript linter-eslint minimap platformio-ide-terminal prettier-atom vim-mode-plus
-npm install -g autoprefixer postcss typescript
+sudo npm install -g autoprefixer postcss typescript
 sudo a2enmod rewrite
 sudo a2enmod vhost_alias
 sudo ln -rs config/vhosts.conf /etc/apache2/conf-available/vhosts.conf
@@ -26,14 +28,14 @@ sudo mv /var/www/html/* ~/Public
 sudo rmdir /var/www/html
 sudo ln -s ~/Public /var/www/html
 sudo service apache2 restart
-sudo cp config/config.cson ~/.atom
 sudo ln -rs config/71-synaptics.conf /usr/share/X11/xorg.conf.d/71-synaptics.conf
 sudo ln -frs config/lightdm-gtk-greeter.conf /etc/lightdm/lightdm-gtk-greeter.conf
 PWD_ESCAPED=$(sed 's/[&/\]/\\&/g' <<< $(pwd))
 sed -E "s/\\\$PWD\b/$PWD_ESCAPED/g" config/power.service | sudo tee /lib/systemd/system/power.service
 sudo systemctl enable power.service
 sudo systemctl start power.service
-rsync -Ir config/autostart config/geany config/guvcview2 config/gtk-3.0 config/orage config/Thunar config/xfce4 ~/.config
+rsync -Ir config/autostart config/guvcview2 config/gtk-3.0 config/orage config/Thunar config/xfce4 ~/.config
+cp config/config.cson ~/.atom
 gsettings set org.blueman.plugins.powermanager auto-power-on false
 gsettings set org.dockbarx.dockbarx theme Deep
 gsettings set org.gnome.DejaDup backend remote
@@ -60,7 +62,7 @@ xfconf-query -c xfce4-keyboard-shortcuts -p /commands/custom/XF86AudioNext -n -t
 xfconf-query -c xfce4-keyboard-shortcuts -p /commands/custom/XF86AudioPlay -n -t string -s 'dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause'
 xfconf-query -c xfce4-keyboard-shortcuts -p /commands/custom/XF86AudioPrev -n -t string -s 'dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Previous'
 xfconf-query -c xfce4-keyboard-shortcuts -p '/commands/custom/<Primary><Alt><Super>8' -n -t string -s 'xcalib -i -a'
-xfconf-query -c xfce4-keyboard-shortcuts -p '/commands/custom/<Super>e' -n -t string -s geany
+xfconf-query -c xfce4-keyboard-shortcuts -p '/commands/custom/<Super>e' -n -t string -s atom
 xfconf-query -c xfce4-keyboard-shortcuts -p /commands/custom/F1 -n -t string -s 'xfce4-terminal --drop-down'
 xfconf-query -c xfce4-keyboard-shortcuts -p '/xfwm4/custom/<Primary><Alt>KP_1' -n -t string -s tile_down_left_key
 xfconf-query -c xfce4-keyboard-shortcuts -p '/xfwm4/custom/<Primary><Alt>KP_2' -n -t string -s tile_down_key
@@ -164,15 +166,11 @@ sudo update-alternatives --set x-cursor-theme /usr/share/icons/DMZ-Black/cursor.
 echo 'set editing-mode vi' > ~/.inputrc
 mkdir -p ~/Documents/orage
 echo -e "0 * * * * $(pwd)/orage.sh\n0 * * * * $(pwd)/power.sh\n" | crontab -
-mkdir -p ~/.config/geany/colorschemes
-wget -O ~/.config/geany/colorschemes/inkpot.conf https://raw.githubusercontent.com/codebrainz/geany-themes/master/colorschemes/inkpot.conf
 git config --global user.name 'Deep Toaster'
 git config --global user.email deeptoaster@gmail.com
-wget https://raw.githubusercontent.com/hotice/webupd8/master/install-google-fonts
-chmod +x install-google-fonts
-./install-google-fonts
-rm -f fonts-master install-google-fonts
-mkdir -p ~/.fonts
-for type in Bold Light Medium Regular Retina; do
-  wget -O ~/.fonts/FiraCode-${type}.ttf https://github.com/tonsky/FiraCode/blob/master/distr/ttf/FiraCode-${type}.ttf?raw=true
-done
+wget -O fonts-main.tar.gz https://github.com/google/fonts/archive/master.tar.gz
+tar -xzf fonts-main.tar.gz
+sudo mkdir -p /usr/share/fonts/truetype/google-fonts
+find fonts-main -name "*.ttf" -exec sudo install -m644 {} /usr/share/fonts/truetype/google-fonts
+fc-cache -f
+rm -fr fonts-main fonts-main.tar.gz
