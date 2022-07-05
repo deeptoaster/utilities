@@ -11,14 +11,14 @@ sudo apt update
 sudo apt purge thunar-volman
 sudo apt --purge autoremove
 sudo apt dist-upgrade
-sudo apt install apache2 arc-theme black blender blueman conky-all cryptsetup deja-dup gimp git git-ftp gnome-disk-utility gnupg2 gparted guvcview inkscape lmms nodejs npm numix-icon-theme-circle php php-curl php-gd php-sqlite3 php-xml redshift spotify-client steam-installer ubuntustudio-fonts virtualbox virtualbox-ext-pack xarchiver xcalib xfce4-dockbarx-plugin zathura
+sudo apt install apache2 arc-theme black blender blueman conky-all cryptsetup deja-dup gimp git git-ftp gnome-disk-utility gnupg2 gparted guvcview inkscape lmms nodejs npm numix-icon-theme-circle php php-bcmath php-curl php-gd php-sqlite3 php-xml redshift spotify-client steam-installer ubuntustudio-fonts virtualbox virtualbox-ext-pack xarchiver xcalib xfce4-dockbarx-plugin xfce4-places-plugin zathura
 sudo apt --no-install-recommends install gnome-control-center gnome-session
 wget -O atom.deb https://atom.io/download/deb
 sudo dpkg -i atom.deb
 sudo apt install --fix-broken
 rm -f atom.deb
 apm install atom-ide-ui highlight-selected ide-typescript linter-eslint minimap platformio-ide-terminal prettier-atom vim-mode-plus
-sudo npm install -g autoprefixer postcss typescript
+sudo npm install -g autoprefixer postcss postcss-cli typescript
 sudo a2enmod rewrite
 sudo a2enmod vhost_alias
 sudo ln -rs config/vhosts.conf /etc/apache2/conf-available/vhosts.conf
@@ -27,6 +27,7 @@ sudo sed -Ei 's/^(display_errors|short_open_tag) = Off$/\1 = On/' /etc/php/*/*/p
 sudo mv /var/www/html/* ~/Public
 sudo rmdir /var/www/html
 sudo ln -s ~/Public /var/www/html
+chmod o+rx ~
 sudo service apache2 restart
 sudo ln -rs config/71-synaptics.conf /usr/share/X11/xorg.conf.d/71-synaptics.conf
 sudo ln -frs config/lightdm-gtk-greeter.conf /etc/lightdm/lightdm-gtk-greeter.conf
@@ -34,7 +35,7 @@ PWD_ESCAPED=$(sed 's/[&/\]/\\&/g' <<< $(pwd))
 sed -E "s/\\\$PWD\b/$PWD_ESCAPED/g" config/power.service | sudo tee /lib/systemd/system/power.service
 sudo systemctl enable power.service
 sudo systemctl start power.service
-rsync -Ir config/autostart config/guvcview2 config/gtk-3.0 config/orage config/Thunar config/xfce4 ~/.config
+rsync -Ir config/autostart config/guvcview2 config/gtk-3.0 config/Thunar config/xfce4 ~/.config
 cp config/config.cson ~/.atom
 gsettings set org.blueman.plugins.powermanager auto-power-on false
 gsettings set org.dockbarx.dockbarx theme Deep
@@ -120,7 +121,8 @@ xfconf-query -c xfce4-panel -p /plugins/plugin-6/display-type -n -t uint -s 2
 xfconf-query -c xfce4-panel -p /plugins/plugin-6/group-policy -n -t uint -s 0
 xfconf-query -c xfce4-panel -p /plugins/plugin-7 -n -t string -s pulseaudio
 xfconf-query -c xfce4-panel -p /plugins/plugin-8 -n -t string -s indicator
-xfconf-query -c xfce4-panel -p /plugins/plugin-9 -n -t string -s xfce4-orageclock-plugin
+xfconf-query -c xfce4-panel -p /plugins/plugin-9 -n -t string -s clock
+xfconf-query -c xfce4-panel -p /plugins/plugin-9/digital-format -n -t string -s '%_H:%M '
 xfconf-query -c xfce4-panel -p /plugins/plugin-10 -n -t string -s pager
 xfconf-query -c xfce4-panel -p /plugins/plugin-10/rows -n -t uint -s 2
 xfconf-query -c xfce4-power-manager -p /xfce4-power-manager/blank-on-ac -n -t uint -s 0
@@ -154,6 +156,7 @@ xfconf-query -c xsettings -p /Gtk/FontName -n -t string -s 'Roboto 10'
 xfconf-query -c xsettings -p /Gtk/MenuImages -n -t bool -s false
 xfconf-query -c xsettings -p /Net/IconThemeName -n -t string -s Numix-Circle
 xfconf-query -c xsettings -p /Net/ThemeName -n -t string -s Arc-Dark
+xfce4-panel --restart
 ln -rs backdrops ~/Images/backdrops
 ln -rs backdrops/city.png ~/Images/city.png
 ln -rs backdrops/map.png ~/Images/map.png
@@ -164,8 +167,7 @@ ln -rs conky-rings/rings.lua ~/.lua/scripts/rings.lua
 sudo update-alternatives --set editor /usr/bin/vim.tiny
 sudo update-alternatives --set x-cursor-theme /usr/share/icons/DMZ-Black/cursor.theme
 echo 'set editing-mode vi' > ~/.inputrc
-mkdir -p ~/Documents/orage
-echo -e "0 * * * * $(pwd)/orage.sh\n0 * * * * $(pwd)/power.sh\n" | crontab -
+echo -e "0 * * * * $(pwd)/power.sh\n" | crontab -
 git config --global user.name 'Deep Toaster'
 git config --global user.email deeptoaster@gmail.com
 wget -O fonts-main.tar.gz https://github.com/google/fonts/archive/master.tar.gz
