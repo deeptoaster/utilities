@@ -11,14 +11,15 @@ sudo apt update
 sudo apt purge thunar-volman
 sudo apt --purge autoremove
 sudo apt dist-upgrade
-sudo apt install apache2 arc-theme black blender blueman conky-all cryptsetup deja-dup gimp git git-ftp gnome-disk-utility gnupg2 gparted guvcview inkscape lmms nodejs npm numix-icon-theme-circle php php-bcmath php-curl php-gd php-sqlite3 php-xml redshift spotify-client steam-installer ubuntustudio-fonts virtualbox virtualbox-ext-pack xarchiver xcalib xfce4-dockbarx-plugin xfce4-places-plugin zathura
+sudo apt install apache2 arc-theme black blender blueman conky-all cryptsetup deja-dup gimp git git-ftp gnome-disk-utility gnupg2 gparted guvcview inkscape lmms mate-calc nodejs npm numix-icon-theme-circle php php-bcmath php-curl php-gd php-sqlite3 php-xml redshift spotify-client steam-installer ubuntustudio-fonts virtualbox virtualbox-ext-pack xarchiver xcalib xfce4-dockbarx-plugin xfce4-places-plugin zathura
 sudo apt --no-install-recommends install gnome-control-center gnome-session
 wget -O atom.deb https://atom.io/download/deb
 sudo dpkg -i atom.deb
 sudo apt install --fix-broken
 rm -f atom.deb
 apm install atom-ide-ui highlight-selected ide-typescript linter-eslint minimap platformio-ide-terminal prettier-atom vim-mode-plus
-sudo npm install -g autoprefixer postcss postcss-cli typescript
+sudo npm install -g autoprefixer n npm postcss postcss-cli typescript
+sudo n latest
 sudo a2enmod rewrite
 sudo a2enmod vhost_alias
 sudo ln -rs config/vhosts.conf /etc/apache2/conf-available/vhosts.conf
@@ -35,7 +36,7 @@ PWD_ESCAPED=$(sed 's/[&/\]/\\&/g' <<< $(pwd))
 sed -E "s/\\\$PWD\b/$PWD_ESCAPED/g" config/power.service | sudo tee /lib/systemd/system/power.service
 sudo systemctl enable power.service
 sudo systemctl start power.service
-rsync -Ir config/autostart config/guvcview2 config/gtk-3.0 config/Thunar config/xfce4 ~/.config
+rsync -Ir config/autostart config/guvcview2 config/gtk-3.0 config/Thunar config/xfce4 config/zathura ~/.config
 cp config/config.cson ~/.atom
 gsettings set org.blueman.plugins.powermanager auto-power-on false
 gsettings set org.dockbarx.dockbarx theme Deep
@@ -173,6 +174,6 @@ git config --global user.email deeptoaster@gmail.com
 wget -O fonts-main.tar.gz https://github.com/google/fonts/archive/master.tar.gz
 tar -xzf fonts-main.tar.gz
 sudo mkdir -p /usr/share/fonts/truetype/google-fonts
-find fonts-main -name "*.ttf" -exec sudo install -m644 {} /usr/share/fonts/truetype/google-fonts
+find fonts-main -name "*.ttf" -exec sudo install -m644 {} /usr/share/fonts/truetype/google-fonts \;
 fc-cache -f
 rm -fr fonts-main fonts-main.tar.gz
