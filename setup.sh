@@ -4,20 +4,21 @@ trap read debug
 sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 0DF731E45CE24F27EEEB1450EFDC8610341D9410
 sudo add-apt-repository ppa:git-ftp/ppa
 sudo add-apt-repository ppa:numix/ppa
-sudo add-apt-repository ppa:xuzhen666/dockbarx
+sudo add-apt-repository ppa:xubuntu-dev/extras
 wget -O - https://download.spotify.com/debian/pubkey_5E3C45D7B312C643.gpg | sudo apt-key add -
 echo deb http://repository.spotify.com stable non-free | sudo tee /etc/apt/sources.list.d/spotify.list
 sudo apt update
-sudo apt purge thunar-volman
+sudo apt purge thunar-volman xfce4-whiskermenu-plugin
 sudo apt --purge autoremove
 sudo apt dist-upgrade
-sudo apt install apache2 arc-theme black blender blueman conky-all cryptsetup deja-dup gimp git git-ftp gnome-disk-utility gnupg2 gparted guvcview inkscape lmms mate-calc nodejs npm numix-icon-theme-circle php php-bcmath php-curl php-gd php-sqlite3 php-xml redshift spotify-client steam-installer ubuntustudio-fonts virtualbox virtualbox-ext-pack xarchiver xcalib xfce4-dockbarx-plugin xfce4-places-plugin zathura
+sudo apt install apache2 arc-theme black blender blueman conky-all cryptsetup deja-dup gimp git git-ftp gnome-disk-utility gnupg2 gparted guvcview inkscape latexmk lmms mate-calc nodejs npm numix-icon-theme-circle perl-tk php php-bcmath php-curl php-gd php-sqlite3 php-xml redshift spotify-client steam-installer ubuntustudio-fonts virtualbox virtualbox-ext-pack xarchiver xcalib xfce4-docklike-plugin xfce4-places-plugin zathura cm-super-x11-
+sudo usermod -a -G vboxusers $USER
 sudo apt --no-install-recommends install gnome-control-center gnome-session
 wget -O atom.deb https://atom.io/download/deb
 sudo dpkg -i atom.deb
 sudo apt install --fix-broken
 rm -f atom.deb
-apm install atom-ide-ui highlight-selected ide-typescript linter-eslint minimap platformio-ide-terminal prettier-atom vim-mode-plus
+apm install atom-ide-ui atom-latex highlight-selected ide-typescript linter-eslint-node minimap platformio-ide-terminal prettier-atom vim-mode-plus
 sudo npm install -g autoprefixer n npm postcss postcss-cli typescript
 sudo n latest
 sudo a2enmod rewrite
@@ -38,8 +39,8 @@ sudo systemctl enable power.service
 sudo systemctl start power.service
 rsync -Ir config/autostart config/guvcview2 config/gtk-3.0 config/Thunar config/xfce4 config/zathura ~/.config
 cp config/config.cson ~/.atom
+sudo update-locale LC_MESSAGES=fr_FR.UTF-8
 gsettings set org.blueman.plugins.powermanager auto-power-on false
-gsettings set org.dockbarx.dockbarx theme Deep
 gsettings set org.gnome.DejaDup backend remote
 gsettings set org.gnome.DejaDup exclude-list "@as []"
 gsettings set org.gnome.DejaDup include-list "['/media/woot/ZERO/LiberKey/MyDocuments', '/media/woot/ONE/LiberKey/MyDocuments']"
@@ -50,6 +51,7 @@ gsettings set org.gnome.settings-daemon.plugins.media-keys custom-keybindings "[
 gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ binding F1
 gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ command 'xfce4-terminal --drop-down'
 gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ name Terminal
+gsettings set org.gtk.gtk4.Settings.FileChooser show-hidden true
 xfconf-query -c keyboard-layout -p /Default/XkbDisable -n -t bool -s false
 xfconf-query -c keyboard-layout -p /Default/XkbLayout -n -t string -s us,ru
 xfconf-query -c keyboard-layout -p /Default/XkbOptions/Group -n -t string -s grp:win_space_toggle
@@ -94,16 +96,12 @@ xfconf-query -c xfce4-keyboard-shortcuts -p '/xfwm4/custom/<Primary><Shift>F9' -
 xfconf-query -c xfce4-panel -p / -r -R
 xfconf-query -c xfce4-panel -p /configver -n -t int -s 2
 xfconf-query -c xfce4-panel -p /panels -n -t uint -s 1
-xfconf-query -c xfce4-panel -p /panels/panel-0/autohide-behavior -n -t uint -s 0
-xfconf-query -c xfce4-panel -p /panels/panel-0/background-alpha -n -t uint -s 50
-xfconf-query -c xfce4-panel -p /panels/panel-0/background-style -n -t uint -s 1
 xfconf-query -c xfce4-panel -p /panels/panel-0/disable-struts -n -t bool -s true
 xfconf-query -c xfce4-panel -p /panels/panel-0/length -n -t uint -s 100
-xfconf-query -c xfce4-panel -p /panels/panel-0/plugin-ids -n -t int -t int -t int -t int -t int -t int -t int -t int -t int -t int -s 1 -s 2 -s 3 -s 4 -s 5 -s 6 -s 7 -s 8 -s 9 -s 10
+xfconf-query -c xfce4-panel -p /panels/panel-0/plugin-ids -n -t int -t int -t int -t int -t int -t int -t int -t int -t int -t int -t int -s 1 -s 2 -s 3 -s 4 -s 5 -s 6 -s 7 -s 8 -s 9 -s 10 -s 11
 xfconf-query -c xfce4-panel -p /panels/panel-0/position -n -t string -s 'p=6;x=0;y=0'
 xfconf-query -c xfce4-panel -p /panels/panel-0/position-locked -n -t bool -s true
 xfconf-query -c xfce4-panel -p /panels/panel-0/size -n -t uint -s 24
-xfconf-query -c xfce4-panel -p /panels/panel-0/span-monitors -n -t bool -s false
 xfconf-query -c xfce4-panel -p /plugins/plugin-1 -n -t string -s applicationsmenu
 xfconf-query -c xfce4-panel -p /plugins/plugin-1/button-icon -n -t string -s go-down-symbolic
 xfconf-query -c xfce4-panel -p /plugins/plugin-1/button-title -n -t string -s ' Applications '
@@ -111,21 +109,19 @@ xfconf-query -c xfce4-panel -p /plugins/plugin-2 -n -t string -s places
 xfconf-query -c xfce4-panel -p /plugins/plugin-2/button-label -n -t string -s ' Emplacements '
 xfconf-query -c xfce4-panel -p /plugins/plugin-2/show-button-type -n -t int -s 1
 xfconf-query -c xfce4-panel -p /plugins/plugin-2/show-recent -n -t bool -s false
-xfconf-query -c xfce4-panel -p /plugins/plugin-3 -n -t string -s dockbarx
-xfconf-query -c xfce4-panel -p /plugins/plugin-3/expand -n -t bool -s true
-xfconf-query -c xfce4-panel -p /plugins/plugin-4 -n -t string -s systray
-xfconf-query -c xfce4-panel -p /plugins/plugin-4/show-frame -n -t bool -s false
-xfconf-query -c xfce4-panel -p /plugins/plugin-5 -n -t string -s power-manager-plugin
-xfconf-query -c xfce4-panel -p /plugins/plugin-6 -n -t string -s xkb
-xfconf-query -c xfce4-panel -p /plugins/plugin-6/display-name -n -t uint -s 1
-xfconf-query -c xfce4-panel -p /plugins/plugin-6/display-type -n -t uint -s 2
-xfconf-query -c xfce4-panel -p /plugins/plugin-6/group-policy -n -t uint -s 0
-xfconf-query -c xfce4-panel -p /plugins/plugin-7 -n -t string -s pulseaudio
-xfconf-query -c xfce4-panel -p /plugins/plugin-8 -n -t string -s indicator
-xfconf-query -c xfce4-panel -p /plugins/plugin-9 -n -t string -s clock
-xfconf-query -c xfce4-panel -p /plugins/plugin-9/digital-format -n -t string -s '%_H:%M '
-xfconf-query -c xfce4-panel -p /plugins/plugin-10 -n -t string -s pager
-xfconf-query -c xfce4-panel -p /plugins/plugin-10/rows -n -t uint -s 2
+xfconf-query -c xfce4-panel -p /plugins/plugin-3 -n -t string -s docklike
+xfconf-query -c xfce4-panel -p /plugins/plugin-4 -n -t string -s separator
+xfconf-query -c xfce4-panel -p /plugins/plugin-4/expand -n -t bool -s true
+xfconf-query -c xfce4-panel -p /plugins/plugin-4/style -n -t uint -s 0
+xfconf-query -c xfce4-panel -p /plugins/plugin-5 -n -t string -s systray
+xfconf-query -c xfce4-panel -p /plugins/plugin-6 -n -t string -s notification-plugin
+xfconf-query -c xfce4-panel -p /plugins/plugin-7 -n -t string -s indicator
+xfconf-query -c xfce4-panel -p /plugins/plugin-8 -n -t string -s power-manager-plugin
+xfconf-query -c xfce4-panel -p /plugins/plugin-9 -n -t string -s pulseaudio
+xfconf-query -c xfce4-panel -p /plugins/plugin-10 -n -t string -s clock
+xfconf-query -c xfce4-panel -p /plugins/plugin-10/digital-format -n -t string -s '%_H:%M '
+xfconf-query -c xfce4-panel -p /plugins/plugin-11 -n -t string -s pager
+xfconf-query -c xfce4-panel -p /plugins/plugin-11/rows -n -t uint -s 2
 xfconf-query -c xfce4-power-manager -p /xfce4-power-manager/blank-on-ac -n -t uint -s 0
 xfconf-query -c xfce4-power-manager -p /xfce4-power-manager/dpms-on-ac-off -n -t uint -s 15
 xfconf-query -c xfce4-power-manager -p /xfce4-power-manager/dpms-on-ac-sleep -n -t uint -s 0
@@ -173,7 +169,17 @@ git config --global user.name 'Deep Toaster'
 git config --global user.email deeptoaster@gmail.com
 wget -O fonts-main.tar.gz https://github.com/google/fonts/archive/master.tar.gz
 tar -xzf fonts-main.tar.gz
-sudo mkdir -p /usr/share/fonts/truetype/google-fonts
+sudo mkdir -p /usr/share/fonts/truetype/google-fonts /usr/share/fonts/truetype/fira-code
 find fonts-main -name "*.ttf" -exec sudo install -m644 {} /usr/share/fonts/truetype/google-fonts \;
-fc-cache -f
 rm -fr fonts-main fonts-main.tar.gz
+curl https://api.github.com/repos/tonsky/FiraCode/releases/latest | grep \"browser_download_url\" | cut -d : -f 2,3 | tr -d \" | wget -i - -O fira-code.zip
+unzip -d fira-code fira-code.zip
+for type in fira-code/ttf/*; do
+  sudo install -m644 $type /usr/share/fonts/truetype/fira-code
+done
+rm -fr fira-code fira-code.zip
+fc-cache -f
+wget https://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz
+tar -xzf install-tl-unx.tar.gz
+sudo perl install-tl-*/install-tl --no-interaction
+rm -fr install-tl-*
