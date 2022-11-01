@@ -2,12 +2,24 @@
   "atom-ide-ui":
     use:
       "atom-ide-diagnostics-ui": "never"
+  "atom-latex":
+    hide_log_if_success: true
+    preview_after_build: "View in PDF viewer tab"
   core:
     autoHideMenuBar: true
+    disabledPackages: [
+      "atom-typescript"
+    ]
+    telemetryConsent: "limited"
+    themes: [
+      "one-dark-ui"
+      "solarized-dark-syntax"
+    ]
   editor:
     fontFamily: "Fira Code"
     softWrap: true
-    softWrapAtPreferredLineLength: true
+  "exception-reporting":
+    userId: "e7b25e05-9b24-47d8-9a2a-de56190a0304"
   "ide-typescript":
     typeScriptServer:
       path: "/usr/local/bin/tsserver"
@@ -22,10 +34,16 @@
       "source.ts"
       "source.tsx"
     ]
+  "linter-eslint-node":
+    autofix:
+      fixOnSave: true
+  "linter-mypy":
+    disallowAnyExplicit: false
+    disallowAnyExpr: false
+    disallowAnyUnimported: false
   "prettier-atom":
     formatOnSaveOptions:
       enabled: true
-    useEslint: true
   "vim-mode-plus":
     askOptInToEditorScrollPastEnd: false
     groupChangesWhenLeavingInsertMode: false
