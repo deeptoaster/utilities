@@ -18,7 +18,7 @@ wget -O atom.deb https://atom.io/download/deb
 sudo dpkg -i atom.deb
 sudo apt install --fix-broken
 rm -f atom.deb
-apm install atom-ide-ui atom-latex highlight-selected ide-typescript linter-eslint-node minimap platformio-ide-terminal prettier-atom vim-mode-plus
+apm install atom-ide-ui atom-inline-blame atom-latex highlight-selected ide-typescript linter-eslint-node linter-mypy minimap platformio-ide-terminal prettier-atom python-black vim-mode-plus
 sudo npm install -g autoprefixer n npm postcss postcss-cli typescript
 sudo n latest
 sudo a2enmod rewrite
@@ -38,7 +38,8 @@ sed -E "s/\\\$PWD\b/$PWD_ESCAPED/g" config/power.service | sudo tee /lib/systemd
 sudo systemctl enable power.service
 sudo systemctl start power.service
 rsync -Ir config/autostart config/guvcview2 config/gtk-3.0 config/Thunar config/xfce4 config/zathura ~/.config
-cp config/config.cson ~/.atom
+ln -frs config/config.cson ~/.atom/config.cson
+ln -frs config/keymap.cson ~/.atom/keymap.cson
 sudo update-locale LC_MESSAGES=fr_FR.UTF-8
 gsettings set org.blueman.plugins.powermanager auto-power-on false
 gsettings set org.gnome.DejaDup backend remote
