@@ -13,7 +13,7 @@
     telemetryConsent: "limited"
     themes: [
       "one-dark-ui"
-      "solarized-dark-syntax"
+      "base16-tomorrow-dark-theme"
     ]
   editor:
     fontFamily: "Fira Code"
@@ -23,6 +23,8 @@
   "ide-typescript":
     typeScriptServer:
       path: "/usr/local/bin/tsserver"
+  latex:
+    buildOnSave: true
   "linter-eslint":
     scopes: [
       "source.js"
@@ -41,6 +43,7 @@
     disallowAnyExplicit: false
     disallowAnyExpr: false
     disallowAnyUnimported: false
+    disallowUntypedCalls: false
   "prettier-atom":
     formatOnSaveOptions:
       enabled: true

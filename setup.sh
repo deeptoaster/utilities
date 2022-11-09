@@ -18,7 +18,7 @@ wget -O atom.deb https://atom.io/download/deb
 sudo dpkg -i atom.deb
 sudo apt install --fix-broken
 rm -f atom.deb
-apm install atom-ide-ui atom-inline-blame atom-latex highlight-selected ide-typescript linter-eslint-node linter-mypy minimap platformio-ide-terminal prettier-atom python-black vim-mode-plus
+apm install atom-ide-ui atom-inline-blame highlight-selected ide-typescript language-latex latex linter-eslint-node linter-mypy minimap prettier-atom python-black terminal-tab vim-mode-plus
 sudo npm install -g autoprefixer n npm postcss postcss-cli typescript
 sudo n latest
 sudo a2enmod rewrite
@@ -124,16 +124,18 @@ xfconf-query -c xfce4-panel -p /plugins/plugin-10/digital-format -n -t string -s
 xfconf-query -c xfce4-panel -p /plugins/plugin-11 -n -t string -s pager
 xfconf-query -c xfce4-panel -p /plugins/plugin-11/rows -n -t uint -s 2
 xfconf-query -c xfce4-power-manager -p /xfce4-power-manager/blank-on-ac -n -t uint -s 0
-xfconf-query -c xfce4-power-manager -p /xfce4-power-manager/dpms-on-ac-off -n -t uint -s 15
+xfconf-query -c xfce4-power-manager -p /xfce4-power-manager/blank-on-battery -n -t uint -s 0
+xfconf-query -c xfce4-power-manager -p /xfce4-power-manager/dpms-on-ac-off -n -t uint -s 5
 xfconf-query -c xfce4-power-manager -p /xfce4-power-manager/dpms-on-ac-sleep -n -t uint -s 0
+xfconf-query -c xfce4-power-manager -p /xfce4-power-manager/dpms-on-battery-off -n -t uint -s 5
+xfconf-query -c xfce4-power-manager -p /xfce4-power-manager/dpms-on-battery-sleep -n -t uint -s 0
 xfconf-query -c xfce4-power-manager -p /xfce4-power-manager/general-notification -n -t bool -s true
-xfconf-query -c xfce4-power-manager -p /xfce4-power-manager/inactivity-on-ac -n -t uint -s 60
-xfconf-query -c xfce4-power-manager -p /xfce4-power-manager/sleep-button-action -n -t uint -s 1
+xfconf-query -c xfce4-power-manager -p /xfce4-power-manager/inactivity-on-battery -n -t uint -s 15
 xfconf-query -c xfce4-screensaver -p /saver/enabled -n -t bool -s false
 xfconf-query -c xfce4-screensaver -p /saver/idle-activation/enabled -n -t bool -s false
 xfconf-query -c xfce4-session -p /general/SaveOnExit -n -t bool -s false
 xfconf-query -c xfwm4 -p /general/button_layout -n -t string -s 'CMH|O'
-xfconf-query -c xfwm4 -p /general/frame_opacity -n -t int -s 80
+xfconf-query -c xfwm4 -p /general/frame_opacity -n -t int -s 60
 xfconf-query -c xfwm4 -p /general/mousewheel_rollup -n -t bool -s true
 xfconf-query -c xfwm4 -p /general/popup_opacity -n -t int -s 80
 xfconf-query -c xfwm4 -p /general/raise_with_any_button -n -t bool -s false
