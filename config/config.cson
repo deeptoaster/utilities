@@ -16,6 +16,7 @@
       "base16-tomorrow-dark-theme"
     ]
   editor:
+    atomicSoftTabs: false
     fontFamily: "Fira Code"
     softWrap: true
   "exception-reporting":
@@ -25,6 +26,7 @@
       path: "/usr/local/bin/tsserver"
   latex:
     buildOnSave: true
+    enableSynctex: false
   "linter-eslint":
     scopes: [
       "source.js"
@@ -44,6 +46,7 @@
     disallowAnyExpr: false
     disallowAnyUnimported: false
     disallowUntypedCalls: false
+    lintTrigger: "LintAsYouType"
   "prettier-atom":
     formatOnSaveOptions:
       enabled: true

@@ -60,7 +60,7 @@ xfconf-query -c keyboard-layout -p /Default/XkbVariant -n -t string -s mac,mac
 xfconf-query -c thunar -p /last-location-bar -n -t string -s ThunarLocationButtons
 xfconf-query -c thunar -p /last-show-hidden -n -t bool -s true
 xfconf-query -c thunar -p /last-view -n -t string -s ThunarDetailsView
-xfconf-query -c xfce4-desktop -p /desktop-icons/style -n -t int -s 0
+xfconf-query -c xfce4-desktop -p /desktop-icons/style -n -t uint -s 0
 xfconf-query -c xfce4-desktop -p /desktop-menu/show -n -t bool -s false
 xfconf-query -c xfce4-desktop -p /windowlist-menu/show -n -t bool -s false
 xfconf-query -c xfce4-keyboard-shortcuts -p /commands/custom/XF86AudioNext -n -t string -s 'dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Next'
@@ -95,11 +95,13 @@ xfconf-query -c xfce4-keyboard-shortcuts -p '/xfwm4/custom/<Primary><Shift>F7' -
 xfconf-query -c xfce4-keyboard-shortcuts -p '/xfwm4/custom/<Primary><Shift>F8' -n -t string -s move_window_workspace_8_key
 xfconf-query -c xfce4-keyboard-shortcuts -p '/xfwm4/custom/<Primary><Shift>F9' -n -t string -s move_window_workspace_9_key
 xfconf-query -c xfce4-panel -p / -r -R
-xfconf-query -c xfce4-panel -p /configver -n -t int -s 2
+xfconf-query -c xfce4-panel -p /configver -n -t uint -s 2
 xfconf-query -c xfce4-panel -p /panels -n -t uint -s 1
+xfconf-query -c xfce4-panel -p /panels/panel-0/background-rgba -n -t double -t double -t double -t double -s 0.219608 -s 0.235294 -s 0.290196 -s 0.6
+xfconf-query -c xfce4-panel -p /panels/panel-0/background-style -n -t uint -s 1
 xfconf-query -c xfce4-panel -p /panels/panel-0/disable-struts -n -t bool -s true
 xfconf-query -c xfce4-panel -p /panels/panel-0/length -n -t uint -s 100
-xfconf-query -c xfce4-panel -p /panels/panel-0/plugin-ids -n -t int -t int -t int -t int -t int -t int -t int -t int -t int -t int -t int -s 1 -s 2 -s 3 -s 4 -s 5 -s 6 -s 7 -s 8 -s 9 -s 10 -s 11
+xfconf-query -c xfce4-panel -p /panels/panel-0/plugin-ids -n -t int -t int -t int -t int -t int -t int -t int -t int -t int -t int -s 1 -s 2 -s 3 -s 4 -s 5 -s 6 -s 7 -s 8 -s 9 -s 10
 xfconf-query -c xfce4-panel -p /panels/panel-0/position -n -t string -s 'p=6;x=0;y=0'
 xfconf-query -c xfce4-panel -p /panels/panel-0/position-locked -n -t bool -s true
 xfconf-query -c xfce4-panel -p /panels/panel-0/size -n -t uint -s 24
@@ -108,7 +110,7 @@ xfconf-query -c xfce4-panel -p /plugins/plugin-1/button-icon -n -t string -s go-
 xfconf-query -c xfce4-panel -p /plugins/plugin-1/button-title -n -t string -s ' Applications '
 xfconf-query -c xfce4-panel -p /plugins/plugin-2 -n -t string -s places
 xfconf-query -c xfce4-panel -p /plugins/plugin-2/button-label -n -t string -s ' Emplacements '
-xfconf-query -c xfce4-panel -p /plugins/plugin-2/show-button-type -n -t int -s 1
+xfconf-query -c xfce4-panel -p /plugins/plugin-2/show-button-type -n -t uint -s 1
 xfconf-query -c xfce4-panel -p /plugins/plugin-2/show-recent -n -t bool -s false
 xfconf-query -c xfce4-panel -p /plugins/plugin-3 -n -t string -s docklike
 xfconf-query -c xfce4-panel -p /plugins/plugin-4 -n -t string -s separator
@@ -116,13 +118,12 @@ xfconf-query -c xfce4-panel -p /plugins/plugin-4/expand -n -t bool -s true
 xfconf-query -c xfce4-panel -p /plugins/plugin-4/style -n -t uint -s 0
 xfconf-query -c xfce4-panel -p /plugins/plugin-5 -n -t string -s systray
 xfconf-query -c xfce4-panel -p /plugins/plugin-6 -n -t string -s notification-plugin
-xfconf-query -c xfce4-panel -p /plugins/plugin-7 -n -t string -s indicator
-xfconf-query -c xfce4-panel -p /plugins/plugin-8 -n -t string -s power-manager-plugin
-xfconf-query -c xfce4-panel -p /plugins/plugin-9 -n -t string -s pulseaudio
-xfconf-query -c xfce4-panel -p /plugins/plugin-10 -n -t string -s clock
-xfconf-query -c xfce4-panel -p /plugins/plugin-10/digital-format -n -t string -s '%_H:%M '
-xfconf-query -c xfce4-panel -p /plugins/plugin-11 -n -t string -s pager
-xfconf-query -c xfce4-panel -p /plugins/plugin-11/rows -n -t uint -s 2
+xfconf-query -c xfce4-panel -p /plugins/plugin-7 -n -t string -s power-manager-plugin
+xfconf-query -c xfce4-panel -p /plugins/plugin-8 -n -t string -s pulseaudio
+xfconf-query -c xfce4-panel -p /plugins/plugin-9 -n -t string -s clock
+xfconf-query -c xfce4-panel -p /plugins/plugin-9/digital-format -n -t string -s '%_H:%M '
+xfconf-query -c xfce4-panel -p /plugins/plugin-10 -n -t string -s pager
+xfconf-query -c xfce4-panel -p /plugins/plugin-10/rows -n -t uint -s 2
 xfconf-query -c xfce4-power-manager -p /xfce4-power-manager/blank-on-ac -n -t uint -s 0
 xfconf-query -c xfce4-power-manager -p /xfce4-power-manager/blank-on-battery -n -t uint -s 0
 xfconf-query -c xfce4-power-manager -p /xfce4-power-manager/dpms-on-ac-off -n -t uint -s 5
@@ -135,9 +136,9 @@ xfconf-query -c xfce4-screensaver -p /saver/enabled -n -t bool -s false
 xfconf-query -c xfce4-screensaver -p /saver/idle-activation/enabled -n -t bool -s false
 xfconf-query -c xfce4-session -p /general/SaveOnExit -n -t bool -s false
 xfconf-query -c xfwm4 -p /general/button_layout -n -t string -s 'CMH|O'
-xfconf-query -c xfwm4 -p /general/frame_opacity -n -t int -s 60
+xfconf-query -c xfwm4 -p /general/frame_opacity -n -t uint -s 60
 xfconf-query -c xfwm4 -p /general/mousewheel_rollup -n -t bool -s true
-xfconf-query -c xfwm4 -p /general/popup_opacity -n -t int -s 80
+xfconf-query -c xfwm4 -p /general/popup_opacity -n -t uint -s 80
 xfconf-query -c xfwm4 -p /general/raise_with_any_button -n -t bool -s false
 xfconf-query -c xfwm4 -p /general/scroll_workspaces -n -t bool -s false
 xfconf-query -c xfwm4 -p /general/show_dock_shadow -n -t bool -s false
@@ -145,7 +146,7 @@ xfconf-query -c xfwm4 -p /general/show_popup_shadow -n -t bool -s true
 xfconf-query -c xfwm4 -p /general/snap_to_windows -n -t bool -s true
 xfconf-query -c xfwm4 -p /general/theme -n -t string -s Arc-Dark
 xfconf-query -c xfwm4 -p /general/title_font -n -t string -s 'Neuropol 9'
-xfconf-query -c xfwm4 -p /general/workspace_count -n -t int -s 4
+xfconf-query -c xfwm4 -p /general/workspace_count -n -t uint -s 4
 xfconf-query -c xfwm4 -p /general/wrap_cycle -n -t bool -s false
 xfconf-query -c xfwm4 -p /general/wrap_layout -n -t bool -s false
 xfconf-query -c xfwm4 -p /general/wrap_windows -n -t bool -s false

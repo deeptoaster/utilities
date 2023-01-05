@@ -1,3 +1,5 @@
 [user]
-showPreviews=true
+indicatorStyle=2
 keyComboActive=true
+showPreviews=true
+showWindowCount=true
