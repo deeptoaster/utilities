@@ -8,19 +8,15 @@ sudo add-apt-repository ppa:xubuntu-dev/extras
 wget -O - https://download.spotify.com/debian/pubkey_5E3C45D7B312C643.gpg | sudo apt-key add -
 echo deb http://repository.spotify.com stable non-free | sudo tee /etc/apt/sources.list.d/spotify.list
 sudo apt update
-sudo apt purge thunar-volman xfce4-whiskermenu-plugin
+sudo apt purge thunar-volman vim-tiny xfce4-whiskermenu-plugin xpdf
 sudo apt --purge autoremove
 sudo apt dist-upgrade
-sudo apt install apache2 arc-theme black blender blueman conky-all cryptsetup deja-dup gimp git git-ftp gnome-disk-utility gnupg2 gparted guvcview inkscape latexmk lmms mate-calc nodejs npm numix-icon-theme-circle perl-tk php php-bcmath php-curl php-gd php-sqlite3 php-xml redshift spotify-client steam-installer ubuntustudio-fonts virtualbox virtualbox-ext-pack xarchiver xcalib xfce4-docklike-plugin xfce4-places-plugin zathura cm-super-x11-
+sudo apt --no-install-recommends install gnome-control-center gnome-session vim-gtk3
+sudo apt install apache2 arc-theme blender blueman conky-all cryptsetup deja-dup gimp git git-ftp gnome-disk-utility gnupg2 gparted guvcview inkscape latexmk lmms mate-calc nodejs npm numix-icon-theme-circle perl-tk php php-bcmath php-curl php-gd php-sqlite3 php-xml redshift spotify-client steam-installer ubuntustudio-fonts vim-airline vim-ale vim-ctrlp vim-gitgutter virtualbox virtualbox-ext-pack xarchiver xcalib xfce4-docklike-plugin xfce4-places-plugin zathura cm-super-x11-
 sudo usermod -a -G vboxusers $USER
-sudo apt --no-install-recommends install gnome-control-center gnome-session
-wget -O atom.deb https://atom.io/download/deb
-sudo dpkg -i atom.deb
-sudo apt install --fix-broken
-rm -f atom.deb
-apm install atom-ide-ui atom-inline-blame highlight-selected ide-typescript language-latex latex linter-eslint-node linter-mypy minimap prettier-atom python-black terminal-tab vim-mode-plus
-sudo npm install -g autoprefixer n npm postcss postcss-cli typescript
+sudo npm install -g n
 sudo n latest
+sudo npm install -g autoprefixer npm postcss postcss-cli pyright typescript
 sudo a2enmod rewrite
 sudo a2enmod vhost_alias
 sudo ln -rs config/vhosts.conf /etc/apache2/conf-available/vhosts.conf
@@ -67,7 +63,7 @@ xfconf-query -c xfce4-keyboard-shortcuts -p /commands/custom/XF86AudioNext -n -t
 xfconf-query -c xfce4-keyboard-shortcuts -p /commands/custom/XF86AudioPlay -n -t string -s 'dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause'
 xfconf-query -c xfce4-keyboard-shortcuts -p /commands/custom/XF86AudioPrev -n -t string -s 'dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Previous'
 xfconf-query -c xfce4-keyboard-shortcuts -p '/commands/custom/<Primary><Alt><Super>8' -n -t string -s 'xcalib -i -a'
-xfconf-query -c xfce4-keyboard-shortcuts -p '/commands/custom/<Super>e' -n -t string -s atom
+xfconf-query -c xfce4-keyboard-shortcuts -p '/commands/custom/<Super>e' -n -t string -s 'xfce4-terminal --maximize --hide-menubar --hide-scrollbar -x vim'
 xfconf-query -c xfce4-keyboard-shortcuts -p /commands/custom/F1 -n -t string -s 'xfce4-terminal --drop-down'
 xfconf-query -c xfce4-keyboard-shortcuts -p '/xfwm4/custom/<Primary><Alt>KP_1' -n -t string -s tile_down_left_key
 xfconf-query -c xfce4-keyboard-shortcuts -p '/xfwm4/custom/<Primary><Alt>KP_2' -n -t string -s tile_down_key
@@ -136,9 +132,9 @@ xfconf-query -c xfce4-screensaver -p /saver/enabled -n -t bool -s false
 xfconf-query -c xfce4-screensaver -p /saver/idle-activation/enabled -n -t bool -s false
 xfconf-query -c xfce4-session -p /general/SaveOnExit -n -t bool -s false
 xfconf-query -c xfwm4 -p /general/button_layout -n -t string -s 'CMH|O'
-xfconf-query -c xfwm4 -p /general/frame_opacity -n -t uint -s 60
+xfconf-query -c xfwm4 -p /general/frame_opacity -n -t int -s 60
 xfconf-query -c xfwm4 -p /general/mousewheel_rollup -n -t bool -s true
-xfconf-query -c xfwm4 -p /general/popup_opacity -n -t uint -s 80
+xfconf-query -c xfwm4 -p /general/popup_opacity -n -t int -s 80
 xfconf-query -c xfwm4 -p /general/raise_with_any_button -n -t bool -s false
 xfconf-query -c xfwm4 -p /general/scroll_workspaces -n -t bool -s false
 xfconf-query -c xfwm4 -p /general/show_dock_shadow -n -t bool -s false
@@ -146,7 +142,7 @@ xfconf-query -c xfwm4 -p /general/show_popup_shadow -n -t bool -s true
 xfconf-query -c xfwm4 -p /general/snap_to_windows -n -t bool -s true
 xfconf-query -c xfwm4 -p /general/theme -n -t string -s Arc-Dark
 xfconf-query -c xfwm4 -p /general/title_font -n -t string -s 'Neuropol 9'
-xfconf-query -c xfwm4 -p /general/workspace_count -n -t uint -s 4
+xfconf-query -c xfwm4 -p /general/workspace_count -n -t int -s 4
 xfconf-query -c xfwm4 -p /general/wrap_cycle -n -t bool -s false
 xfconf-query -c xfwm4 -p /general/wrap_layout -n -t bool -s false
 xfconf-query -c xfwm4 -p /general/wrap_windows -n -t bool -s false
@@ -162,10 +158,13 @@ ln -rs backdrops ~/Images/backdrops
 ln -rs backdrops/city.png ~/Images/city.png
 ln -rs backdrops/map.png ~/Images/map.png
 ln -rs config/face ~/.face
+ln -rs config/vimrc ~/.vimrc
 ln -rs conky-rings/conkyrc ~/.conkyrc
 mkdir -p ~/.lua/scripts
 ln -rs conky-rings/rings.lua ~/.lua/scripts/rings.lua
-sudo update-alternatives --set editor /usr/bin/vim.tiny
+git clone https://github.com/preservim/nerdtree.git ~/.vim/pack/vendor/start/nerdtree
+sudo update-alternatives --install /usr/bin/editor editor /usr/bin/vim 50
+sudo update-alternatives --remove editor /usr/bin/vim.gtk3
 sudo update-alternatives --set x-cursor-theme /usr/share/icons/DMZ-Black/cursor.theme
 echo 'set editing-mode vi' > ~/.inputrc
 echo -e "0 * * * * $(pwd)/power.sh\n" | crontab -
@@ -187,3 +186,4 @@ wget https://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz
 tar -xzf install-tl-unx.tar.gz
 sudo perl install-tl-*/install-tl --no-interaction
 rm -fr install-tl-*
+
