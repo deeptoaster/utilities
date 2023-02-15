@@ -157,6 +157,7 @@ xfce4-panel --restart
 ln -rs backdrops ~/Images/backdrops
 ln -rs backdrops/city.png ~/Images/city.png
 ln -rs backdrops/map.png ~/Images/map.png
+ln -rs config/bash_aliases ~/.bash_aliases
 ln -rs config/face ~/.face
 ln -rs config/vimrc ~/.vimrc
 ln -rs conky-rings/conkyrc ~/.conkyrc

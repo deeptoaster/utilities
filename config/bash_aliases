@@ -1,0 +1,2 @@
+alias glag='git log --all --graph'
+
