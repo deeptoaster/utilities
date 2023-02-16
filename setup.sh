@@ -12,7 +12,7 @@ sudo apt purge thunar-volman vim-tiny xfce4-whiskermenu-plugin xpdf
 sudo apt --purge autoremove
 sudo apt dist-upgrade
 sudo apt --no-install-recommends install gnome-control-center gnome-session vim-gtk3
-sudo apt install apache2 arc-theme blender blueman conky-all cryptsetup deja-dup gimp git git-ftp gnome-disk-utility gnupg2 gparted guvcview inkscape latexmk lmms mate-calc nodejs npm numix-icon-theme-circle perl-tk php php-bcmath php-curl php-gd php-sqlite3 php-xml redshift spotify-client steam-installer ubuntustudio-fonts vim-airline vim-ale vim-ctrlp vim-gitgutter virtualbox virtualbox-ext-pack xarchiver xcalib xfce4-docklike-plugin xfce4-places-plugin zathura cm-super-x11-
+sudo apt install apache2 arc-theme blender blueman conky-all cryptsetup deja-dup fonts-powerline gimp git git-ftp gnome-disk-utility gnupg2 gparted guvcview inkscape latexmk lmms mate-calc nodejs npm numix-icon-theme-circle perl-tk php php-bcmath php-curl php-gd php-sqlite3 php-xml redshift spotify-client steam-installer ubuntustudio-fonts vim-airline vim-ale vim-ctrlp vim-gitgutter virtualbox virtualbox-ext-pack xarchiver xcalib xfce4-docklike-plugin xfce4-places-plugin zathura cm-super-x11-
 sudo usermod -a -G vboxusers $USER
 sudo npm install -g n
 sudo n latest
@@ -154,6 +154,8 @@ xfconf-query -c xsettings -p /Gtk/MenuImages -n -t bool -s false
 xfconf-query -c xsettings -p /Net/IconThemeName -n -t string -s Numix-Circle
 xfconf-query -c xsettings -p /Net/ThemeName -n -t string -s Arc-Dark
 xfce4-panel --restart
+git config --global user.name 'Deep Toaster'
+git config --global user.email deeptoaster@gmail.com
 ln -rs backdrops ~/Images/backdrops
 ln -rs backdrops/city.png ~/Images/city.png
 ln -rs backdrops/map.png ~/Images/map.png
@@ -163,14 +165,15 @@ ln -rs config/vimrc ~/.vimrc
 ln -rs conky-rings/conkyrc ~/.conkyrc
 mkdir -p ~/.lua/scripts
 ln -rs conky-rings/rings.lua ~/.lua/scripts/rings.lua
-git clone https://github.com/preservim/nerdtree.git ~/.vim/pack/vendor/start/nerdtree
+git clone https://github.com/Xuyuanp/nerdtree-git-plugin ~/.vim/pack/foo/start/nerdtree-git-plugin
+git clone https://github.com/preservim/nerdtree ~/.vim/pack/foo/start/nerdtree
+git clone https://github.com/tiagofumo/vim-nerdtree-syntax-highlight ~/.vim/pack/foo/start/vim-nerdtree-syntax-highlight
+git clone https://github.com/tpope/vim-obsession ~/.vim/pack/foo/start/vim-obsession
 sudo update-alternatives --install /usr/bin/editor editor /usr/bin/vim 50
 sudo update-alternatives --remove editor /usr/bin/vim.gtk3
 sudo update-alternatives --set x-cursor-theme /usr/share/icons/DMZ-Black/cursor.theme
 echo 'set editing-mode vi' > ~/.inputrc
 echo -e "0 * * * * $(pwd)/power.sh\n" | crontab -
-git config --global user.name 'Deep Toaster'
-git config --global user.email deeptoaster@gmail.com
 wget -O fonts-main.tar.gz https://github.com/google/fonts/archive/master.tar.gz
 tar -xzf fonts-main.tar.gz
 sudo mkdir -p /usr/share/fonts/truetype/google-fonts /usr/share/fonts/truetype/fira-code
