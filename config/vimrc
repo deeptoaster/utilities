@@ -2,6 +2,7 @@ set autoindent
 set clipboard=unnamedplus
 set cursorline
 set expandtab
+set foldmethod=indent
 set hlsearch
 set incsearch
 set mouse=a
@@ -16,6 +17,7 @@ let g:airline_powerline_fonts = 1
 let g:ale_completion_enabled = 1
 let g:ale_fixers = {'python': ['black']}
 let g:ale_fix_on_save = 1
+let g:ale_set_balloons = 1
 let g:ctrlp_custom_ignore = '\v[\/]\.git$|\v[\/]node_modules$'
 let g:NERDTreeExactMatchHighlightFullName = 1
 let g:NERDTreeFileExtensionHighlightFullName = 1
