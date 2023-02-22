@@ -34,8 +34,6 @@ sed -E "s/\\\$PWD\b/$PWD_ESCAPED/g" config/power.service | sudo tee /lib/systemd
 sudo systemctl enable power.service
 sudo systemctl start power.service
 rsync -Ir config/autostart config/guvcview2 config/gtk-3.0 config/Thunar config/xfce4 config/zathura ~/.config
-ln -frs config/config.cson ~/.atom/config.cson
-ln -frs config/keymap.cson ~/.atom/keymap.cson
 sudo update-locale LC_MESSAGES=fr_FR.UTF-8
 gsettings set org.blueman.plugins.powermanager auto-power-on false
 gsettings set org.gnome.DejaDup backend remote
