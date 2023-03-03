@@ -16,7 +16,7 @@ sudo apt install apache2 arc-theme blender blueman conky-all cryptsetup deja-dup
 sudo usermod -a -G vboxusers $USER
 sudo npm install -g n
 sudo n latest
-sudo npm install -g autoprefixer npm postcss postcss-cli pyright typescript
+sudo npm install -g autoprefixer eslint npm postcss postcss-cli prettier pyright typescript
 sudo a2enmod rewrite
 sudo a2enmod vhost_alias
 sudo ln -rs config/vhosts.conf /etc/apache2/conf-available/vhosts.conf
@@ -34,11 +34,13 @@ sed -E "s/\\\$PWD\b/$PWD_ESCAPED/g" config/power.service | sudo tee /lib/systemd
 sudo systemctl enable power.service
 sudo systemctl start power.service
 rsync -Ir config/autostart config/guvcview2 config/gtk-3.0 config/Thunar config/xfce4 config/zathura ~/.config
+sed -Ei "s/\\\$USER\b/$USER/g" ~/.config/gtk-3.0/bookmarks
 sudo update-locale LC_MESSAGES=fr_FR.UTF-8
+LANGUAGE=fr_FR xdg-user-dirs-update --force
 gsettings set org.blueman.plugins.powermanager auto-power-on false
 gsettings set org.gnome.DejaDup backend remote
 gsettings set org.gnome.DejaDup exclude-list "@as []"
-gsettings set org.gnome.DejaDup include-list "['/media/woot/ZERO/LiberKey/MyDocuments', '/media/woot/ONE/LiberKey/MyDocuments']"
+gsettings set org.gnome.DejaDup include-list "['/media/$USER/ZERO/LiberKey/MyDocuments', '/media/$USER/ONE/LiberKey/MyDocuments']"
 gsettings set org.gnome.DejaDup periodic true
 gsettings set org.gnome.DejaDup.Remote folder ''
 gsettings set org.gnome.DejaDup.Remote uri 'davs://deeptoaster%40gmail.com@dav.box.com/dav/deja-dup'
@@ -165,6 +167,7 @@ ln -rs backdrops/map.png ~/Images/map.png
 ln -rs config/bash_aliases ~/.bash_aliases
 ln -rs config/face ~/.face
 ln -rs config/gitignore ~/.gitignore
+ln -rs config/pam_environment ~/.pam_environment
 ln -rs config/vimrc ~/.vimrc
 ln -rs conky-rings/conkyrc ~/.conkyrc
 mkdir -p ~/.lua/scripts
