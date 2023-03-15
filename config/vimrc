@@ -15,6 +15,7 @@ set tabstop=2
 set wildmenu
 colorscheme elflord
 highlight ALEError ctermbg=darkred
+highlight Error ctermbg=darkred
 let g:NERDTreeWinPos = 'right'
 let g:airline_powerline_fonts = 1
 let g:ale_completion_enabled = 1
