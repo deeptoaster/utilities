@@ -13,9 +13,8 @@ set shiftwidth=2
 set smartindent
 set tabstop=2
 set wildmenu
-colorscheme elflord
-highlight ALEError ctermbg=darkred
-highlight Error ctermbg=darkred
+colorscheme monokai
+highlight Normal ctermbg=NONE
 let g:NERDTreeWinPos = 'right'
 let g:airline_powerline_fonts = 1
 let g:ale_completion_enabled = 1
