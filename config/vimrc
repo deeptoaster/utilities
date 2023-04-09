@@ -28,4 +28,11 @@ let g:NERDTreeGitStatusConcealBrackets = 1
 let g:NERDTreePatternMatchHighlightFullName = 1
 packadd! CtrlP
 packadd! ale
-
+autocmd User ALECompletePost setglobal nofoldenable |
+    \ ALEHover |
+    \ call timer_start(100, function('execute', ['setglobal foldenable']))
+map <C-LeftMouse> <LeftMouse><Plug>(ale_go_to_definition)
+map <C-]> <Plug>(ale_go_to_definition)
+noremap <C-t> :NERDTreeToggle<CR>
+nmap [q <Plug>(ale_previous_wrap)
+nmap ]q <Plug>(ale_previous_wrap)
