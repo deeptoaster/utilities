@@ -1,0 +1,11 @@
+[xarchiver]
+confirm_deletion=true
+icon_size=2
+show_sidebar=true
+show_location_bar=true
+store_output=true
+show_toolbar=true
+preferred_temp_dir=/tmp
+ensure_directory=true
+full_path=true
+recurse=true

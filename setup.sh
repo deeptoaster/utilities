@@ -33,17 +33,15 @@ PWD_ESCAPED=$(sed 's/[&/\]/\\&/g' <<< $(pwd))
 sed -E "s/\\\$PWD\b/$PWD_ESCAPED/g" config/power.service | sudo tee /lib/systemd/system/power.service
 sudo systemctl enable power.service
 sudo systemctl start power.service
-rsync -Ir config/autostart config/guvcview2 config/gtk-3.0 config/Thunar config/xfce4 config/zathura ~/.config
+rsync -Ir config/autostart config/guvcview2 config/gtk-3.0 config/Thunar config/xarchiver config/xfce4 config/zathura ~/.config
 sed -Ei "s/\\\$USER\b/$USER/g" ~/.config/gtk-3.0/bookmarks
 sudo update-locale LC_MESSAGES=fr_FR.UTF-8
 LANGUAGE=fr_FR xdg-user-dirs-update --force
 gsettings set org.blueman.plugins.powermanager auto-power-on false
-gsettings set org.gnome.DejaDup backend remote
-gsettings set org.gnome.DejaDup exclude-list "@as []"
+gsettings set org.gnome.DejaDup backend google
 gsettings set org.gnome.DejaDup include-list "['/media/$USER/ZERO/LiberKey/MyDocuments', '/media/$USER/ONE/LiberKey/MyDocuments']"
 gsettings set org.gnome.DejaDup periodic true
-gsettings set org.gnome.DejaDup.Remote folder ''
-gsettings set org.gnome.DejaDup.Remote uri 'davs://deeptoaster%40gmail.com@dav.box.com/dav/deja-dup'
+gsettings set org.gnome.DejaDup.Google folder 'deja-dup'
 gsettings set org.gnome.settings-daemon.plugins.media-keys custom-keybindings "['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/']"
 gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ binding F1
 gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ command 'xfce4-terminal --drop-down'
@@ -156,6 +154,7 @@ xfconf-query -c xsettings -p /Net/ThemeName -n -t string -s Arc-Dark
 xfce4-panel --restart
 git config --global commit.gpgSign true
 git config --global core.excludesFile ~/.gitignore
+git config --global diff.tool vimdiff
 git config --global gpg.format ssh
 git config --global gpg.ssh.allowedSignersFile ~/.ssh/allowed_signers
 git config --global pull.rebase false
