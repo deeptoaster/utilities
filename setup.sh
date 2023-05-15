@@ -2,15 +2,14 @@
 set -x
 trap read debug
 sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 0DF731E45CE24F27EEEB1450EFDC8610341D9410
-sudo add-apt-repository ppa:git-ftp/ppa
 sudo add-apt-repository ppa:numix/ppa
 sudo add-apt-repository ppa:xubuntu-dev/extras
 wget -O - https://download.spotify.com/debian/pubkey_7A3A762FAFD4A51F.gpg | sudo apt-key add -
 echo deb http://repository.spotify.com stable non-free | sudo tee /etc/apt/sources.list.d/spotify.list
 sudo apt update
 sudo apt purge thunar-volman vim-tiny xfce4-whiskermenu-plugin xpdf
-sudo apt --purge autoremove
 sudo apt dist-upgrade
+sudo apt --purge autoremove
 sudo apt --no-install-recommends install gnome-control-center gnome-session vim-gtk3
 sudo apt install apache2 arc-theme black blender blueman conky-all cryptsetup deja-dup ffmpeg fonts-powerline gimp git git-ftp gnome-disk-utility gnupg2 gparted guvcview inkscape lmms mate-calc nodejs npm numix-icon-theme-circle pandoc php php-bcmath php-curl php-gd php-sqlite3 php-xml redshift spotify-client steam-installer ubuntustudio-fonts vim-airline vim-ale vim-ctrlp vim-gitgutter virtualbox virtualbox-ext-pack xarchiver xcalib xfce4-docklike-plugin xfce4-places-plugin zathura cm-super-x11-
 sudo usermod -aG vboxusers $USER
@@ -152,6 +151,9 @@ xfconf-query -c xsettings -p /Gtk/MenuImages -n -t bool -s false
 xfconf-query -c xsettings -p /Net/IconThemeName -n -t string -s Numix-Circle
 xfconf-query -c xsettings -p /Net/ThemeName -n -t string -s Arc-Dark
 xfce4-panel --restart
+ssh-keygen -C deeptoaster@gmail.com -t ed25519
+eval "$(ssh-agent -s)"
+ssh-add ~/.ssh/id_ed25519
 git config --global commit.gpgSign true
 git config --global core.excludesFile ~/.gitignore
 git config --global diff.tool vimdiff
@@ -160,6 +162,7 @@ git config --global gpg.ssh.allowedSignersFile ~/.ssh/allowed_signers
 git config --global pull.rebase false
 git config --global user.email deeptoaster@gmail.com
 git config --global user.name 'Deep Toaster'
+git config --global user.signingkey ~/.ssh/id_ed25519.pub
 touch ~/.ssh/allowed_signers
 ln -rs config/bash_aliases ~/.bash_aliases
 ln -rs config/face ~/.face
@@ -196,4 +199,3 @@ wget https://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz
 tar -xzf install-tl-unx.tar.gz
 sudo perl install-tl-*/install-tl --no-interaction
 rm -fr install-tl-*
-
