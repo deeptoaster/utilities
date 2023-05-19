@@ -17,10 +17,18 @@ colorscheme monokai
 highlight Normal ctermbg=NONE
 let g:airline_powerline_fonts = 1
 let g:ale_completion_enabled = 1
-let g:ale_fixers = {'python': ['black'], '*': ['prettier']}
+let g:ale_fixers = {
+  \ 'c': ['clang-format'],
+  \ 'cpp': ['clang-format'],
+  \ 'cuda': ['clang-format'],
+  \ 'python': ['black'],
+  \ '*': ['prettier']
+\ }
 let g:ale_fix_on_save = 1
 let g:ale_set_balloons = 1
-let g:ctrlp_custom_ignore = '\v[\/](\.git|dist|node_modules)$'
+let g:ctrlp_custom_ignore =
+    \ '\v[\/](\.catkin_tools|\.git|build|devel|dist|logs|node_modules)$'
+let g:ctrlp_show_hidden = 1
 let g:ctrlp_working_path_mode = 0
 let g:NERDTreeExactMatchHighlightFullName = 1
 let g:NERDTreeFileExtensionHighlightFullName = 1
@@ -29,11 +37,15 @@ let g:NERDTreePatternMatchHighlightFullName = 1
 let g:NERDTreeShowHidden=1
 packadd! CtrlP
 packadd! ale
+function GoToDefinition()
+  ALEGoToDefinition
+  silent! execute "normal! \<C-]>"
+endfunction
 autocmd User ALECompletePost setglobal nofoldenable |
     \ ALEHover |
     \ call timer_start(100, function('execute', ['setglobal foldenable']))
-map <C-LeftMouse> <LeftMouse><Plug>(ale_go_to_definition)
-map <C-]> <Plug>(ale_go_to_definition)
+noremap <silent> <C-LeftMouse> <LeftMouse>:call GoToDefinition()<CR>
+noremap <silent> <C-]> :call GoToDefinition()<CR>
 noremap <C-t> :NERDTreeToggle<CR>
 nmap [q <Plug>(ale_previous_wrap)
 nmap ]q <Plug>(ale_next_wrap)
