@@ -150,7 +150,7 @@ xfconf-query -c xsettings -p /Gtk/FontName -n -t string -s 'Roboto 10'
 xfconf-query -c xsettings -p /Gtk/MenuImages -n -t bool -s false
 xfconf-query -c xsettings -p /Net/IconThemeName -n -t string -s Numix-Circle
 xfconf-query -c xsettings -p /Net/ThemeName -n -t string -s Arc-Dark
-xfce4-panel --restart
+xfce4-panel -r
 ssh-keygen -C deeptoaster@gmail.com -t ed25519
 eval "$(ssh-agent -s)"
 ssh-add ~/.ssh/id_ed25519
