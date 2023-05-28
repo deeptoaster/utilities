@@ -1,5 +1,6 @@
 [user]
-indicatorStyle=2
+inactiveIndicatorStyle=2
+indicatorStyle=3
 keyComboActive=true
 showPreviews=true
 showWindowCount=true
