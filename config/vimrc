@@ -15,6 +15,7 @@ set tabstop=2
 set wildmenu
 colorscheme sierra
 highlight Normal ctermbg=NONE
+let g:airline#extensions#tabline#enabled = 1
 let g:airline_powerline_fonts = 1
 let g:ale_completion_enabled = 1
 let g:ale_fixers = {
@@ -30,10 +31,8 @@ let g:ctrlp_custom_ignore =
     \ '\v[\/](\.catkin_tools|\.clangd\/index|\.git|__pycache__|build|devel|dist|logs|node_modules)$'
 let g:ctrlp_show_hidden = 1
 let g:ctrlp_working_path_mode = 0
-let g:NERDTreeExactMatchHighlightFullName = 1
-let g:NERDTreeFileExtensionHighlightFullName = 1
 let g:NERDTreeGitStatusConcealBrackets = 1
-let g:NERDTreePatternMatchHighlightFullName = 1
+let g:NERDTreeGitStatusUseNerdFonts = 1
 let g:NERDTreeShowHidden=1
 packadd! CtrlP
 packadd! ale

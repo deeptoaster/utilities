@@ -2,7 +2,7 @@
 BackgroundDarkness=0.8
 BackgroundMode=TERMINAL_BACKGROUND_TRANSPARENT
 ColorPalette=#3f3f3f;#705050;#60b48a;#dfaf8f;#9ab8d7;#dc8cc3;#8cd0d3;#dcdcdc;#709080;#dca3a3;#72d5a3;#f0dfaf;#94bff3;#ec93d3;#93e0e3;#ffffff
-FontName=Fira Code 11
+FontName=FiraCode Nerd Font Mono 11
 DropdownWidth=100
 DropdownAlwaysShowTabs=FALSE
 DropdownAnimationTime=100

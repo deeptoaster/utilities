@@ -11,7 +11,7 @@ sudo apt purge thunar-volman vim-tiny xfce4-whiskermenu-plugin xpdf
 sudo apt dist-upgrade
 sudo apt --purge autoremove
 sudo apt --no-install-recommends install gnome-control-center gnome-session vim-gtk3
-sudo apt install apache2 arc-theme black blender blueman conky-all cryptsetup deja-dup ffmpeg fonts-powerline gimp git git-ftp gnome-disk-utility gnupg2 gparted guvcview inkscape lmms mate-calc nodejs npm numix-icon-theme-circle pandoc php php-bcmath php-curl php-gd php-sqlite3 php-xml redshift spotify-client steam-installer ubuntustudio-fonts vim-airline vim-ale vim-ctrlp vim-gitgutter virtualbox virtualbox-ext-pack xarchiver xcalib xfce4-docklike-plugin xfce4-places-plugin zathura cm-super-x11-
+sudo apt install apache2 arc-theme black blender blueman conky-all cryptsetup deja-dup ffmpeg gimp git git-ftp gnome-disk-utility gnupg2 gparted guvcview inkscape lmms mate-calc nodejs npm numix-icon-theme-circle pandoc php php-bcmath php-curl php-gd php-sqlite3 php-xml redshift spotify-client steam-installer ubuntustudio-fonts vim-airline vim-ale vim-ctrlp vim-gitgutter virtualbox virtualbox-ext-pack xarchiver xcalib xfce4-docklike-plugin xfce4-places-plugin zathura cm-super-x11-
 sudo usermod -aG vboxusers $USER
 sudo npm install -g n
 sudo n latest
@@ -176,6 +176,7 @@ mkdir -p ~/.lua/scripts
 ln -rs conky-rings/rings.lua ~/.lua/scripts/rings.lua
 git clone https://github.com/Xuyuanp/nerdtree-git-plugin ~/.vim/pack/foo/start/nerdtree-git-plugin
 git clone https://github.com/preservim/nerdtree ~/.vim/pack/foo/start/nerdtree
+git clone https://github.com/ryanoasis/vim-devicons ~/.vim/pack/foo/start/vim-devicons
 git clone https://github.com/tiagofumo/vim-nerdtree-syntax-highlight ~/.vim/pack/foo/start/vim-nerdtree-syntax-highlight
 git clone https://github.com/tpope/vim-surround ~/.vim/pack/foo/start/vim-surround
 git clone https://github.com/tpope/vim-obsession ~/.vim/pack/foo/start/vim-obsession
@@ -194,12 +195,9 @@ tar -xzf fonts-main.tar.gz
 sudo mkdir -p /usr/share/fonts/truetype/google-fonts /usr/share/fonts/truetype/fira-code
 find fonts-main -name "*.ttf" -exec sudo install -m644 {} /usr/share/fonts/truetype/google-fonts \;
 rm -fr fonts-main fonts-main.tar.gz
-curl https://api.github.com/repos/tonsky/FiraCode/releases/latest | grep \"browser_download_url\" | cut -d : -f 2,3 | tr -d \" | wget -i - -O fira-code.zip
-unzip -d fira-code fira-code.zip
-for type in fira-code/ttf/*; do
-  sudo install -m644 $type /usr/share/fonts/truetype/fira-code
+for variant in Bold Light Medium Regular Retina SemiBold; do
+  sudo wget -P /usr/share/fonts/truetype/fira-code https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/FiraCode/$variant/FiraCodeNerdFontMono-$variant.ttf
 done
-rm -fr fira-code fira-code.zip
 fc-cache -f
 wget https://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz
 tar -xzf install-tl-unx.tar.gz
