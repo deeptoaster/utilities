@@ -13,7 +13,7 @@ set shiftwidth=2
 set smartindent
 set tabstop=2
 set wildmenu
-colorscheme monokai
+colorscheme sierra
 highlight Normal ctermbg=NONE
 let g:airline_powerline_fonts = 1
 let g:ale_completion_enabled = 1
@@ -27,7 +27,7 @@ let g:ale_fixers = {
 let g:ale_fix_on_save = 1
 let g:ale_set_balloons = 1
 let g:ctrlp_custom_ignore =
-    \ '\v[\/](\.catkin_tools|\.clangd\/index|\.git|build|devel|dist|logs|node_modules)$'
+    \ '\v[\/](\.catkin_tools|\.clangd\/index|\.git|__pycache__|build|devel|dist|logs|node_modules)$'
 let g:ctrlp_show_hidden = 1
 let g:ctrlp_working_path_mode = 0
 let g:NERDTreeExactMatchHighlightFullName = 1

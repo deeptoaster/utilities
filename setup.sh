@@ -177,9 +177,13 @@ ln -rs conky-rings/rings.lua ~/.lua/scripts/rings.lua
 git clone https://github.com/Xuyuanp/nerdtree-git-plugin ~/.vim/pack/foo/start/nerdtree-git-plugin
 git clone https://github.com/preservim/nerdtree ~/.vim/pack/foo/start/nerdtree
 git clone https://github.com/tiagofumo/vim-nerdtree-syntax-highlight ~/.vim/pack/foo/start/vim-nerdtree-syntax-highlight
+git clone https://github.com/tpope/vim-surround ~/.vim/pack/foo/start/vim-surround
 git clone https://github.com/tpope/vim-obsession ~/.vim/pack/foo/start/vim-obsession
 mkdir ~/.vim/colors
+wget -O ~/.vim/colors/gruvbox.vim https://raw.githubusercontent.com/morhetz/gruvbox/master/colors/gruvbox.vim
 wget -O ~/.vim/colors/monokai.vim https://raw.githubusercontent.com/ErichDonGubler/vim-sublime-monokai/master/colors/sublimemonokai.vim
+wget -O ~/.vim/colors/seoul256.vim https://github.com/junegunn/seoul256.vim/blob/master/colors/seoul256.vim
+wget -O ~/.vim/colors/sierra.vim https://raw.githubusercontent.com/AlessandroYorba/Sierra/master/colors/sierra.vim
 sudo update-alternatives --install /usr/bin/editor editor /usr/bin/vim 50
 sudo update-alternatives --remove editor /usr/bin/vim.gtk3
 sudo update-alternatives --set x-cursor-theme /usr/share/icons/DMZ-Black/cursor.theme
