@@ -1,5 +1,12 @@
-alias cacc="catkin build -DCMAKE_EXPORT_COMPILE_COMMANDS=1 && roscd && jq --slurp 'map(.[])' ../build/*/compile_commands.json > ../compile_commands.json"
+cacc() {
+  catkin build -DCMAKE_EXPORT_COMPILE_COMMANDS=1 && \
+  roscd && \
+  jq --slurp 'map(.[])' ../build/*/compile_commands.json > ../compile_commands.json && \
+  echo "{ \"extraPaths\": [ \"$(sed -En 's/^__extended_path = '\''([^'\'']*).*$/\1/p' lib/python3/dist-packages/*/__init__.py | sed ':x N;s/\n/", "/;bx')\" ] }" > ../pyrightconfig.json
+}
 alias glag='git log --all --graph'
-glep() { grep --color=always --line-number "$@" | less --quit-if-one-screen --RAW-CONTROL-CHARS; }
+glep() {
+  grep --color=always --line-number "$@" 2>/dev/null | less --quit-if-one-screen --RAW-CONTROL-CHARS
+}
 export PATH="/usr/local/texlive/2022/bin/x86_64-linux:$PATH"
 shopt -s globstar

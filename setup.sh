@@ -15,7 +15,7 @@ sudo apt install apache2 arc-theme black blender blueman conky-all cryptsetup de
 sudo usermod -aG vboxusers $USER
 sudo npm install -g n
 sudo n latest
-sudo npm install -g autoprefixer eslint npm postcss postcss-cli prettier pyright typescript
+sudo npm install -g autoprefixer eslint eslint-config-airbnb npm postcss postcss-cli prettier pyright typescript
 sudo a2enmod rewrite
 sudo a2enmod vhost_alias
 sudo ln -rs config/vhosts.conf /etc/apache2/conf-available/vhosts.conf
@@ -167,9 +167,11 @@ git config --global user.name 'Deep Toaster'
 git config --global user.signingkey ~/.ssh/id_ed25519.pub
 touch ~/.ssh/allowed_signers
 ln -rs config/bash_aliases ~/.bash_aliases
+ln -rs config/eslintrc.json ~/.eslintrc.json
 ln -rs config/face ~/.face
 ln -rs config/gitignore ~/.gitignore
 ln -rs config/pam_environment ~/.pam_environment
+ln -rs config/pyrightconfig.json ~/pyrightconfig.json
 ln -rs config/vimrc ~/.vimrc
 ln -rs conky-rings/conkyrc ~/.conkyrc
 mkdir -p ~/.lua/scripts
