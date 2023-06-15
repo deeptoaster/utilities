@@ -4,11 +4,12 @@ set colorcolumn=80
 set cursorline
 set directory=/tmp
 set expandtab
-set foldmethod=indent
+set foldmethod=syntax
 set hlsearch
 set incsearch
 set mouse=a
 set number
+set shell+=\ -O\ globstar
 set shiftwidth=2
 set smartindent
 set tabstop=2
@@ -27,6 +28,7 @@ let g:ale_fixers = {
 \ }
 let g:ale_fix_on_save = 1
 let g:ale_set_balloons = 1
+let g:ale_virtualtext_cursor = 0
 let g:ctrlp_custom_ignore =
     \ '\v[\/](\.catkin_tools|\.clangd\/index|\.git|__pycache__|build|devel|dist|logs|node_modules)$'
 let g:ctrlp_show_hidden = 1
@@ -36,6 +38,13 @@ let g:NERDTreeGitStatusUseNerdFonts = 1
 let g:NERDTreeShowHidden=1
 packadd! CtrlP
 packadd! ale
+function BufClean()
+  for buffer in range(1, bufnr('$') + 1)
+    if buflisted(buffer) && !bufloaded(buffer)
+      execute 'bdelete' buffer
+    endif
+  endfor
+endfunction
 function GoToDefinition()
   ALEGoToDefinition
   silent! execute "normal! \<C-]>"
@@ -43,6 +52,7 @@ endfunction
 autocmd User ALECompletePost setglobal nofoldenable |
     \ ALEHover |
     \ call timer_start(100, function('execute', ['setglobal foldenable']))
+command Bc :call BufClean()
 noremap <silent> <C-LeftMouse> <LeftMouse>:call GoToDefinition()<CR>
 noremap <silent> <C-]> :call GoToDefinition()<CR>
 noremap <C-t> :NERDTreeToggle<CR>
