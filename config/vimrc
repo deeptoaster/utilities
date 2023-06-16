@@ -34,6 +34,7 @@ let g:ctrlp_custom_ignore =
     \ '\v[\/](\.catkin_tools|\.clangd\/index|\.git|__pycache__|build|devel|dist|logs|node_modules)$'
 let g:ctrlp_show_hidden = 1
 let g:ctrlp_working_path_mode = 0
+let g:DevIconsEnableFoldersOpenClose = 1
 let g:NERDTreeGitStatusConcealBrackets = 1
 let g:NERDTreeGitStatusUseNerdFonts = 1
 let g:NERDTreeShowHidden = 1
@@ -63,32 +64,37 @@ endfunction
 function NERDTreeFugitiveFind()
   let l:bufnr = bufnr()
   if !g:NERDTree.IsOpen()
-    call s:NERDTreeFugitiveToggle()
+    call NERDTreeFugitiveToggle()
   endif
   execute l:bufnr . 'bufdo NERDTreeFind'
-  wincmd j
-  execute 'buffer' l:bufnr
-  Gedit :
+  if !empty(FugitiveGitDir(l:bufnr))
+    wincmd j
+    execute 'buffer' l:bufnr
+    Gedit :
+  endif
 endfunction
 function NERDTreeFugitiveToggle()
   let l:bufnr = bufnr()
-  call s:FugitiveClose()
   if g:NERDTree.IsOpen()
     NERDTreeClose
+    call s:FugitiveClose()
   else
     NERDTreeFocus
-    execute 'belowright sbuffer' l:bufnr
-    Gedit :
+    if !empty(FugitiveGitDir(l:bufnr))
+      execute 'belowright sbuffer' l:bufnr
+      Gedit :
+    endif
   endif
 endfunction
 function s:PersistWithoutTerminals()
   if !empty(v:this_session) && empty(filter(range(1, bufnr('$')), {
-    \ idx, val -> 
+    \ idx, val ->
         \ getbufvar(val, '&modified') &&
         \ getbufvar(val, '&buftype') !=# 'terminal'
   \ }))
     call s:FugitiveClose()
     execute 'mksession!' v:this_session
+    sleep 100m
     for l:bufnr in range(1, bufnr('$'))
       if getbufvar(l:bufnr, '&buftype') ==# 'terminal'
         execute 'bdelete!' l:bufnr
@@ -102,6 +108,8 @@ augroup squiffles
 augroup end
 command BC :call BufClean()
 cabbrev bc BC
+command GLAG :Git log --all --graph
+cabbrev glag GLAG
 noremap <C-LeftMouse> <LeftMouse>:call GoToDefinition()<CR>
 noremap <Leader>t :call NERDTreeFugitiveToggle()<CR>
 noremap <Leader>f :call NERDTreeFugitiveFind()<CR>

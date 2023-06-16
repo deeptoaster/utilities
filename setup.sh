@@ -179,7 +179,6 @@ ln -rs conky-rings/rings.lua ~/.lua/scripts/rings.lua
 git clone https://github.com/Xuyuanp/nerdtree-git-plugin ~/.vim/pack/foo/start/nerdtree-git-plugin
 git clone https://github.com/preservim/nerdtree ~/.vim/pack/foo/start/nerdtree
 git clone https://github.com/ryanoasis/vim-devicons ~/.vim/pack/foo/start/vim-devicons
-git clone https://github.com/tiagofumo/vim-nerdtree-syntax-highlight ~/.vim/pack/foo/start/vim-nerdtree-syntax-highlight
 git clone https://github.com/tpope/vim-surround ~/.vim/pack/foo/start/vim-surround
 mkdir ~/.vim/colors
 wget -O ~/.vim/colors/gruvbox.vim https://raw.githubusercontent.com/morhetz/gruvbox/master/colors/gruvbox.vim
@@ -196,7 +195,7 @@ sudo mkdir -p /usr/share/fonts/truetype/google-fonts /usr/share/fonts/truetype/f
 find fonts-main -name "*.ttf" -exec sudo install -m644 {} /usr/share/fonts/truetype/google-fonts \;
 rm -fr fonts-main fonts-main.tar.gz
 for variant in Bold Light Medium Regular Retina SemiBold; do
-  sudo wget -P /usr/share/fonts/truetype/fira-code https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/FiraCode/$variant/FiraCodeNerdFontMono-$variant.ttf
+  sudo wget -P /usr/share/fonts/truetype/fira-code https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/FiraCode/$variant/FiraCodeNerdFont-$variant.ttf
 done
 fc-cache -f
 wget https://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz
