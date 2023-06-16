@@ -35,26 +35,60 @@ let g:ctrlp_show_hidden = 1
 let g:ctrlp_working_path_mode = 0
 let g:NERDTreeGitStatusConcealBrackets = 1
 let g:NERDTreeGitStatusUseNerdFonts = 1
-let g:NERDTreeShowHidden=1
+let g:NERDTreeShowHidden = 1
 packadd! CtrlP
 packadd! ale
 function BufClean()
-  for buffer in range(1, bufnr('$') + 1)
-    if buflisted(buffer) && !bufloaded(buffer)
-      execute 'bdelete' buffer
+  for l:bufnr in range(1, bufnr('$'))
+    if buflisted(l:bufnr) && !bufloaded(l:bufnr)
+      execute 'bdelete' l:bufnr
+    endif
+  endfor
+endfunction
+function s:FugitiveClose()
+  for l:bufnr in range(1, bufnr('$'))
+    if getbufvar(l:bufnr, 'fugitive_type') ==# 'index'
+      execute 'bdelete' l:bufnr
     endif
   endfor
 endfunction
 function GoToDefinition()
-  ALEGoToDefinition
-  silent! execute "normal! \<C-]>"
+  try
+    execute "normal! \<C-]>"
+  catch
+    ALEGoToDefinition
+  endtry
 endfunction
-autocmd User ALECompletePost setglobal nofoldenable |
-    \ ALEHover |
-    \ call timer_start(100, function('execute', ['setglobal foldenable']))
-command Bc :call BufClean()
-noremap <silent> <C-LeftMouse> <LeftMouse>:call GoToDefinition()<CR>
-noremap <silent> <C-]> :call GoToDefinition()<CR>
-noremap <C-t> :NERDTreeToggle<CR>
-nmap [q <Plug>(ale_previous_wrap)
-nmap ]q <Plug>(ale_next_wrap)
+function NERDTreeFugitiveFind()
+  let l:bufnr = bufnr()
+  if !g:NERDTree.IsOpen()
+    call s:NERDTreeFugitiveToggle()
+  endif
+  execute l:bufnr . 'bufdo NERDTreeFind'
+  wincmd j
+  execute 'buffer' l:bufnr
+  Gedit :
+endfunction
+function NERDTreeFugitiveToggle()
+  if g:NERDTree.IsOpen()
+    NERDTreeClose
+    call s:FugitiveClose()
+  else
+    let l:bufnr = bufnr()
+    NERDTreeFocus
+    execute 'belowright sbuffer' l:bufnr
+    Gedit :
+  endif
+endfunction
+augroup squiffles
+  autocmd User ALECompletePost ALEHover
+  autocmd ExitPre s:PersistWithoutTerminals()
+augroup end
+command BC :call BufClean()
+cabbrev bc BC
+noremap <C-LeftMouse> <LeftMouse>:call GoToDefinition()<CR>
+noremap <Leader>t :call NERDTreeFugitiveToggle()<CR>
+noremap <Leader>f :call NERDTreeFugitiveFind()<CR>
+noremap <C-]> :call GoToDefinition()<CR>
+noremap [q :try \| cprev \| catch \| try \| clast \| catch \| ALEPreviousWrap \| endtry \| endtry<CR>
+noremap ]q :try \| cnext \| catch \| try \| cfirst \| catch \| ALENextWrap \| endtry \| endtry<CR>
