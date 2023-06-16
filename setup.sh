@@ -181,7 +181,6 @@ git clone https://github.com/preservim/nerdtree ~/.vim/pack/foo/start/nerdtree
 git clone https://github.com/ryanoasis/vim-devicons ~/.vim/pack/foo/start/vim-devicons
 git clone https://github.com/tiagofumo/vim-nerdtree-syntax-highlight ~/.vim/pack/foo/start/vim-nerdtree-syntax-highlight
 git clone https://github.com/tpope/vim-surround ~/.vim/pack/foo/start/vim-surround
-git clone https://github.com/tpope/vim-obsession ~/.vim/pack/foo/start/vim-obsession
 mkdir ~/.vim/colors
 wget -O ~/.vim/colors/gruvbox.vim https://raw.githubusercontent.com/morhetz/gruvbox/master/colors/gruvbox.vim
 wget -O ~/.vim/colors/monokai.vim https://raw.githubusercontent.com/ErichDonGubler/vim-sublime-monokai/master/colors/sublimemonokai.vim
