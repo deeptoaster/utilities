@@ -176,10 +176,10 @@ ln -rs config/vimrc ~/.vimrc
 ln -rs conky-rings/conkyrc ~/.conkyrc
 mkdir -p ~/.lua/scripts
 ln -rs conky-rings/rings.lua ~/.lua/scripts/rings.lua
-git clone https://github.com/Xuyuanp/nerdtree-git-plugin ~/.vim/pack/foo/start/nerdtree-git-plugin
-git clone https://github.com/preservim/nerdtree ~/.vim/pack/foo/start/nerdtree
-git clone https://github.com/ryanoasis/vim-devicons ~/.vim/pack/foo/start/vim-devicons
-git clone https://github.com/tpope/vim-surround ~/.vim/pack/foo/start/vim-surround
+git clone https://github.com/Xuyuanp/nerdtree-git-plugin ~/.vim/pack/foo/opt/nerdtree-git-plugin
+git clone https://github.com/preservim/nerdtree ~/.vim/pack/foo/opt/nerdtree
+git clone https://github.com/ryanoasis/vim-devicons ~/.vim/pack/foo/opt/vim-devicons
+git clone https://github.com/tpope/vim-surround ~/.vim/pack/foo/opt/vim-surround
 mkdir ~/.vim/colors
 wget -O ~/.vim/colors/gruvbox.vim https://raw.githubusercontent.com/morhetz/gruvbox/master/colors/gruvbox.vim
 wget -O ~/.vim/colors/monokai.vim https://raw.githubusercontent.com/ErichDonGubler/vim-sublime-monokai/master/colors/sublimemonokai.vim
