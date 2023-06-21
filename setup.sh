@@ -184,6 +184,8 @@ mkdir ~/.vim/colors
 wget -O ~/.vim/colors/gruvbox.vim https://raw.githubusercontent.com/morhetz/gruvbox/master/colors/gruvbox.vim
 wget -O ~/.vim/colors/monokai.vim https://raw.githubusercontent.com/ErichDonGubler/vim-sublime-monokai/master/colors/sublimemonokai.vim
 wget -O ~/.vim/colors/sierra.vim https://raw.githubusercontent.com/AlessandroYorba/Sierra/master/colors/sierra.vim
+ln -rs config/after ~/.vim/after
+ln -rs config/compiler ~/.vim/compiler
 sudo update-alternatives --install /usr/bin/editor editor /usr/bin/vim 50
 sudo update-alternatives --remove editor /usr/bin/vim.gtk3
 sudo update-alternatives --set x-cursor-theme /usr/share/icons/DMZ-Black/cursor.theme

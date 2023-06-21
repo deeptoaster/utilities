@@ -5,12 +5,13 @@ set cursorline
 set directory=/tmp
 set expandtab
 set foldmethod=syntax
+set grepprg=grep\ -ns\ $*\ /dev/null
 set hlsearch
 set incsearch
 set mouse=a
 set number
 set sessionoptions-=blank sessionoptions-=buffers sessionoptions-=options
-set shell+=\ -O\ globstar
+set shell=bash\ -O\ globstar
 set shiftwidth=2
 set smartindent
 set tabstop=2
@@ -36,17 +37,16 @@ let g:ctrlp_custom_ignore =
 let g:ctrlp_show_hidden = 1
 let g:ctrlp_working_path_mode = 0
 let g:DevIconsEnableFoldersOpenClose = 1
-let g:NERDTreeGitStatusConcealBrackets = 1
 let g:NERDTreeGitStatusUseNerdFonts = 1
 let g:NERDTreeShowHidden = 1
 packloadall
 packadd CtrlP
 packadd ale
-packadd nerdtree-git-plugin
 packadd vim-devicons
+packadd nerdtree-git-plugin
 packadd nerdtree
 packadd vim-surround
-function BufClean()
+function s:BufClean()
   for l:bufnr in range(1, bufnr('$'))
     if buflisted(l:bufnr) && !bufloaded(l:bufnr)
       execute 'bdelete' l:bufnr
@@ -109,17 +109,18 @@ function s:PersistWithoutTerminals()
   endif
 endfunction
 augroup squiffles
-  autocmd User ALECompletePost ALEHover
   autocmd ExitPre * call s:PersistWithoutTerminals()
+  autocmd User ALECompletePost ALEHover
 augroup end
-command BC :call BufClean()
+command BC call s:BufClean()
 cabbrev bc BC
-command GLAG :Git log --all --graph
+command GLAG Git log --all --decorate --graph
 cabbrev glag GLAG
+noremap <C-@> :ALECodeAction<CR>
 noremap <C-LeftMouse> <LeftMouse>:call GoToDefinition()<CR>
+noremap <C-]> :call GoToDefinition()<CR>
 noremap <Leader>t :call NERDTreeFugitiveToggle()<CR>
 noremap <Leader>f :call NERDTreeFugitiveFind()<CR>
-noremap <C-]> :call GoToDefinition()<CR>
 noremap [g :GitGutterPrevHunk<CR>
 noremap ]g :GitGutterNextHunk<CR>
 noremap [q :try \| cprev \| catch \| try \| clast \| catch \| ALEPreviousWrap \| endtry \| endtry<CR>
