@@ -11,7 +11,7 @@ sudo apt purge thunar-volman vim-tiny xfce4-whiskermenu-plugin xpdf
 sudo apt dist-upgrade
 sudo apt --purge autoremove
 sudo apt --no-install-recommends install gnome-control-center gnome-session vim-gtk3
-sudo apt install apache2 arc-theme black blender blueman conky-all cryptsetup deja-dup ffmpeg gimp git git-ftp gnome-disk-utility gnupg2 gparted guvcview inkscape lmms mate-calc nodejs npm numix-icon-theme-circle pandoc php php-bcmath php-curl php-gd php-sqlite3 php-xml redshift spotify-client steam-installer ubuntustudio-fonts vim-airline vim-ale vim-ctrlp vim-fugitive vim-gitgutter virtualbox virtualbox-ext-pack xarchiver xcalib xfce4-docklike-plugin xfce4-places-plugin zathura cm-super-x11-
+sudo apt install apache2 arc-theme black blender blueman conky-all cryptsetup deja-dup ffmpeg gimp git git-ftp gnome-disk-utility gnupg2 gparted guvcview inkscape lmms mate-calc nodejs npm numix-icon-theme-circle pandoc php php-bcmath php-curl php-gd php-sqlite3 php-xml redshift spotify-client steam-installer ubuntustudio-fonts vim-airline vim-ale vim-ctrlp vim-fugitive vim-gitgutter virtualbox-ext-pack virtualbox-guest-additions-iso xarchiver xcalib xfce4-docklike-plugin xfce4-places-plugin zathura cm-super-x11-
 sudo usermod -aG vboxusers $USER
 sudo npm install -g n
 sudo n latest

@@ -92,6 +92,11 @@ function NERDTreeFugitiveToggle()
     endif
   endif
 endfunction
+function s:Persist()
+  if !empty(v:this_session)
+    execute 'mksession!' v:this_session
+  endif
+endfunction
 function s:PersistWithoutTerminals()
   if !empty(v:this_session) && empty(filter(range(1, bufnr('$')), {
     \ idx, val ->
@@ -109,6 +114,7 @@ function s:PersistWithoutTerminals()
   endif
 endfunction
 augroup squiffles
+  autocmd BufEnter * call s:Persist()
   autocmd ExitPre * call s:PersistWithoutTerminals()
   autocmd User ALECompletePost ALEHover
 augroup end
@@ -123,5 +129,7 @@ noremap <Leader>t :call NERDTreeFugitiveToggle()<CR>
 noremap <Leader>f :call NERDTreeFugitiveFind()<CR>
 noremap [g :GitGutterPrevHunk<CR>
 noremap ]g :GitGutterNextHunk<CR>
-noremap [q :try \| cprev \| catch \| try \| clast \| catch \| ALEPreviousWrap \| endtry \| endtry<CR>
-noremap ]q :try \| cnext \| catch \| try \| cfirst \| catch \| ALENextWrap \| endtry \| endtry<CR>
+noremap [l :try <Bar> lprev <Bar> catch <Bar> try <Bar> llast <Bar> catch <Bar> ALEPreviousWrap <Bar> endtry <Bar> endtry<CR>
+noremap ]l :try <Bar> lnext <Bar> catch <Bar> try <Bar> lfirst <Bar> catch <Bar> ALENextWrap <Bar> endtry <Bar> endtry<CR>
+noremap [q :try <Bar> cprev <Bar> catch <Bar> clast <Bar> endtry<CR>
+noremap ]q :try <Bar> cnext <Bar> catch <Bar> cfirst <Bar> endtry<CR>
