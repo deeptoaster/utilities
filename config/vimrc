@@ -18,6 +18,7 @@ set tabstop=2
 set wildmenu
 colorscheme sierra
 highlight Normal ctermbg=NONE
+let $BASH_ENV = '~/.bash_aliases'
 let g:airline#extensions#branch#format = 2
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_powerline_fonts = 1
@@ -67,12 +68,20 @@ function GoToDefinition()
     ALEGoToDefinition
   endtry
 endfunction
+function GoToTerminal()
+  for l:winnr in range(1, winnr('$'))
+    if getbufvar(winbufnr(l:winnr), '&buftype') ==# 'terminal'
+      execute l:winnr 'wincmd w'
+      return
+    endif
+  endfor
+endfunction
 function NERDTreeFugitiveFind()
   let l:bufnr = bufnr()
   if !g:NERDTree.IsOpen()
     call NERDTreeFugitiveToggle()
   endif
-  execute l:bufnr . 'bufdo NERDTreeFind'
+  execute l:bufnr 'bufdo NERDTreeFind'
   if !empty(FugitiveGitDir(l:bufnr))
     wincmd j
     execute 'buffer' l:bufnr
@@ -113,6 +122,13 @@ function s:PersistWithoutTerminals()
     endfor
   endif
 endfunction
+function PreviewDefinition()
+  try
+    execute "normal! \<C-W>}"
+  catch
+    ALEHover
+  endtry
+endfunction
 augroup squiffles
   autocmd BufEnter * call s:Persist()
   autocmd ExitPre * call s:PersistWithoutTerminals()
@@ -124,12 +140,15 @@ command GLAG Git log --all --decorate --graph
 cabbrev glag GLAG
 noremap <C-@> :ALECodeAction<CR>
 noremap <C-LeftMouse> <LeftMouse>:call GoToDefinition()<CR>
+noremap <C-W>} :call PreviewDefinition()<CR>
 noremap <C-]> :call GoToDefinition()<CR>
-noremap <Leader>t :call NERDTreeFugitiveToggle()<CR>
+noremap <Leader>c :call GoToTerminal()<CR>
 noremap <Leader>f :call NERDTreeFugitiveFind()<CR>
+noremap <Leader>t :call NERDTreeFugitiveToggle()<CR>
 noremap [g :GitGutterPrevHunk<CR>
 noremap ]g :GitGutterNextHunk<CR>
 noremap [l :try <Bar> lprev <Bar> catch <Bar> try <Bar> llast <Bar> catch <Bar> ALEPreviousWrap <Bar> endtry <Bar> endtry<CR>
 noremap ]l :try <Bar> lnext <Bar> catch <Bar> try <Bar> lfirst <Bar> catch <Bar> ALENextWrap <Bar> endtry <Bar> endtry<CR>
 noremap [q :try <Bar> cprev <Bar> catch <Bar> clast <Bar> endtry<CR>
 noremap ]q :try <Bar> cnext <Bar> catch <Bar> cfirst <Bar> endtry<CR>
+noremap Y y$

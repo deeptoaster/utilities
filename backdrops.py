@@ -1,5 +1,4 @@
 #!/usr/bin/python3
-import json
 import random
 import requests
 from pathlib import Path

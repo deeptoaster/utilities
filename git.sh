@@ -1,3 +1,4 @@
+#!/bin/bash
 git filter-branch --force --env-filter '
   OLD_EMAIL_1="yizhenwilliam@gmail.com"
   CORRECT_NAME="Deep Toaster"
