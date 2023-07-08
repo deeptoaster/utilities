@@ -1,6 +1,5 @@
 #!/bin/bash
-set -x
-trap read debug
+set -ex
 sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 0DF731E45CE24F27EEEB1450EFDC8610341D9410
 sudo add-apt-repository ppa:numix/ppa
 sudo add-apt-repository ppa:xubuntu-dev/extras
@@ -18,15 +17,15 @@ sudo n latest
 sudo npm install -g autoprefixer eslint eslint-config-airbnb npm postcss postcss-cli prettier pyright typescript
 sudo a2enmod rewrite
 sudo a2enmod vhost_alias
-sudo ln -rs config/vhosts.conf /etc/apache2/conf-available/vhosts.conf
+sudo ln -frs config/vhosts.conf /etc/apache2/conf-available/vhosts.conf
 sudo a2enconf vhosts
 sudo sed -Ei 's/^(display_errors|short_open_tag) = Off$/\1 = On/' /etc/php/*/*/php.ini
 sudo mv /var/www/html/* ~/Public
 sudo rmdir /var/www/html
-sudo ln -s ~/Public /var/www/html
+sudo ln -fns ~/Public /var/www/html
 chmod o+rx ~
 sudo service apache2 restart
-sudo ln -rs config/71-synaptics.conf /usr/share/X11/xorg.conf.d/71-synaptics.conf
+sudo ln -frs config/71-synaptics.conf /usr/share/X11/xorg.conf.d/71-synaptics.conf
 sudo ln -frs config/lightdm-gtk-greeter.conf /etc/lightdm/lightdm-gtk-greeter.conf
 PWD_ESCAPED=$(sed 's/[&/\]/\\&/g' <<< $(pwd))
 sed -E "s/\\\$PWD\b/$PWD_ESCAPED/g" config/power.service | sudo tee /lib/systemd/system/power.service
@@ -166,16 +165,16 @@ git config --global user.email deeptoaster@gmail.com
 git config --global user.name 'Deep Toaster'
 git config --global user.signingkey ~/.ssh/id_ed25519.pub
 touch ~/.ssh/allowed_signers
-ln -rs config/bash_aliases ~/.bash_aliases
-ln -rs config/eslintrc.json ~/.eslintrc.json
-ln -rs config/face ~/.face
-ln -rs config/gitignore ~/.gitignore
-ln -rs config/pam_environment ~/.pam_environment
-ln -rs config/pyrightconfig.json ~/pyrightconfig.json
-ln -rs config/vimrc ~/.vimrc
-ln -rs conky-rings/conkyrc ~/.conkyrc
+ln -frs config/bash_aliases ~/.bash_aliases
+ln -frs config/eslintrc.json ~/.eslintrc.json
+ln -frs config/face ~/.face
+ln -frs config/gitignore ~/.gitignore
+ln -frs config/pam_environment ~/.pam_environment
+ln -frs config/pyrightconfig.json ~/pyrightconfig.json
+ln -frs config/vimrc ~/.vimrc
+ln -frs conky-rings/conkyrc ~/.conkyrc
 mkdir -p ~/.lua/scripts
-ln -rs conky-rings/rings.lua ~/.lua/scripts/rings.lua
+ln -frs conky-rings/rings.lua ~/.lua/scripts/rings.lua
 git clone https://github.com/Xuyuanp/nerdtree-git-plugin ~/.vim/pack/foo/opt/nerdtree-git-plugin
 git clone https://github.com/preservim/nerdtree ~/.vim/pack/foo/opt/nerdtree
 git clone https://github.com/ryanoasis/vim-devicons ~/.vim/pack/foo/opt/vim-devicons
@@ -184,8 +183,8 @@ mkdir ~/.vim/colors
 wget -O ~/.vim/colors/gruvbox.vim https://raw.githubusercontent.com/morhetz/gruvbox/master/colors/gruvbox.vim
 wget -O ~/.vim/colors/monokai.vim https://raw.githubusercontent.com/ErichDonGubler/vim-sublime-monokai/master/colors/sublimemonokai.vim
 wget -O ~/.vim/colors/sierra.vim https://raw.githubusercontent.com/AlessandroYorba/Sierra/master/colors/sierra.vim
-ln -rs config/after ~/.vim/after
-ln -rs config/compiler ~/.vim/compiler
+ln -fnrs config/after ~/.vim/after
+ln -fnrs config/compiler ~/.vim/compiler
 sudo update-alternatives --install /usr/bin/editor editor /usr/bin/vim 50
 sudo update-alternatives --remove editor /usr/bin/vim.gtk3
 sudo update-alternatives --set x-cursor-theme /usr/share/icons/DMZ-Black/cursor.theme
