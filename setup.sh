@@ -189,7 +189,7 @@ sudo update-alternatives --install /usr/bin/editor editor /usr/bin/vim 50
 sudo update-alternatives --remove editor /usr/bin/vim.gtk3
 sudo update-alternatives --set x-cursor-theme /usr/share/icons/DMZ-Black/cursor.theme
 echo 'set editing-mode vi' > ~/.inputrc
-echo -e "0 0 * * * $(pwd)/backdrops.py\n0 * * * * $(pwd)/power.sh\n" | crontab -
+(echo "0 0 * * * $(pwd)/backdrops.py"; echo "0 * * * * $(pwd)/power.sh") | crontab -
 wget -O fonts-main.tar.gz https://github.com/google/fonts/archive/master.tar.gz
 tar -xzf fonts-main.tar.gz
 sudo mkdir -p /usr/share/fonts/truetype/google-fonts /usr/share/fonts/truetype/fira-code

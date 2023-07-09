@@ -1,19 +1,18 @@
 #!/bin/zsh
 set -ex
 /bin/bash -c "$(curl -fLS https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-(echo 'eval "$(/opt/homebrew/bin/brew shellenv)"'; echo 'source .bash_aliases') >> ~/.zprofile
 eval "$(/opt/homebrew/bin/brew shellenv)"
 brew install firefox n php spotify texlive
 sudo n latest
 sudo npm install -g autoprefixer eslint eslint-config-airbnb npm postcss postcss-cli prettier pyright typescript
-sudo sed -Ei'' -e 's/^#(LoadModule (rewrite|vhost_alias)_module )/\1/' /etc/apache2/httpd.conf
-(echo 'LoadModule php_module /opt/homebrew/opt/php/lib/httpd/modules/libphp.so'; echo; echo '<FilesMatch \.php$>'; echo '    SetHandler application/x-httpd-php'; echo '</FilesMatch>') | sudo tee -a /etc/apache2/httpd.conf
-sudo ln -fs $(pwd)/config/vhosts_mac.conf /etc/apache2/other/vhosts.conf
+sudo sed -Ei.bak -e 's/^#(LoadModule (rewrite|vhost_alias)_module )/\1/' /etc/apache2/httpd.conf
+(echo 'LoadModule php_module /opt/homebrew/opt/php/lib/httpd/modules/libphp.so woot'; echo; echo '<FilesMatch \.php$>'; echo '    SetHandler application/x-httpd-php'; echo '</FilesMatch>') | sudo tee -a /etc/apache2/httpd.conf
+sudo cp -f $(pwd)/config/vhosts_mac.conf /etc/apache2/other/vhosts.conf
 sudo sed -Ei'' -e 's/^(display_errors|short_open_tag) = Off$/\1 = On/' /opt/homebrew/etc/php/*/php.ini
 sudo mv /Library/WebServer/Documents/* ~/Public
 sudo rmdir /Library/WebServer/Documents
 sudo ln -fns ~/Public /Library/WebServer/Documents
-chmod o+rx ~
+chmod o+rx ~ ~/Documents
 sudo apachectl restart
 defaults write NSGlobalDomain AppleShowAllExtensions -bool true
 defaults write com.apple.Finder AppleShowAllFiles -bool true
@@ -41,6 +40,7 @@ ln -fs $(pwd)/config/gitignore ~/.gitignore
 ln -fs $(pwd)/config/pam_environment ~/.pam_environment
 ln -fs $(pwd)/config/pyrightconfig.json ~/pyrightconfig.json
 ln -fs $(pwd)/config/vimrc ~/.vimrc
+ln -fs $(pwd)/config/zshenv ~/.zshenv
 git clone https://github.com/dense-analysis/ale ~/.vim/pack/foo/opt/ale
 git clone https://github.com/ctrlpvim/ctrlp.vim ~/.vim/pack/foo/opt/ctrlp
 git clone https://github.com/Xuyuanp/nerdtree-git-plugin ~/.vim/pack/foo/opt/nerdtree-git-plugin
@@ -57,8 +57,7 @@ curl -fLo ~/.vim/colors/monokai.vim -S https://raw.githubusercontent.com/ErichDo
 curl -fLo ~/.vim/colors/sierra.vim -S https://raw.githubusercontent.com/AlessandroYorba/Sierra/master/colors/sierra.vim
 ln -fns $(pwd)/config/after ~/.vim/after
 ln -fns $(pwd)/config/compiler ~/.vim/compiler
-echo 'set editing-mode vi' > ~/.inputrc
-echo -e "0 0 * * * $(pwd)/backdrops.py\n0 * * * * $(pwd)/power.sh\n" | crontab -
+(echo "0 0 * * * $(pwd)/backdrops.py"; echo "0 * * * * $(pwd)/power.sh") | crontab -
 curl -fLo fonts-main.tar.gz -S https://github.com/google/fonts/archive/master.tar.gz
 tar -xzf fonts-main.tar.gz
 sudo mkdir -p /Library/Fonts/google-fonts /Library/Fonts/fira-code
