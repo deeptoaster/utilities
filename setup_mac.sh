@@ -15,7 +15,12 @@ sudo rmdir /Library/WebServer/Documents
 sudo ln -fns ~/Public /Library/WebServer/Documents
 chmod o+rx ~
 sudo apachectl restart
-defaults write com.apple.finder AppleShowAllFiles true
+defaults write NSGlobalDomain AppleShowAllExtensions -bool true
+defaults write com.apple.Finder AppleShowAllFiles -bool true
+defaults write com.apple.Finder FXPreferredViewStyle Nlsv
+defaults write com.apple.Finder ShowPathbar -bool true
+defaults write com.apple.Finder _FXSortFoldersFirst -bool true
+open config/Vim.terminal
 ssh-keygen -C deeptoaster@gmail.com -t ed25519
 eval "$(ssh-agent -s)"
 ssh-add ~/.ssh/id_ed25519
@@ -41,8 +46,10 @@ git clone https://github.com/ctrlpvim/ctrlp.vim ~/.vim/pack/foo/opt/ctrlp
 git clone https://github.com/Xuyuanp/nerdtree-git-plugin ~/.vim/pack/foo/opt/nerdtree-git-plugin
 git clone https://github.com/preservim/nerdtree ~/.vim/pack/foo/opt/nerdtree
 git clone https://github.com/vim-airline/vim-airline ~/.vim/pack/foo/start/vim-airline
+git clone https://github.com/vim-airline/vim-airline-themes ~/.vim/pack/foo/start/vim-airline-themes
 git clone https://github.com/ryanoasis/vim-devicons ~/.vim/pack/foo/opt/vim-devicons
 git clone https://github.com/tpope/vim-fugitive ~/.vim/pack/foo/start/vim-fugitive
+git clone https://github.com/airblade/vim-gitgutter ~/.vim/pack/foo/start/vim-gitgutter
 git clone https://github.com/tpope/vim-surround ~/.vim/pack/foo/opt/vim-surround
 mkdir ~/.vim/colors
 curl -fLo ~/.vim/colors/gruvbox.vim -S https://raw.githubusercontent.com/morhetz/gruvbox/master/colors/gruvbox.vim

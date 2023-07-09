@@ -1,5 +1,5 @@
 set autoindent
-set clipboard=unnamedplus
+set clipboard^=unnamed clipboard^=unnamedplus
 set colorcolumn=80
 set cursorline
 set directory=/tmp
@@ -11,11 +11,14 @@ set incsearch
 set mouse=a
 set number
 set sessionoptions-=blank sessionoptions-=buffers sessionoptions-=options
-set shell=bash\ -O\ globstar
+if !executable('zsh')
+  set shell=bash\ -O\ globstar
+endif
 set shiftwidth=2
 set smartindent
 set tabstop=2
 set wildmenu
+syntax on
 colorscheme sierra
 highlight Normal ctermbg=NONE
 let $BASH_ENV = '~/.bash_aliases'
@@ -86,6 +89,7 @@ function NERDTreeFugitiveFind()
     wincmd j
     execute 'buffer' l:bufnr
     Gedit :
+    normal zR
   endif
 endfunction
 function NERDTreeFugitiveToggle()
@@ -98,6 +102,7 @@ function NERDTreeFugitiveToggle()
     if !empty(FugitiveGitDir(l:bufnr))
       execute 'belowright sbuffer' l:bufnr
       Gedit :
+      normal zR
     endif
   endif
 endfunction
