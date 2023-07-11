@@ -404,6 +404,8 @@
 	</data>
 	<key>ProfileCurrentVersion</key>
 	<real>2.0699999999999998</real>
+	<key>RunCommandAsShell</key>
+	<true/>
 	<key>name</key>
 	<string>Vim</string>
 	<key>shellExitAction</key>

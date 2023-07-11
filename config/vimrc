@@ -9,7 +9,9 @@ set grepprg=grep\ -ns\ $*\ /dev/null
 set hlsearch
 set incsearch
 set mouse=a
+set nofileignorecase
 set number
+set regexpengine=0
 set sessionoptions-=blank sessionoptions-=buffers sessionoptions-=options
 if !executable('zsh')
   set shell=bash\ -O\ globstar
