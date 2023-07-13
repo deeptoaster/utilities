@@ -59,6 +59,13 @@ function s:BufClean()
     endif
   endfor
 endfunction
+function CodeActionDetail(data, menu)
+  if !empty(a:menu)
+    ALECodeAction
+  else
+    ALEDetail
+  endif
+endfunction
 function s:FugitiveClose()
   for l:bufnr in range(1, bufnr('$'))
     if getbufvar(l:bufnr, 'fugitive_type') ==# 'index'
@@ -109,7 +116,7 @@ function NERDTreeFugitiveToggle()
   endif
 endfunction
 function s:Persist()
-  if !empty(v:this_session)
+  if !empty(v:this_session) && !exists('g:SessionLoad')
     execute 'mksession!' v:this_session
   endif
 endfunction
@@ -145,7 +152,7 @@ command BC call s:BufClean()
 cabbrev bc BC
 command GLAG Git log --all --decorate --graph
 cabbrev glag GLAG
-noremap <C-@> :ALECodeAction<CR>
+noremap <C-@> :call ale#codefix#Execute(mode() ==# 'v' \|\| mode() ==# "\<lt>C-V>", function('CodeActionDetail'))<CR>
 noremap <C-LeftMouse> <LeftMouse>:call GoToDefinition()<CR>
 noremap <C-W>} :call PreviewDefinition()<CR>
 noremap <C-]> :call GoToDefinition()<CR>

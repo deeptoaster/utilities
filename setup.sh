@@ -57,6 +57,14 @@ xfconf-query -c xfce4-desktop -p /desktop-menu/show -n -t bool -s false
 xfconf-query -c xfce4-desktop -p /windowlist-menu/show -n -t bool -s false
 xfconf-query -c xfce4-keyboard-shortcuts -p '/commands/custom/<Alt>Pause' -r
 xfconf-query -c xfce4-keyboard-shortcuts -p '/commands/custom/<Primary>Escape' -r
+xfconf-query -c xfce4-keyboard-shortcuts -p '/xfwm4/custom/<Super>KP_Down' -r
+xfconf-query -c xfce4-keyboard-shortcuts -p '/xfwm4/custom/<Super>KP_End' -r
+xfconf-query -c xfce4-keyboard-shortcuts -p '/xfwm4/custom/<Super>KP_Home' -r
+xfconf-query -c xfce4-keyboard-shortcuts -p '/xfwm4/custom/<Super>KP_Left' -r
+xfconf-query -c xfce4-keyboard-shortcuts -p '/xfwm4/custom/<Super>KP_Next' -r
+xfconf-query -c xfce4-keyboard-shortcuts -p '/xfwm4/custom/<Super>KP_Page_Up' -r
+xfconf-query -c xfce4-keyboard-shortcuts -p '/xfwm4/custom/<Super>KP_Right' -r
+xfconf-query -c xfce4-keyboard-shortcuts -p '/xfwm4/custom/<Super>KP_Up' -r
 xfconf-query -c xfce4-keyboard-shortcuts -p '/commands/custom/<Primary><Alt><Super>8' -n -t string -s 'xcalib -i -a'
 xfconf-query -c xfce4-keyboard-shortcuts -p '/commands/custom/<Super>e' -n -t string -s 'xfce4-terminal --maximize --hide-menubar --hide-scrollbar -x vim'
 xfconf-query -c xfce4-keyboard-shortcuts -p /commands/custom/F1 -n -t string -s 'xfce4-terminal --drop-down'
