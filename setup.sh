@@ -1,6 +1,5 @@
 #!/bin/bash
 set -ex
-sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 0DF731E45CE24F27EEEB1450EFDC8610341D9410
 sudo add-apt-repository ppa:numix/ppa
 sudo add-apt-repository ppa:xubuntu-dev/extras
 wget -O - https://download.spotify.com/debian/pubkey_7A3A762FAFD4A51F.gpg | sudo apt-key add -
