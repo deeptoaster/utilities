@@ -16,9 +16,12 @@ chmod o+rx ~ ~/Documents
 sudo apachectl restart
 defaults write NSGlobalDomain AppleShowAllExtensions -bool true
 defaults write com.apple.Finder AppleShowAllFiles -bool true
-defaults write com.apple.Finder FXPreferredViewStyle Nlsv
+defaults write com.apple.Finder FXPreferredViewStyle -string Nlsv
 defaults write com.apple.Finder ShowPathbar -bool true
 defaults write com.apple.Finder _FXSortFoldersFirst -bool true
+/usr/libexec/PlistBuddy -c 'Set :AppleSymbolicHotKeys:21:enabled true' ~/Library/Preferences/com.apple.symbolichotkeys.plist
+defaults write com.apple.universalaccess closeViewPanningMode -integer 0
+defaults write com.apple.universalaccess closeViewScrollWheelToggle -bool true
 open config/Vim.terminal
 ssh-keygen -C deeptoaster@gmail.com -t ed25519
 eval "$(ssh-agent -s)"

@@ -159,8 +159,6 @@ noremap <C-]> :call GoToDefinition()<CR>
 noremap <Leader>c :call GoToTerminal()<CR>
 noremap <Leader>f :call NERDTreeFugitiveFind()<CR>
 noremap <Leader>t :call NERDTreeFugitiveToggle()<CR>
-noremap [g :GitGutterPrevHunk<CR>
-noremap ]g :GitGutterNextHunk<CR>
 noremap [l :try <Bar> lprev <Bar> catch <Bar> try <Bar> llast <Bar> catch <Bar> ALEPreviousWrap <Bar> endtry <Bar> endtry<CR>
 noremap ]l :try <Bar> lnext <Bar> catch <Bar> try <Bar> lfirst <Bar> catch <Bar> ALENextWrap <Bar> endtry <Bar> endtry<CR>
 noremap [q :try <Bar> cprev <Bar> catch <Bar> clast <Bar> endtry<CR>
