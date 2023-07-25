@@ -3,23 +3,28 @@ set clipboard^=unnamed clipboard^=unnamedplus
 set colorcolumn=80
 set cursorline
 set directory=/tmp
+set display=lastline
 set expandtab
+set nofileignorecase
 set foldmethod=syntax
+set formatoptions=tcqj
 set grepprg=grep\ -ns\ $*\ /dev/null
 set hlsearch
 set incsearch
+set nojoinspaces
 set mouse=a
-set nofileignorecase
 set number
 set regexpengine=0
 set sessionoptions-=blank sessionoptions-=buffers sessionoptions-=options
+set showcmd
 if !executable('zsh')
   set shell=bash\ -O\ globstar
 endif
 set shiftwidth=2
-set smartindent
 set tabstop=2
+set viewoptions-=options
 set wildmenu
+filetype plugin indent on
 syntax on
 colorscheme sierra
 highlight Normal ctermbg=NONE

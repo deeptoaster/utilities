@@ -189,6 +189,7 @@ git clone https://github.com/tpope/vim-surround ~/.vim/pack/foo/opt/vim-surround
 mkdir ~/.vim/colors
 wget -O ~/.vim/colors/gruvbox.vim https://raw.githubusercontent.com/morhetz/gruvbox/master/colors/gruvbox.vim
 wget -O ~/.vim/colors/monokai.vim https://raw.githubusercontent.com/ErichDonGubler/vim-sublime-monokai/master/colors/sublimemonokai.vim
+wget -O ~/.vim/colors/seoul256.vim https://raw.githubusercontent.com/junegunn/seoul256.vim/master/colors/seoul256.vim
 wget -O ~/.vim/colors/sierra.vim https://raw.githubusercontent.com/AlessandroYorba/Sierra/master/colors/sierra.vim
 ln -fnrs config/after ~/.vim/after
 ln -fnrs config/compiler ~/.vim/compiler

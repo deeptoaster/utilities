@@ -57,6 +57,7 @@ git clone https://github.com/tpope/vim-surround ~/.vim/pack/foo/opt/vim-surround
 mkdir ~/.vim/colors
 curl -fLo ~/.vim/colors/gruvbox.vim -S https://raw.githubusercontent.com/morhetz/gruvbox/master/colors/gruvbox.vim
 curl -fLo ~/.vim/colors/monokai.vim -S https://raw.githubusercontent.com/ErichDonGubler/vim-sublime-monokai/master/colors/sublimemonokai.vim
+curl -fLo ~/.vim/colors/seoul256.vim -S https://raw.githubusercontent.com/junegunn/seoul256.vim/master/colors/seoul256.vim
 curl -fLo ~/.vim/colors/sierra.vim -S https://raw.githubusercontent.com/AlessandroYorba/Sierra/master/colors/sierra.vim
 ln -fns $(pwd)/config/after ~/.vim/after
 ln -fns $(pwd)/config/compiler ~/.vim/compiler
