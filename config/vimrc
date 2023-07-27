@@ -1,6 +1,7 @@
 set autoindent
 set clipboard^=unnamed clipboard^=unnamedplus
 set colorcolumn=80
+set completeopt-=preview completeopt+=popup
 set cursorline
 set directory=/tmp
 set display=lastline
@@ -41,8 +42,10 @@ let g:ale_fixers = {
   \ '*': ['prettier']
 \ }
 let g:ale_fix_on_save = 1
-let g:ale_set_balloons = 1
-let g:ale_virtualtext_cursor = 0
+if has('popupwin')
+  let g:ale_hover_to_floating_preview = 1
+endif
+let g:ale_virtualtext_cursor = 1
 let g:ctrlp_custom_ignore =
     \ '\v[\/](\.catkin_tools|\.clangd\/index|\.git|__pycache__|build|devel|dist|logs|node_modules)$'
 let g:ctrlp_show_hidden = 1
@@ -64,11 +67,13 @@ function s:BufClean()
     endif
   endfor
 endfunction
-function CodeActionDetail(data, menu)
+function CodeActionDetailHover(data, menu)
   if !empty(a:menu)
     ALECodeAction
-  else
+  elseif !empty(ale#util#FindItemAtCursor(bufnr())[1])
     ALEDetail
+  else
+    call HoverFunctionCall()
   endif
 endfunction
 function s:FugitiveClose()
@@ -92,6 +97,31 @@ function GoToTerminal()
       return
     endif
   endfor
+endfunction
+function HoverFunctionCall()
+  let l:curline = getpos('.')[1]
+  let [l:line, l:column] = searchpos('(', 'bcn')
+  if l:line == l:curline
+    call ale#hover#Show(
+      \ bufnr(),
+      \ l:line,
+      \ l:column,
+      \ { 'called_from_balloonexpr': v:true }
+    \ )
+  else
+    ALEHover
+  endif
+endfunction
+function s:HoverOneBack()
+  if !empty(v:completed_item)
+    let l:curpos = getpos('.')
+    call ale#hover#Show(
+      \ bufnr(),
+      \ l:curpos[1],
+      \ l:curpos[2] - 1,
+      \ { 'called_from_balloonexpr': v:true }
+    \ )
+  endif
 endfunction
 function NERDTreeFugitiveFind()
   let l:bufnr = bufnr()
@@ -141,25 +171,18 @@ function s:PersistWithoutTerminals()
     endfor
   endif
 endfunction
-function PreviewDefinition()
-  try
-    execute "normal! \<C-W>}"
-  catch
-    ALEHover
-  endtry
-endfunction
 augroup squiffles
   autocmd BufEnter * call s:Persist()
   autocmd ExitPre * call s:PersistWithoutTerminals()
-  autocmd User ALECompletePost ALEHover
+  autocmd CompleteDone * call s:HoverOneBack()
 augroup end
 command BC call s:BufClean()
 cabbrev bc BC
 command GLAG Git log --all --decorate --graph
 cabbrev glag GLAG
-noremap <C-@> :call ale#codefix#Execute(mode() ==# 'v' \|\| mode() ==# "\<lt>C-V>", function('CodeActionDetail'))<CR>
+noremap <C-@> :call ale#codefix#Execute(mode() ==# 'v' \|\| mode() ==# "\<lt>C-V>", function('CodeActionDetailHover'))<CR>
+inoremap <C-@> <C-\><C-O>:call HoverFunctionCall()<CR>
 noremap <C-LeftMouse> <LeftMouse>:call GoToDefinition()<CR>
-noremap <C-W>} :call PreviewDefinition()<CR>
 noremap <C-]> :call GoToDefinition()<CR>
 noremap <Leader>c :call GoToTerminal()<CR>
 noremap <Leader>f :call NERDTreeFugitiveFind()<CR>
