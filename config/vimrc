@@ -45,7 +45,8 @@ let g:ale_fix_on_save = 1
 if has('popupwin')
   let g:ale_hover_to_floating_preview = 1
 endif
-let g:ale_virtualtext_cursor = 1
+let g:ale_set_balloons = 1
+let g:ale_virtualtext_cursor = 0
 let g:ctrlp_custom_ignore =
     \ '\v[\/](\.catkin_tools|\.clangd\/index|\.git|__pycache__|build|devel|dist|logs|node_modules)$'
 let g:ctrlp_show_hidden = 1
@@ -100,21 +101,23 @@ function GoToTerminal()
 endfunction
 function HoverFunctionCall()
   let l:curline = getpos('.')[1]
-  let [l:line, l:column] = searchpos('(', 'bcn')
-  if l:line == l:curline
+  let [l:left_line, l:left_column] = searchpos('(', 'bcn')
+  let [l:right_line, l:right_column] = searchpos('(', 'bcn')
+  if l:left_line < l:right_line ||
+      \ l:left_line == l:right_line && l:left_column < l:right_column
+    call s:PauseBalloons()
     call ale#hover#Show(
       \ bufnr(),
       \ l:line,
       \ l:column,
       \ { 'called_from_balloonexpr': v:true }
     \ )
-  else
-    ALEHover
   endif
 endfunction
 function s:HoverOneBack()
   if !empty(v:completed_item)
     let l:curpos = getpos('.')
+    call s:PauseBalloons()
     call ale#hover#Show(
       \ bufnr(),
       \ l:curpos[1],
@@ -150,6 +153,14 @@ function NERDTreeFugitiveToggle()
     endif
   endif
 endfunction
+function s:PauseBalloons()
+  let l:bufnr = bufnr()
+  let b:ale_set_balloons = 0
+  call timer_start(
+    \ 600,
+    \ {-> setbufvar(l:bufnr, 'ale_set_balloons', g:ale_set_balloons)}
+  \ )
+endfunction
 function s:Persist()
   if !empty(v:this_session) && !exists('g:SessionLoad')
     execute 'mksession!' v:this_session
@@ -175,6 +186,7 @@ augroup squiffles
   autocmd BufEnter * call s:Persist()
   autocmd ExitPre * call s:PersistWithoutTerminals()
   autocmd CompleteDone * call s:HoverOneBack()
+  autocmd FileType python setlocal foldmethod=indent
 augroup end
 command BC call s:BufClean()
 cabbrev bc BC
