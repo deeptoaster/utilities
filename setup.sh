@@ -186,11 +186,12 @@ git clone https://github.com/Xuyuanp/nerdtree-git-plugin ~/.vim/pack/foo/opt/ner
 git clone https://github.com/preservim/nerdtree ~/.vim/pack/foo/opt/nerdtree
 git clone https://github.com/ryanoasis/vim-devicons ~/.vim/pack/foo/opt/vim-devicons
 git clone https://github.com/tpope/vim-surround ~/.vim/pack/foo/opt/vim-surround
-mkdir ~/.vim/colors
+mkdir ~/.vim/colors ~/.vim/plugin
 wget -O ~/.vim/colors/gruvbox.vim https://raw.githubusercontent.com/morhetz/gruvbox/master/colors/gruvbox.vim
 wget -O ~/.vim/colors/monokai.vim https://raw.githubusercontent.com/ErichDonGubler/vim-sublime-monokai/master/colors/sublimemonokai.vim
 wget -O ~/.vim/colors/seoul256.vim https://raw.githubusercontent.com/junegunn/seoul256.vim/master/colors/seoul256.vim
 wget -O ~/.vim/colors/sierra.vim https://raw.githubusercontent.com/AlessandroYorba/Sierra/master/colors/sierra.vim
+wget -O ~/.vim/plugin/argtextobj.vim 'https://www.vim.org/scripts/download_script.php?src_id=11985'
 ln -fnrs config/after ~/.vim/after
 ln -fnrs config/compiler ~/.vim/compiler
 sudo update-alternatives --install /usr/bin/editor editor /usr/bin/vim 50

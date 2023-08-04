@@ -54,11 +54,12 @@ git clone https://github.com/ryanoasis/vim-devicons ~/.vim/pack/foo/opt/vim-devi
 git clone https://github.com/tpope/vim-fugitive ~/.vim/pack/foo/start/vim-fugitive
 git clone https://github.com/airblade/vim-gitgutter ~/.vim/pack/foo/start/vim-gitgutter
 git clone https://github.com/tpope/vim-surround ~/.vim/pack/foo/opt/vim-surround
-mkdir ~/.vim/colors
+mkdir ~/.vim/colors ~/.vim/plugin
 curl -fLo ~/.vim/colors/gruvbox.vim -S https://raw.githubusercontent.com/morhetz/gruvbox/master/colors/gruvbox.vim
 curl -fLo ~/.vim/colors/monokai.vim -S https://raw.githubusercontent.com/ErichDonGubler/vim-sublime-monokai/master/colors/sublimemonokai.vim
 curl -fLo ~/.vim/colors/seoul256.vim -S https://raw.githubusercontent.com/junegunn/seoul256.vim/master/colors/seoul256.vim
 curl -fLo ~/.vim/colors/sierra.vim -S https://raw.githubusercontent.com/AlessandroYorba/Sierra/master/colors/sierra.vim
+curl -fLo ~/.vim/plugin/argtextobj.vim -S 'https://www.vim.org/scripts/download_script.php?src_id=11985'
 ln -fns $(pwd)/config/after ~/.vim/after
 ln -fns $(pwd)/config/compiler ~/.vim/compiler
 (echo "0 0 * * * $(pwd)/backdrops.py"; echo "0 * * * * $(pwd)/power.sh") | crontab -
