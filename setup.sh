@@ -1,8 +1,10 @@
 #!/bin/bash
 set -ex
+DOCUMENT_ROOT=/var/www/html
+FONT_ROOT=/usr/share/fonts/truetype
 sudo add-apt-repository ppa:numix/ppa
 sudo add-apt-repository ppa:xubuntu-dev/extras
-wget -O - https://download.spotify.com/debian/pubkey_7A3A762FAFD4A51F.gpg | sudo apt-key add -
+curl -fLS https://download.spotify.com/debian/pubkey_7A3A762FAFD4A51F.gpg | sudo apt-key add -
 echo deb http://repository.spotify.com stable non-free | sudo tee /etc/apt/sources.list.d/spotify.list
 sudo apt update
 sudo apt purge thunar-volman vim-tiny xfce4-whiskermenu-plugin xpdf
@@ -12,26 +14,19 @@ sudo apt --no-install-recommends install gnome-control-center gnome-session vim-
 sudo apt install apache2 arc-theme black blender blueman conky-all cryptsetup deja-dup ffmpeg gimp git git-ftp gnome-disk-utility gnupg2 gparted guvcview inkscape lmms mate-calc nodejs npm numix-icon-theme-circle pandoc php php-bcmath php-curl php-gd php-sqlite3 php-xml redshift spotify-client steam-installer ubuntustudio-fonts vim-airline vim-ale vim-ctrlp vim-fugitive vim-gitgutter virtualbox-ext-pack virtualbox-guest-additions-iso xarchiver xcalib xfce4-docklike-plugin xfce4-places-plugin zathura cm-super-x11-
 sudo usermod -aG vboxusers $USER
 sudo npm install -g n
-sudo n latest
-sudo npm install -g autoprefixer eslint eslint-config-airbnb npm postcss postcss-cli prettier pyright typescript
 sudo a2enmod rewrite
 sudo a2enmod vhost_alias
-sudo ln -frs config/vhosts.conf /etc/apache2/conf-available/vhosts.conf
+sudo ln -fs $(pwd)/config/vhosts.conf /etc/apache2/conf-available/vhosts.conf
 sudo a2enconf vhosts
-sudo sed -Ei 's/^(display_errors|short_open_tag) = Off$/\1 = On/' /etc/php/*/*/php.ini
-sudo mv /var/www/html/* ~/Public
-sudo rmdir /var/www/html
-sudo ln -fns ~/Public /var/www/html
-chmod o+rx ~
-sudo service apache2 restart
-sudo ln -frs config/71-synaptics.conf /usr/share/X11/xorg.conf.d/71-synaptics.conf
-sudo ln -frs config/lightdm-gtk-greeter.conf /etc/lightdm/lightdm-gtk-greeter.conf
+sudo sed -Ei'' -e 's/^(display_errors|short_open_tag) = Off$/\1 = On/' /etc/php/*/*/php.ini
+sudo ln -fs $(pwd)/config/71-synaptics.conf /usr/share/X11/xorg.conf.d/71-synaptics.conf
+sudo ln -fs $(pwd)/config/lightdm-gtk-greeter.conf /etc/lightdm/lightdm-gtk-greeter.conf
 PWD_ESCAPED=$(sed 's/[&/\]/\\&/g' <<< $(pwd))
 sed -E "s/\\\$PWD\b/$PWD_ESCAPED/g" config/power.service | sudo tee /lib/systemd/system/power.service
 sudo systemctl enable power.service
 sudo systemctl start power.service
 rsync -Ir config/autostart config/guvcview2 config/gtk-3.0 config/Thunar config/xarchiver config/xfce4 config/zathura ~/.config
-sed -Ei "s/\\\$USER\b/$USER/g" ~/.config/gtk-3.0/bookmarks
+sed -Ei'' "s/\\\$USER\b/$USER/g" ~/.config/gtk-3.0/bookmarks
 sudo update-locale LC_MESSAGES=fr_FR.UTF-8
 LANGUAGE=fr_FR xdg-user-dirs-update --force
 gsettings set org.blueman.plugins.powermanager auto-power-on false
@@ -159,56 +154,14 @@ xfconf-query -c xsettings -p /Gtk/MenuImages -n -t bool -s false
 xfconf-query -c xsettings -p /Net/IconThemeName -n -t string -s Numix-Circle
 xfconf-query -c xsettings -p /Net/ThemeName -n -t string -s Arc-Dark
 xfce4-panel -r
-ssh-keygen -C deeptoaster@gmail.com -t ed25519
-eval "$(ssh-agent -s)"
-ssh-add ~/.ssh/id_ed25519
-git config --global commit.gpgSign true
-git config --global core.excludesFile ~/.gitignore
-git config --global diff.tool vimdiff
-git config --global gpg.format ssh
-git config --global gpg.ssh.allowedSignersFile ~/.ssh/allowed_signers
-git config --global pull.rebase false
-git config --global user.email deeptoaster@gmail.com
-git config --global user.name 'Deep Toaster'
-git config --global user.signingkey ~/.ssh/id_ed25519.pub
-touch ~/.ssh/allowed_signers
-ln -frs config/bash_aliases ~/.bash_aliases
-ln -frs config/eslintrc.json ~/.eslintrc.json
-ln -frs config/face ~/.face
-ln -frs config/gitignore ~/.gitignore
-ln -frs config/pam_environment ~/.pam_environment
-ln -frs config/pyrightconfig.json ~/pyrightconfig.json
-ln -frs config/vimrc ~/.vimrc
-ln -frs conky-rings/conkyrc ~/.conkyrc
-mkdir -p ~/.lua/scripts
-ln -frs conky-rings/rings.lua ~/.lua/scripts/rings.lua
-git clone https://github.com/Xuyuanp/nerdtree-git-plugin ~/.vim/pack/foo/opt/nerdtree-git-plugin
-git clone https://github.com/preservim/nerdtree ~/.vim/pack/foo/opt/nerdtree
-git clone https://github.com/ryanoasis/vim-devicons ~/.vim/pack/foo/opt/vim-devicons
-git clone https://github.com/tpope/vim-surround ~/.vim/pack/foo/opt/vim-surround
-mkdir ~/.vim/colors ~/.vim/plugin
-wget -O ~/.vim/colors/gruvbox.vim https://raw.githubusercontent.com/morhetz/gruvbox/master/colors/gruvbox.vim
-wget -O ~/.vim/colors/monokai.vim https://raw.githubusercontent.com/ErichDonGubler/vim-sublime-monokai/master/colors/sublimemonokai.vim
-wget -O ~/.vim/colors/seoul256.vim https://raw.githubusercontent.com/junegunn/seoul256.vim/master/colors/seoul256.vim
-wget -O ~/.vim/colors/sierra.vim https://raw.githubusercontent.com/AlessandroYorba/Sierra/master/colors/sierra.vim
-wget -O ~/.vim/plugin/argtextobj.vim 'https://www.vim.org/scripts/download_script.php?src_id=11985'
-ln -fnrs config/after ~/.vim/after
-ln -fnrs config/compiler ~/.vim/compiler
+ln -fs $(pwd)/conky-rings/conkyrc ~/.conkyrc
+ln -fs $(pwd)/conky-rings/rings.lua ~/.lua/scripts/rings.lua
 sudo update-alternatives --install /usr/bin/editor editor /usr/bin/vim 50
 sudo update-alternatives --remove editor /usr/bin/vim.gtk3
 sudo update-alternatives --set x-cursor-theme /usr/share/icons/DMZ-Black/cursor.theme
 echo 'set editing-mode vi' > ~/.inputrc
-(echo "0 0 * * * $(pwd)/backdrops.py"; echo "0 * * * * $(pwd)/power.sh") | crontab -
-wget -O fonts-main.tar.gz https://github.com/google/fonts/archive/master.tar.gz
-tar -xzf fonts-main.tar.gz
-sudo mkdir -p /usr/share/fonts/truetype/google-fonts /usr/share/fonts/truetype/fira-code
-find fonts-main -name "*.ttf" -exec sudo install -m644 {} /usr/share/fonts/truetype/google-fonts \;
-rm -fr fonts-main fonts-main.tar.gz
-for variant in Bold Light Medium Regular Retina SemiBold; do
-  sudo wget -P /usr/share/fonts/truetype/fira-code https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/FiraCode/$variant/FiraCodeNerdFont-$variant.ttf
-done
-fc-cache -f
-wget https://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz
+curl -fLo install-tl-unx.tar.gz https://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz
 tar -xzf install-tl-unx.tar.gz
 sudo perl install-tl-*/install-tl --no-interaction
 rm -fr install-tl-*
+source setup_common
