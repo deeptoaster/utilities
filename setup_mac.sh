@@ -4,11 +4,12 @@ DOCUMENT_ROOT=/Library/WebServer/Documents
 FONT_ROOT=/Library/Fonts
 /bin/bash -c "$(curl -fLS https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 eval "$(/opt/homebrew/bin/brew shellenv)"
-brew install firefox n php spotify texlive
+brew install firefox n pandoc php spotify texlive
 sudo sed -Ei.bak -e 's/^#(LoadModule (rewrite|vhost_alias)_module )/\1/' /etc/apache2/httpd.conf
 (echo 'LoadModule php_module /opt/homebrew/opt/php/lib/httpd/modules/libphp.so woot'; echo; echo '<FilesMatch \.php$>'; echo '    SetHandler application/x-httpd-php'; echo '</FilesMatch>') | sudo tee -a /etc/apache2/httpd.conf
 sudo cp -f $(pwd)/config/vhosts.conf /etc/apache2/other/vhosts.conf
-sudo sed -Ei'' -e 's/\/var\/www\/html\b/\/Library\/Webserver\/Documents/' -e 's/\/var\/www\b/\/Library\/Webserver/' /etc/apache2/conf-enabled/vhosts.conf
+sudo sed -Ei'' -e 's/\/var\/www\/html\b/\/Library\/Webserver\/Documents/' /etc/apache2/other/vhosts.conf
+sudo sed -Ei'' -e 's/\/var\/www\b/\/Library\/Webserver/' /etc/apache2/other/vhosts.conf
 sudo sed -Ei'' -e 's/^(display_errors|short_open_tag) = Off$/\1 = On/' /opt/homebrew/etc/php/*/php.ini
 defaults write NSGlobalDomain AppleShowAllExtensions -bool true
 defaults write com.apple.Finder AppleShowAllFiles -bool true
