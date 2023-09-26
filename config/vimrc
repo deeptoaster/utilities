@@ -2,6 +2,7 @@ set autoindent
 set clipboard^=unnamed clipboard^=unnamedplus
 set colorcolumn=80
 set completeopt-=preview completeopt+=popup
+set conceallevel=2
 set cursorline
 set directory=/tmp
 set display=lastline
@@ -39,6 +40,7 @@ let g:ale_fixers = {
   \ 'cpp': ['clang-format'],
   \ 'cuda': ['clang-format'],
   \ 'python': ['black'],
+  \ 'tex': ['latexindent'],
   \ '*': ['prettier']
 \ }
 let g:ale_fix_on_save = 1
@@ -54,6 +56,8 @@ let g:ctrlp_working_path_mode = 0
 let g:DevIconsEnableFoldersOpenClose = 1
 let g:NERDTreeGitStatusUseNerdFonts = 1
 let g:NERDTreeShowHidden = 1
+let g:vimtex_fold_enabled = 1
+let g:vimtex_view_method = 'zathura'
 packloadall
 packadd CtrlP
 packadd ale
@@ -61,6 +65,7 @@ packadd vim-devicons
 packadd nerdtree-git-plugin
 packadd nerdtree
 packadd vim-surround
+packadd vimtex
 function s:BufClean()
   for l:bufnr in range(1, bufnr('$'))
     if buflisted(l:bufnr) && !bufloaded(l:bufnr)
@@ -182,10 +187,21 @@ function s:PersistWithoutTerminals()
     endfor
   endif
 endfunction
+function RepositionList()
+  let l:winnr = winnr()
+  cclose
+  wincmd b
+  wincmd v
+  copen
+  wincmd k
+  quit
+  execute l:winnr 'wincmd w'
+endfunction
 augroup squiffles
   autocmd BufEnter * call s:Persist()
   autocmd ExitPre * call s:PersistWithoutTerminals()
   autocmd CompleteDone * call s:HoverOneBack()
+  autocmd FileType php setlocal foldmethod=indent
   autocmd FileType python setlocal foldmethod=indent
 augroup end
 command BC call s:BufClean()
@@ -198,6 +214,7 @@ noremap <C-LeftMouse> <LeftMouse>:call GoToDefinition()<CR>
 noremap <C-]> :call GoToDefinition()<CR>
 noremap <Leader>c :call GoToTerminal()<CR>
 noremap <Leader>f :call NERDTreeFugitiveFind()<CR>
+noremap <Leader>q :call RepositionList()<CR>
 noremap <Leader>t :call NERDTreeFugitiveToggle()<CR>
 noremap [l :try <Bar> lprev <Bar> catch <Bar> try <Bar> llast <Bar> catch <Bar> ALEPreviousWrap <Bar> endtry <Bar> endtry<CR>
 noremap ]l :try <Bar> lnext <Bar> catch <Bar> try <Bar> lfirst <Bar> catch <Bar> ALENextWrap <Bar> endtry <Bar> endtry<CR>
