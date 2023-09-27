@@ -9,6 +9,8 @@ glep() {
   grep --color=always --line-number --no-messages "$@" | less --quit-if-one-screen --RAW-CONTROL-CHARS
 }
 alias pand='pandoc -t ~/.lua/scripts/terminal.lua'
+alias venc='python3 -m venv --system-site-packages .venv'
+alias venv='source .venv/bin/activate'
 export PATH="$(ls -dr /usr/local/texlive/*/bin/x86_64-linux 2> /dev/null | head -n 1):$PATH"
 if command -v shopt > /dev/null && shopt | grep --quiet '^globstar\b'; then
   shopt -s globstar
