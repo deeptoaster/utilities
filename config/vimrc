@@ -54,6 +54,8 @@ let g:ctrlp_custom_ignore =
 let g:ctrlp_show_hidden = 1
 let g:ctrlp_working_path_mode = 0
 let g:DevIconsEnableFoldersOpenClose = 1
+let g:easycomplete_cursor_word_hl = 1
+let g:easycomplete_nerd_font = 1
 let g:NERDTreeGitStatusUseNerdFonts = 1
 let g:NERDTreeShowHidden = 1
 let g:vimtex_fold_enabled = 1
@@ -64,7 +66,9 @@ packadd ale
 packadd vim-devicons
 packadd nerdtree-git-plugin
 packadd nerdtree
+packadd vim-easycomplete
 packadd vim-surround
+packadd vim-ultisnips
 packadd vimtex
 function s:BufClean()
   for l:bufnr in range(1, bufnr('$'))
@@ -214,7 +218,7 @@ noremap <C-LeftMouse> <LeftMouse>:call GoToDefinition()<CR>
 noremap <C-]> :call GoToDefinition()<CR>
 noremap <Leader>c :call GoToTerminal()<CR>
 noremap <Leader>f :call NERDTreeFugitiveFind()<CR>
-noremap <Leader>q :call RepositionList()<CR>
+noremap <Leader>q :noautocmd call RepositionList()<CR>
 noremap <Leader>t :call NERDTreeFugitiveToggle()<CR>
 noremap [l :try <Bar> lprev <Bar> catch <Bar> try <Bar> llast <Bar> catch <Bar> ALEPreviousWrap <Bar> endtry <Bar> endtry<CR>
 noremap ]l :try <Bar> lnext <Bar> catch <Bar> try <Bar> lfirst <Bar> catch <Bar> ALENextWrap <Bar> endtry <Bar> endtry<CR>

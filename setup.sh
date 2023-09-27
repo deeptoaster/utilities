@@ -155,6 +155,7 @@ xfconf-query -c xsettings -p /Net/IconThemeName -n -t string -s Numix-Circle
 xfconf-query -c xsettings -p /Net/ThemeName -n -t string -s Arc-Dark
 xfce4-panel -r
 ln -fs $(pwd)/conky-rings/conkyrc ~/.conkyrc
+mkdir -p ~/.lua/scripts
 ln -fs $(pwd)/conky-rings/rings.lua ~/.lua/scripts/rings.lua
 sudo update-alternatives --install /usr/bin/editor editor /usr/bin/vim 50
 sudo update-alternatives --remove editor /usr/bin/vim.gtk3
