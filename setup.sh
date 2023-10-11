@@ -160,6 +160,7 @@ ln -fs $(pwd)/conky-rings/rings.lua ~/.lua/scripts/rings.lua
 sudo update-alternatives --install /usr/bin/editor editor /usr/bin/vim 50
 sudo update-alternatives --remove editor /usr/bin/vim.gtk3
 sudo update-alternatives --set x-cursor-theme /usr/share/icons/DMZ-Black/cursor.theme
+(echo 'paths:'; echo "  - $HOME/latexindent.yaml") > ~/indentconfig.yaml
 echo 'set editing-mode vi' > ~/.inputrc
 curl -fLo install-tl-unx.tar.gz https://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz
 tar -xzf install-tl-unx.tar.gz

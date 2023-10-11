@@ -22,6 +22,7 @@ ln -fs $(pwd)/config/bash_aliases ~/.bash_aliases
 ln -fs $(pwd)/config/eslintrc.json ~/.eslintrc.json
 ln -fs $(pwd)/config/face ~/.face
 ln -fs $(pwd)/config/gitignore ~/.gitignore
+ln -fs $(pwd)/config/latexindent.yaml ~/latexindent.yaml
 ln -fs $(pwd)/config/pam_environment ~/.pam_environment
 ln -fs $(pwd)/config/pyrightconfig.json ~/pyrightconfig.json
 ln -fs $(pwd)/config/vimrc ~/.vimrc
