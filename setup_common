@@ -31,9 +31,7 @@ curl -fLo ~/.lua/scripts/terminal.lua -S https://raw.githubusercontent.com/Orang
 git clone https://github.com/preservim/nerdtree ~/.vim/pack/foo/opt/nerdtree
 git clone https://github.com/Xuyuanp/nerdtree-git-plugin ~/.vim/pack/foo/opt/nerdtree-git-plugin
 git clone https://github.com/ryanoasis/vim-devicons ~/.vim/pack/foo/opt/vim-devicons
-git clone https://github.com/jayli/vim-easycomplete ~/.vim/pack/foo/opt/vim-easycomplete
 git clone https://github.com/tpope/vim-surround ~/.vim/pack/foo/opt/vim-surround
-git clone https://github.com/SirVer/ultisnips ~/.vim/pack/foo/opt/vim-ultisnips
 git clone https://github.com/lervag/vimtex ~/.vim/pack/foo/opt/vimtex
 mkdir -p ~/.vim/after/syntax ~/.vim/colors ~/.vim/plugin
 curl -fLo ~/.vim/after/syntax/python.vim -S https://raw.githubusercontent.com/ehamberg/vim-cute-python/moresymbols/after/syntax/python.vim
