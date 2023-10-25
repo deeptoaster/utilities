@@ -104,32 +104,40 @@ function GoToTerminal()
     endif
   endfor
 endfunction
+function s:Hover(line, column)
+  let l:bufnr = bufnr()
+  let b:ale_set_balloons = 0
+  call timer_start(
+    \ 600,
+    \ {-> setbufvar(l:bufnr, 'ale_set_balloons', g:ale_set_balloons)}
+  \ )
+  call ale#hover#Show(
+    \ l:bufnr,
+    \ a:line,
+    \ a:column,
+    \ { 'called_from_balloonexpr': v:true }
+  \ )
+endfunction
 function HoverFunctionCall()
-  let l:curline = getpos('.')[1]
-  let [l:left_line, l:left_column] = searchpos('(', 'bcn')
-  let [l:right_line, l:right_column] = searchpos('(', 'bcn')
-  if l:left_line < l:right_line ||
-      \ l:left_line == l:right_line && l:left_column < l:right_column
-    call s:PauseBalloons()
-    call ale#hover#Show(
-      \ bufnr(),
-      \ l:line,
-      \ l:column,
-      \ { 'called_from_balloonexpr': v:true }
-    \ )
+  let l:curpos = getpos('.')
+  let [l:left_line, l:left_column] = searchpos('(', 'bcnW')
+  if l:left_line == l:curpos[1] && l:left_column == l:curpos[2] - 1
+    call s:Hover(l:left_line, l:left_column)
+  else
+    let &operatorfunc = function('s:HoverOperator', [winsaveview()])
+    normal g@[(
   endif
 endfunction
 function s:HoverOneBack()
   if !empty(v:completed_item)
     let l:curpos = getpos('.')
-    call s:PauseBalloons()
-    call ale#hover#Show(
-      \ bufnr(),
-      \ l:curpos[1],
-      \ l:curpos[2] - 1,
-      \ { 'called_from_balloonexpr': v:true }
-    \ )
+    call s:Hover(l:curpos[1], l:curpos[2] - 1)
   endif
+endfunction
+function s:HoverOperator(view, type)
+  call winrestview(a:view)
+  let l:operatorpos = getpos("'[")
+  call s:Hover(l:operatorpos[1], l:operatorpos[2])
 endfunction
 function NERDTreeFugitiveFind()
   let l:bufnr = bufnr()
@@ -157,14 +165,6 @@ function NERDTreeFugitiveToggle()
       normal zR
     endif
   endif
-endfunction
-function s:PauseBalloons()
-  let l:bufnr = bufnr()
-  let b:ale_set_balloons = 0
-  call timer_start(
-    \ 600,
-    \ {-> setbufvar(l:bufnr, 'ale_set_balloons', g:ale_set_balloons)}
-  \ )
 endfunction
 function s:Persist()
   if !empty(v:this_session) && !exists('g:SessionLoad')
