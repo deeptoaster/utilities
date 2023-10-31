@@ -56,6 +56,7 @@ xfconf-query -c xfce4-keyboard-shortcuts -p '/xfwm4/custom/<Super>KP_End' -r
 xfconf-query -c xfce4-keyboard-shortcuts -p '/xfwm4/custom/<Super>KP_Home' -r
 xfconf-query -c xfce4-keyboard-shortcuts -p '/xfwm4/custom/<Super>KP_Left' -r
 xfconf-query -c xfce4-keyboard-shortcuts -p '/xfwm4/custom/<Super>KP_Next' -r
+xfconf-query -c xfce4-keyboard-shortcuts -p '/xfwm4/custom/<Super>KP_Page_Down' -r
 xfconf-query -c xfce4-keyboard-shortcuts -p '/xfwm4/custom/<Super>KP_Page_Up' -r
 xfconf-query -c xfce4-keyboard-shortcuts -p '/xfwm4/custom/<Super>KP_Right' -r
 xfconf-query -c xfce4-keyboard-shortcuts -p '/xfwm4/custom/<Super>KP_Up' -r

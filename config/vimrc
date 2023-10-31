@@ -197,6 +197,14 @@ function RepositionList()
   quit
   execute l:winnr 'wincmd w'
 endfunction
+function SplitTerminal()
+  vsplit
+  wincmd l
+  terminal
+  wincmd j
+  normal i
+  quit
+endfunction
 augroup squiffles
   autocmd BufEnter * call s:Persist()
   autocmd ExitPre * call s:PersistWithoutTerminals()
@@ -211,6 +219,7 @@ cabbrev glag GLAG
 noremap <C-@> :call ale#codefix#Execute(mode() ==# 'v' \|\| mode() ==# "\<lt>C-V>", function('CodeActionDetailHover'))<CR>
 inoremap <C-@> <C-\><C-O>:call HoverFunctionCall()<CR>
 noremap <C-LeftMouse> <LeftMouse>:call GoToDefinition()<CR>
+tnoremap <C-W>C <C-W>N:call SplitTerminal()<CR>
 noremap <C-]> :call GoToDefinition()<CR>
 noremap <Leader>c :call GoToTerminal()<CR>
 noremap <Leader>f :call NERDTreeFugitiveFind()<CR>
