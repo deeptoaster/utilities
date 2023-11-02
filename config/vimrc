@@ -66,6 +66,15 @@ packadd nerdtree-git-plugin
 packadd nerdtree
 packadd vim-surround
 packadd vimtex
+function s:AppendPandocMessage(bufnr, _channel, message)
+  call timer_stop(getbufvar(a:bufnr, 'pandoc_timer', 0))
+  call add(getbufvar(a:bufnr, 'pandoc_messages'), {'text': a:message})
+  call setbufvar(
+    \ a:bufnr,
+    \ 'pandoc_timer',
+    \ timer_start(600, function('s:EchoPandocMessages', [a:bufnr]))
+  \ )
+endfunction
 function s:BufClean()
   for l:bufnr in range(1, bufnr('$'))
     if buflisted(l:bufnr) && !bufloaded(l:bufnr)
@@ -81,6 +90,14 @@ function CodeActionDetailHover(data, menu)
   else
     call HoverFunctionCall()
   endif
+endfunction
+function s:EchoPandocMessages(bufnr, _timer)
+  let l:pandoc_messages = getbufvar(a:bufnr, 'pandoc_messages')
+  call setqflist(l:pandoc_messages)
+  if !empty(l:pandoc_messages)
+    call RepositionList()
+  endif
+  call setbufvar(a:bufnr, 'pandoc_messages', [])
 endfunction
 function s:FugitiveClose()
   for l:bufnr in range(1, bufnr('$'))
@@ -115,7 +132,7 @@ function s:Hover(line, column)
     \ l:bufnr,
     \ a:line,
     \ a:column,
-    \ { 'called_from_balloonexpr': v:true }
+    \ {'called_from_balloonexpr': v:true}
   \ )
 endfunction
 function HoverFunctionCall()
@@ -173,9 +190,9 @@ function s:Persist()
 endfunction
 function s:PersistWithoutTerminals()
   if !empty(v:this_session) && empty(filter(range(1, bufnr('$')), {
-    \ idx, val ->
-        \ getbufvar(val, '&modified') &&
-        \ getbufvar(val, '&buftype') !=# 'terminal'
+    \ _index, bufnr ->
+        \ getbufvar(bufnr, '&modified') &&
+        \ getbufvar(bufnr, '&buftype') !=# 'terminal'
   \ }))
     call s:FugitiveClose()
     execute 'mksession!' v:this_session
@@ -205,10 +222,37 @@ function SplitTerminal()
   normal i
   quit
 endfunction
+function TogglePandocWorker()
+  if get(b:, 'pandoc_job', v:null) is v:null
+    let l:fname = expand('%:t')
+    let l:tempname = '/tmp/' . fnamemodify(l:fname, ':r') . '.pdf'
+    let b:pandoc_messages = []
+    let b:pandoc_job = job_start(
+      \ [
+        \ 'bash',
+        \ '-c',
+        \ 'inwm ' . l:fname . ' pandoc -o ' . l:tempname . ' ' . l:fname
+      \ ],
+      \ {
+        \ 'cwd': expand('%:h'),
+        \ 'err_cb': function('s:AppendPandocMessage', [bufnr()])
+      \ }
+    \ )
+    let b:zathura_job = job_start(['zathura', l:tempname])
+    let b:ale_fix_on_save = 0
+  else
+    call job_stop(b:pandoc_job)
+    call job_stop(b:zathura_job)
+    let b:pandoc_job = v:null
+    unlet b:ale_fix_on_save
+    cclose
+  endif
+endfunction
 augroup squiffles
   autocmd BufEnter * call s:Persist()
   autocmd ExitPre * call s:PersistWithoutTerminals()
   autocmd CompleteDone * call s:HoverOneBack()
+  autocmd FileType markdown noremap <buffer> <Leader>ll :call TogglePandocWorker()<CR>
   autocmd FileType php setlocal foldmethod=indent
   autocmd FileType python setlocal foldmethod=indent
 augroup end
