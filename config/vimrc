@@ -50,7 +50,7 @@ endif
 let g:ale_set_balloons = 1
 let g:ale_virtualtext_cursor = 0
 let g:ctrlp_custom_ignore =
-    \ '\v[\/](\.catkin_tools|\.clangd\/index|\.git|__pycache__|build|devel|dist|logs|node_modules)$'
+    \ '\v[\/](\.catkin_tools|\.clangd\/index|\.git|\.venv|__pycache__|build|devel|dist|logs|node_modules)$'
 let g:ctrlp_show_hidden = 1
 let g:ctrlp_working_path_mode = 0
 let g:DevIconsEnableFoldersOpenClose = 1
@@ -66,6 +66,21 @@ packadd nerdtree-git-plugin
 packadd nerdtree
 packadd vim-surround
 packadd vimtex
+function AddAlignment()
+  let l:begin = search('\$\$', 'bcnW')
+  let l:end = search('\$\$', 'nW')
+  if l:begin != 0 && l:end != 0
+    execute l:begin . 'substitute/\$\$/\\begin{align*}/'
+    execute l:end . 'substitute/\$\$/\\end{align*}/'
+    if l:end - l:begin >= 2
+      execute (l:begin + 1) . ',' . (l:end - 1) .
+          \ 'substitute/\v:?\=|\<\>|\\[gln]e|\\approx|\\in|\\propto|\\sim|\\subset(eq)?/\& \0/'
+    endif
+    if l:end - l:begin >= 3
+      execute (l:begin + 1) . ',' . (l:end - 2) . 'substitute/$/ \\\\/'
+    endif
+  endif
+endfunction
 function s:AppendPandocMessage(bufnr, _channel, message)
   call timer_stop(getbufvar(a:bufnr, 'pandoc_timer', 0))
   call add(getbufvar(a:bufnr, 'pandoc_messages'), {'text': a:message})
@@ -137,9 +152,9 @@ function s:Hover(line, column)
 endfunction
 function HoverFunctionCall()
   let l:curpos = getpos('.')
-  let [l:left_line, l:left_column] = searchpos('(', 'bcnW')
-  if l:left_line == l:curpos[1] && l:left_column == l:curpos[2] - 1
-    call s:Hover(l:left_line, l:left_column)
+  let [l:line, l:column] = searchpos('(', 'bcnW')
+  if l:line == l:curpos[1] && l:column == l:curpos[2] - 1
+    call s:Hover(l:line, l:column)
   else
     let &operatorfunc = function('s:HoverOperator', [winsaveview()])
     normal g@[(
@@ -267,6 +282,7 @@ tnoremap <C-W>C <C-W>N:call SplitTerminal()<CR>
 noremap <C-]> :call GoToDefinition()<CR>
 noremap <Leader>c :call GoToTerminal()<CR>
 noremap <Leader>f :call NERDTreeFugitiveFind()<CR>
+noremap <Leader>l$ :call AddAlignment()<CR>
 noremap <Leader>q :noautocmd call RepositionList()<CR>
 noremap <Leader>t :call NERDTreeFugitiveToggle()<CR>
 noremap [l :try <Bar> lprev <Bar> catch <Bar> try <Bar> llast <Bar> catch <Bar> ALEPreviousWrap <Bar> endtry <Bar> endtry<CR>
