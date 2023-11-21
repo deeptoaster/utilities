@@ -31,6 +31,7 @@ set shiftwidth=2
 set tabstop=2
 set viewoptions-=options
 set wildmenu
+set wildoptions+=pum wildoptions+=tagfile
 filetype plugin indent on
 syntax on
 colorscheme sierra
@@ -49,7 +50,7 @@ let g:ale_fixers = {
   \ '*': ['prettier']
 \ }
 let g:ale_fix_on_save = 1
-if has('popupwin')
+if has('popupwin') || has('nvim')
   let g:ale_hover_to_floating_preview = 1
 endif
 let g:ale_set_balloons = 1
@@ -86,9 +87,23 @@ function AddAlignment()
     endif
   endif
 endfunction
-function s:AppendPandocMessage(bufnr, _channel, message)
+function s:AppendPandocMessage(bufnr, _channel, data, ...)
   call timer_stop(getbufvar(a:bufnr, 'pandoc_timer', 0))
-  call add(getbufvar(a:bufnr, 'pandoc_messages'), {'text': a:message})
+  let l:pandoc_messages = getbufvar(a:bufnr, 'pandoc_messages')
+  if has('nvim')
+    if a:data !=# ['']
+      if empty(l:pandoc_messages)
+        call add(l:pandoc_messages, {'text': ''})
+      endif
+      let l:pandoc_messages[-1].text .= a:data[0]
+      call extend(
+        \ l:pandoc_messages,
+        \ map(a:data[1:], {_index, message -> {'text': message}})
+      \ )
+    endif
+  else
+    call add(l:pandoc_messages, {'text': a:data})
+  endif
   call setbufvar(
     \ a:bufnr,
     \ 'pandoc_timer',
@@ -226,7 +241,7 @@ function s:PersistAndCloseTerminals()
 endfunction
 function s:ReopenTerminalsAsync()
   call timer_stop(get(s:, 'terminals_timer', 0))
-  let s:terminals_timer = timer_start(600, function('s:ReopenTerminals'))
+  let s:terminals_timer = timer_start(200, function('s:ReopenTerminals'))
 endfunction
 function s:ReopenTerminals(_timer)
   let l:winnr = winnr()
@@ -257,25 +272,45 @@ function RepositionList()
 endfunction
 function TogglePandocWorker()
   if get(b:, 'pandoc_job', v:null) is v:null
-    let l:fname = expand('%:t')
-    let l:tempname = '/tmp/' . fnamemodify(l:fname, ':r') . '.pdf'
+    let l:bufnr = bufnr()
+    let l:source = expand('%:t')
+    let l:target = '/tmp/' . fnamemodify(l:source, ':r') . '.pdf'
+    let l:pandoc_command =
+        \ 'inwm ' . l:source . ' pandoc -o ' . l:target . ' ' . l:source
+    let l:zathura_command =
+        \ 'inotifywait --event modify --quiet ' . l:target . ' && zathura ' .
+        \ l:target
     let b:pandoc_messages = []
-    let b:pandoc_job = job_start(
-      \ [
-        \ 'bash',
-        \ '-c',
-        \ 'inwm ' . l:fname . ' pandoc -o ' . l:tempname . ' ' . l:fname
-      \ ],
-      \ {
-        \ 'cwd': expand('%:h'),
-        \ 'err_cb': function('s:AppendPandocMessage', [bufnr()])
-      \ }
-    \ )
-    let b:zathura_job = job_start(['zathura', l:tempname])
+    call system('touch ' . l:target)
+    if has('nvim')
+      let b:pandoc_job = jobstart(
+        \ l:pandoc_command,
+        \ {
+          \ 'cwd': expand('%:h'),
+          \ 'on_stderr': function('s:AppendPandocMessage', [l:bufnr])
+        \ }
+      \ )
+      let b:zathura_job = jobstart(l:zathura_command)
+    else
+      let b:pandoc_job = job_start(
+        \ ['bash', '-c', l:pandoc_command],
+        \ {
+          \ 'cwd': expand('%:h'),
+          \ 'err_cb': function('s:AppendPandocMessage', [l:bufnr])
+        \ }
+      \ )
+      let b:zathura_job = job_start(['bash', '-c', l:zathura_command])
+    endif
     let b:ale_fix_on_save = 0
+    call timer_start(200, function('execute', [l:bufnr . 'bufdo write']))
   else
-    call job_stop(b:pandoc_job)
-    call job_stop(b:zathura_job)
+    if has('nvim')
+      call jobstop(b:pandoc_job)
+      call jobstop(b:zathura_job)
+    else
+      call job_stop(b:pandoc_job)
+      call job_stop(b:zathura_job)
+    endif
     let b:pandoc_job = v:null
     unlet b:ale_fix_on_save
     cclose
@@ -297,11 +332,18 @@ command BC call s:BufClean()
 cabbrev bc BC
 command GLAG Git log --all --decorate --graph
 cabbrev glag GLAG
+if has('nvim')
+  cabbrev terminal split \| terminal
+endif
 noremap <C-@> :call ale#codefix#Execute(mode() ==# 'v' \|\| mode() ==# "\<lt>C-V>", function('CodeActionDetailHover'))<CR>
 inoremap <C-@> <C-\><C-O>:call HoverFunctionCall()<CR>
 noremap <C-LeftMouse> <LeftMouse>:call GoToDefinition()<CR>
 if has('nvim')
   tnoremap <C-W> <C-\><C-N><C-W>
+endif
+if has('nvim')
+  noremap <C-Space> :call ale#codefix#Execute(mode() ==# 'v' \|\| mode() ==# "\<lt>C-V>", function('CodeActionDetailHover'))<CR>
+  inoremap <C-Space> <C-\><C-O>:call HoverFunctionCall()<CR>
 endif
 tnoremap <C-W>C <C-\><C-N>:vertical terminal<CR>
 noremap <C-]> :call GoToDefinition()<CR>
