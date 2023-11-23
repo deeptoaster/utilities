@@ -28,6 +28,7 @@ ln -fs $(pwd)/config/pyrightconfig.json ~/pyrightconfig.json
 ln -fs $(pwd)/config/vimrc ~/.vimrc
 mkdir -p ~/.lua/scripts
 curl -fLo ~/.lua/scripts/terminal.lua -S https://raw.githubusercontent.com/Orange-OpenSource/pandoc-terminal-writer/master/terminal.lua
+git clone https://github.com/github/copilot.vim ~/.vim/pack/foo/opt/copilot
 git clone https://github.com/preservim/nerdtree ~/.vim/pack/foo/opt/nerdtree
 git clone https://github.com/Xuyuanp/nerdtree-git-plugin ~/.vim/pack/foo/opt/nerdtree-git-plugin
 git clone https://github.com/ryanoasis/vim-devicons ~/.vim/pack/foo/opt/vim-devicons

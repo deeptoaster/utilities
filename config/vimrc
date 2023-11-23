@@ -67,6 +67,7 @@ let g:vimtex_view_method = 'zathura'
 packloadall
 packadd CtrlP
 packadd ale
+packadd copilot
 packadd vim-devicons
 packadd nerdtree-git-plugin
 packadd nerdtree
