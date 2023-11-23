@@ -25,7 +25,7 @@ PWD_ESCAPED=$(sed 's/[&/\]/\\&/g' <<< $(pwd))
 sed -E "s/\\\$PWD\b/$PWD_ESCAPED/g" config/power.service | sudo tee /lib/systemd/system/power.service
 sudo systemctl enable power.service
 sudo systemctl start power.service
-rsync -Ir config/autostart config/guvcview2 config/gtk-3.0 config/Thunar config/xarchiver config/xfce4 config/zathura ~/.config
+rsync -Ir config/autostart config/guvcview2 config/gtk-3.0 config/nvim config/Thunar config/xarchiver config/xfce4 config/zathura ~/.config
 sed -Ei'' "s/\\\$USER\b/$USER/g" ~/.config/gtk-3.0/bookmarks
 sudo update-locale LC_MESSAGES=fr_FR.UTF-8
 LANGUAGE=fr_FR xdg-user-dirs-update --force

@@ -11,6 +11,7 @@ sudo cp -f $(pwd)/config/vhosts.conf /etc/apache2/other/vhosts.conf
 sudo sed -Ei'' -e 's/\/var\/www\/html\b/\/Library\/Webserver\/Documents/' /etc/apache2/other/vhosts.conf
 sudo sed -Ei'' -e 's/\/var\/www\b/\/Library\/Webserver/' /etc/apache2/other/vhosts.conf
 sudo sed -Ei'' -e 's/^(display_errors|short_open_tag) = Off$/\1 = On/' /opt/homebrew/etc/php/*/php.ini
+rsync -Ir config/nvim ~/.config
 defaults write NSGlobalDomain AppleShowAllExtensions -bool true
 defaults write com.apple.Finder AppleShowAllFiles -bool true
 defaults write com.apple.Finder FXPreferredViewStyle -string Nlsv
