@@ -1,5 +1,5 @@
 sudo n latest
-sudo npm install -g autoprefixer eslint eslint-config-airbnb npm postcss postcss-cli prettier pyright typescript
+sudo npm install -g autoprefixer eslint eslint-config-airbnb eslint-config-prettier npm postcss postcss-cli prettier pyright typescript
 sudo mv $DOCUMENT_ROOT/* ~/Public
 sudo rmdir $DOCUMENT_ROOT
 sudo ln -fns ~/Public $DOCUMENT_ROOT

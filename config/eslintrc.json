@@ -1,1 +1,18 @@
-{ "extends": ["airbnb", "airbnb/hooks"] }
+{
+  "extends": ["airbnb", "prettier"],
+  "rules": {
+    "react/jsx-boolean-value": ["error", "always"],
+    "no-param-reassign": ["error", { "props": false }],
+    "sort-imports": ["error", { "allowSeparatedGroups": true }],
+    "jsx-a11y/anchor-is-valid": "off",
+    "jsx-a11y/control-has-associated-label": "off",
+    "jsx-a11y/label-has-associated-control": "off",
+    "react/jsx-props-no-spreading": "off",
+    "react/no-array-index-key": "off",
+    "react/no-unescaped-entities": "off",
+    "react/no-unused-prop-types": "off",
+    "react/require-default-props": "off",
+    "no-else-return": "off",
+    "no-nested-ternary": "off"
+  }
+}
