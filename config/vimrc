@@ -330,6 +330,7 @@ augroup squiffles
 augroup end
 command BC call s:BufClean()
 cabbrev bc BC
+cabbrev ccc CtrlPClearAllCaches
 command GLAG Git log --all --decorate --graph
 cabbrev glag GLAG
 if has('nvim')
@@ -352,6 +353,8 @@ noremap <Leader>f :call DrawerFind()<CR>
 noremap <Leader>l$ :call AddAlignment()<CR>
 noremap <Leader>q :noautocmd call RepositionList()<CR>
 noremap <Leader>t :call DrawerToggle()<CR>
+noremap [g :GitGutterPrevHunk<CR>
+noremap ]g :GitGutterNextHunk<CR>
 noremap [l :try <Bar> lprev <Bar> catch <Bar> try <Bar> llast <Bar> catch <Bar> ALEPreviousWrap <Bar> endtry <Bar> endtry<CR>
 noremap ]l :try <Bar> lnext <Bar> catch <Bar> try <Bar> lfirst <Bar> catch <Bar> ALENextWrap <Bar> endtry <Bar> endtry<CR>
 noremap [q :try <Bar> cprev <Bar> catch <Bar> clast <Bar> endtry<CR>
