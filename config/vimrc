@@ -340,11 +340,9 @@ noremap <C-@> :call ale#codefix#Execute(mode() ==# 'v' \|\| mode() ==# "\<lt>C-V
 inoremap <C-@> <C-\><C-O>:call HoverFunctionCall()<CR>
 noremap <C-LeftMouse> <LeftMouse>:call GoToDefinition()<CR>
 if has('nvim')
-  tnoremap <C-W> <C-\><C-N><C-W>
-endif
-if has('nvim')
   noremap <C-Space> :call ale#codefix#Execute(mode() ==# 'v' \|\| mode() ==# "\<lt>C-V>", function('CodeActionDetailHover'))<CR>
   inoremap <C-Space> <C-\><C-O>:call HoverFunctionCall()<CR>
+  tnoremap <C-W> <C-\><C-N><C-W>
 endif
 tmap <C-W>C <C-\><C-N>:vertical terminal<CR>
 noremap <C-]> :call GoToDefinition()<CR>
