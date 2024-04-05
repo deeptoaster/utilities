@@ -4,14 +4,14 @@ cacc() {
   jq --slurp 'map(.[])' ../build/*/compile_commands.json > ../compile_commands.json && \
   echo "{ \"extraPaths\": [ \"$(sed -En 's/^__extended_path = '\''([^'\'']*).*$/\1/p' lib/python3/dist-packages/*/__init__.py | sed ':x N;s/\n/", "/;bx')\" ] }" > ../pyrightconfig.json
 }
-alias glag='git log --all --graph'
+alias glag='git log --all --date-order --graph'
+glep() {
+  grep --color=always --line-number --no-messages "$@" | less --quit-if-one-screen --RAW-CONTROL-CHARS
+}
 inwm() {
   while inotifywait --event modify --quiet "$(pwd)/$1" || true; do
     "${@:2}"
   done
-}
-glep() {
-  grep --color=always --line-number --no-messages "$@" | less --quit-if-one-screen --RAW-CONTROL-CHARS
 }
 pand() {
   pandoc -t ~/.lua/scripts/terminal.lua "$@" | less --quit-if-one-screen --RAW-CONTROL-CHARS

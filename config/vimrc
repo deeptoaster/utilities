@@ -220,7 +220,7 @@ function s:HoverOperator(view, type)
 endfunction
 function s:Persist()
   if !empty(v:this_session) && !exists('g:SessionLoad')
-    execute 'mksession!' v:this_session
+    silent! execute 'mksession!' v:this_session
   endif
 endfunction
 function s:PersistAndCloseTerminals()
@@ -331,7 +331,7 @@ augroup end
 command BC call s:BufClean()
 cabbrev bc BC
 cabbrev ccc CtrlPClearAllCaches
-command GLAG Git log --all --decorate --graph
+command GLAG Git log --all --date-order --decorate --graph
 cabbrev glag GLAG
 if has('nvim')
   cabbrev terminal split \| terminal
