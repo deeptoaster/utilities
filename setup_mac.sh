@@ -13,14 +13,14 @@ sudo sed -Ei'' -e 's/\/var\/www\b/\/Library\/Webserver/' /etc/apache2/other/vhos
 sudo sed -Ei'' -e 's/^(display_errors|short_open_tag) = Off$/\1 = On/' /opt/homebrew/etc/php/*/php.ini
 rsync -Ir config/nvim ~/.config
 defaults write NSGlobalDomain AppleShowAllExtensions -bool true
-defaults write com.apple.Finder AppleShowAllFiles -bool true
-defaults write com.apple.Finder FXPreferredViewStyle -string Nlsv
-defaults write com.apple.Finder ShowPathbar -bool true
-defaults write com.apple.Finder _FXSortFoldersFirst -bool true
+defaults write com.apple.finder AppleShowAllFiles -bool true
+defaults write com.apple.finder FXPreferredViewStyle -string Nlsv
+defaults write com.apple.finder ShowPathbar -bool true
+defaults write com.apple.finder _FXSortFoldersFirst -bool true
 /usr/libexec/PlistBuddy -c 'Set :AppleSymbolicHotKeys:21:enabled true' ~/Library/Preferences/com.apple.symbolichotkeys.plist
 defaults write com.apple.universalaccess closeViewPanningMode -integer 0
 defaults write com.apple.universalaccess closeViewScrollWheelToggle -bool true
-open config/Vim.terminal
+open -a Terminal config/Vim.terminal
 ln -fs $(pwd)/config/zshenv ~/.zshenv
 git clone https://github.com/dense-analysis/ale ~/.vim/pack/foo/opt/ale
 git clone https://github.com/ctrlpvim/ctrlp.vim ~/.vim/pack/foo/opt/ctrlp
