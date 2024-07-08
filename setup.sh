@@ -1,33 +1,22 @@
 #!/bin/bash
 set -ex
-DOCUMENT_ROOT=/var/www/html
-FONT_ROOT=/usr/share/fonts/truetype
 sudo add-apt-repository ppa:numix/ppa
 sudo add-apt-repository ppa:xubuntu-dev/extras
 curl -sS https://download.spotify.com/debian/pubkey_6224F9941A8AA6D1.gpg | sudo gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/spotify.gpg
 echo 'deb http://repository.spotify.com stable non-free' | sudo tee /etc/apt/sources.list.d/spotify.list
 sudo apt update
 sudo apt purge thunar-volman vim-tiny xfce4-whiskermenu-plugin xpdf
-sudo apt dist-upgrade
-sudo apt --purge autoremove
 sudo apt --no-install-recommends install gnome-control-center gnome-session vim-gtk3
-sudo apt install apache2 arc-theme black blender blueman conky-all cryptsetup deja-dup ffmpeg gimp git git-ftp gnome-disk-utility gnupg2 gparted guvcview inkscape lmms mate-calc nodejs npm numix-icon-theme-circle pandoc php php-bcmath php-curl php-gd php-sqlite3 php-xml python3-pip python3-venv redshift spotify-client steam-installer ubuntustudio-fonts vim-airline vim-ale vim-ctrlp vim-fugitive vim-gitgutter virtualbox-ext-pack virtualbox-guest-additions-iso xarchiver xcalib xfce4-docklike-plugin xfce4-places-plugin zathura cm-super-x11-
+sudo apt install arc-theme blender blueman conky-all cryptsetup deja-dup ffmpeg gimp git gnome-disk-utility gnupg2 gparted guvcview inkscape lmms mate-calc nodejs numix-icon-theme-circle redshift spotify-client steam-installer ubuntustudio-fonts virtualbox-ext-pack virtualbox-guest-additions-iso xarchiver xcalib xfce4-docklike-plugin xfce4-places-plugin zathura cm-super-x11-
 sudo usermod -aG vboxusers $USER
-sudo npm install -g n
-sudo a2enmod rewrite
-sudo a2enmod vhost_alias
-sudo ln -fs $(pwd)/config/vhosts.conf /etc/apache2/conf-available/vhosts.conf
-sudo a2enconf vhosts
-sudo sed -Ei'' -e 's/^(display_errors|short_open_tag) = Off$/\1 = On/' /etc/php/*/*/php.ini
 sudo ln -fs $(pwd)/config/71-synaptics.conf /usr/share/X11/xorg.conf.d/71-synaptics.conf
 sudo ln -fs $(pwd)/config/lightdm-gtk-greeter.conf /etc/lightdm/lightdm-gtk-greeter.conf
 PWD_ESCAPED=$(sed 's/[&/\]/\\&/g' <<< $(pwd))
 sed -E "s/\\\$PWD\b/$PWD_ESCAPED/g" config/power.service | sudo tee /lib/systemd/system/power.service
 sudo systemctl enable power.service
 sudo systemctl start power.service
-rsync -Ir config/autostart config/guvcview2 config/gtk-3.0 config/nvim config/Thunar config/xarchiver config/xfce4 config/zathura ~/.config
+rsync -Ir config/autostart config/guvcview2 config/gtk-3.0 config/Thunar config/xarchiver config/xfce4 config/zathura ~/.config
 sed -Ei'' "s/\\\$USER\b/$USER/g" ~/.config/gtk-3.0/bookmarks
-sudo update-locale LC_MESSAGES=fr_FR.UTF-8
 LANGUAGE=fr_FR xdg-user-dirs-update --force
 gsettings set org.blueman.plugins.powermanager auto-power-on false
 gsettings set org.gnome.DejaDup backend google
@@ -159,14 +148,11 @@ xfce4-panel -r
 ln -fs $(pwd)/conky-rings/conkyrc ~/.conkyrc
 mkdir -p ~/.lua/scripts
 ln -fs $(pwd)/conky-rings/rings.lua ~/.lua/scripts/rings.lua
-sudo update-alternatives --install /usr/bin/editor editor /usr/bin/vim 50
 sudo update-alternatives --remove editor /usr/bin/vim.gtk3
 sudo update-alternatives --set x-cursor-theme /usr/share/icons/DMZ-Black/cursor.theme
-(echo 'paths:'; echo "  - $HOME/latexindent.yaml") > ~/indentconfig.yaml
-echo 'set editing-mode vi' > ~/.inputrc
 curl -fLo install-tl-unx.tar.gz https://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz
 tar -xzf install-tl-unx.tar.gz
 sudo perl install-tl-*/install-tl --no-interaction
 rm -fr install-tl-*
 sudo cpan -i File::HomeDir
-source setup_common
+./setup_server.sh
