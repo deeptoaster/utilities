@@ -1,0 +1,10 @@
+[Desktop Entry]
+NoDisplay=true
+Version=1.0
+Encoding=UTF-8
+Type=X-XFCE-Helper
+X-XFCE-Category=MailReader
+X-XFCE-CommandsWithParameter=/opt/beeper/beeper.sh "%s"
+Icon=beeper.sh
+Name=beeper.sh
+X-XFCE-Commands=/opt/beeper/beeper.sh
