@@ -175,6 +175,19 @@ function GoToDefinition()
     ALEGoToDefinition
   endtry
 endfunction
+function QuickFixDifferentFile(operator)
+  let l:qflist = getqflist({'id': 0, 'idx': 0, 'items': [], 'size': 0})
+  let l:current = l:qflist.idx - 1
+  let l:bufnr = l:qflist.items[l:current].bufnr
+  for l:delta in range(1, l:qflist.size - 1)
+    let l:other =
+        \ (a:operator(l:current, l:delta) + l:qflist.size) % l:qflist.size
+    if l:qflist.items[l:other].bufnr != l:bufnr
+      execute 'cc' l:other + 1
+      return
+    endif
+  endfor
+endfunction
 function GoToTerminal()
   for l:winnr in range(1, winnr('$'))
     if getbufvar(winbufnr(l:winnr), '&buftype') ==# 'terminal'
@@ -355,6 +368,8 @@ noremap [g :GitGutterPrevHunk<CR>
 noremap ]g :GitGutterNextHunk<CR>
 noremap [l :try <Bar> lprev <Bar> catch <Bar> try <Bar> llast <Bar> catch <Bar> ALEPreviousWrap <Bar> endtry <Bar> endtry<CR>
 noremap ]l :try <Bar> lnext <Bar> catch <Bar> try <Bar> lfirst <Bar> catch <Bar> ALENextWrap <Bar> endtry <Bar> endtry<CR>
+noremap [Q :call QuickFixDifferentFile({a, b -> a - b})<CR>
+noremap ]Q :call QuickFixDifferentFile({a, b -> a + b})<CR>
 noremap [q :try <Bar> cprev <Bar> catch <Bar> clast <Bar> endtry<CR>
 noremap ]q :try <Bar> cnext <Bar> catch <Bar> cfirst <Bar> endtry<CR>
 noremap Y y$
