@@ -373,3 +373,4 @@ noremap ]Q :call QuickFixDifferentFile({a, b -> a + b})<CR>
 noremap [q :try <Bar> cprev <Bar> catch <Bar> clast <Bar> endtry<CR>
 noremap ]q :try <Bar> cnext <Bar> catch <Bar> cfirst <Bar> endtry<CR>
 noremap Y y$
+noremap y% :let @* = @% <Bar> let @+ = @%<CR>
