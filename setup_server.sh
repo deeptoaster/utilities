@@ -6,7 +6,7 @@ sudo apt update
 sudo apt purge vim-tiny
 sudo apt dist-upgrade
 sudo apt --purge autoremove
-sudo apt install apache2 black git-ftp npm pandoc php php-bcmath php-curl php-gd php-sqlite3 php-xml python3-pip python3-venv vim-airline vim-ale vim-ctrlp vim-fugitive vim-gitgutter
+sudo apt install apache2 black git-ftp npm pandoc php php-bcmath php-curl php-gd php-sqlite3 php-xml python3-pip python3-venv vim-ale vim-ctrlp vim-gitgutter
 sudo npm install -g n
 sudo a2enmod rewrite
 sudo a2enmod vhost_alias

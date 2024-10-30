@@ -26,6 +26,5 @@ git clone https://github.com/dense-analysis/ale ~/.vim/pack/foo/opt/ale
 git clone https://github.com/ctrlpvim/ctrlp.vim ~/.vim/pack/foo/opt/ctrlp
 git clone https://github.com/vim-airline/vim-airline ~/.vim/pack/foo/start/vim-airline
 git clone https://github.com/vim-airline/vim-airline-themes ~/.vim/pack/foo/start/vim-airline-themes
-git clone https://github.com/tpope/vim-fugitive ~/.vim/pack/foo/start/vim-fugitive
 git clone https://github.com/airblade/vim-gitgutter ~/.vim/pack/foo/start/vim-gitgutter
 source setup_common
