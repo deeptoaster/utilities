@@ -7,7 +7,7 @@ echo 'deb http://repository.spotify.com stable non-free' | sudo tee /etc/apt/sou
 sudo apt update
 sudo apt purge xfce4-whiskermenu-plugin
 sudo apt --no-install-recommends install gnome-control-center gnome-session vim-gtk3
-sudo apt install arc-theme blender blueman conky-all cryptsetup curl deja-dup firefox ffmpeg gimp git gnome-disk-utility gnupg2 gparted guvcview inkscape lmms mate-calc nodejs numix-icon-theme-circle redshift spotify-client ubuntustudio-fonts virtualbox-ext-pack virtualbox-guest-additions-iso xarchiver xcalib xfce4-docklike-plugin xfce4-places-plugin zathura cm-super-x11-
+sudo apt install arc-theme blender blueman conky-all cryptsetup curl deja-dup firefox ffmpeg gimp git gnome-disk-utility gnupg2 gparted guvcview inkscape lmms mate-calc nodejs numix-icon-theme-circle redshift spotify-client ubuntustudio-fonts virtualbox-ext-pack virtualbox-guest-additions-iso xarchiver xcalib xfce4-docklike-plugin xfce4-places-plugin zathura
 curl -fLo steam_latest.deb https://repo.steampowered.com/steam/archive/stable/steam_latest.deb
 sudo dpkg -i steam_latest.deb
 sudo apt install -f
@@ -19,7 +19,7 @@ PWD_ESCAPED=$(sed 's/[&/\]/\\&/g' <<< $(pwd))
 sed -E "s/\\\$PWD\b/$PWD_ESCAPED/g" config/power.service | sudo tee /lib/systemd/system/power.service
 sudo systemctl enable power.service
 sudo systemctl start power.service
-sudo rm -r /opt/beeper
+sudo rm -fr /opt/beeper
 sudo curl --create-dirs -JLO --output-dir /opt/beeper https://download.beeper.com/linux/appImage/x64
 sudo chown -R $USER:$USER /opt/beeper
 chmod -R +x /opt/beeper
@@ -29,7 +29,6 @@ ln -fs $(pwd)/config/custom-MailReader.desktop ~/.local/share/xfce4/helpers/cust
 rsync -Ir config/autostart config/guvcview2 config/gtk-3.0 config/Thunar config/xarchiver config/xfce4 config/zathura ~/.config
 sed -Ei'' "s/\\\$USER\b/$USER/g" ~/.config/gtk-3.0/bookmarks
 LANGUAGE=fr_FR xdg-user-dirs-update --force
-gsettings set org.blueman.plugins.powermanager auto-power-on false
 gsettings set org.gnome.DejaDup backend google
 gsettings set org.gnome.DejaDup include-list "['/media/$USER/ZERO/LiberKey/MyDocuments', '/media/$USER/ONE/LiberKey/MyDocuments']"
 gsettings set org.gnome.DejaDup periodic true
@@ -114,7 +113,7 @@ xfconf-query -c xfce4-panel -p /plugins/plugin-3 -n -t string -s docklike
 xfconf-query -c xfce4-panel -p /plugins/plugin-4 -n -t string -s separator
 xfconf-query -c xfce4-panel -p /plugins/plugin-4/expand -n -t bool -s true
 xfconf-query -c xfce4-panel -p /plugins/plugin-4/style -n -t uint -s 0
-xfconf-query -c xfce4-panel -p /plugins/plugin-5 -n -t string -s systray
+xfconf-query -c xfce4-panel -p /plugins/plugin-5 -n -t string -s indicator
 xfconf-query -c xfce4-panel -p /plugins/plugin-6 -n -t string -s notification-plugin
 xfconf-query -c xfce4-panel -p /plugins/plugin-7 -n -t string -s power-manager-plugin
 xfconf-query -c xfce4-panel -p /plugins/plugin-8 -n -t string -s pulseaudio
@@ -133,6 +132,17 @@ xfconf-query -c xfce4-power-manager -p /xfce4-power-manager/inactivity-on-batter
 xfconf-query -c xfce4-screensaver -p /saver/enabled -n -t bool -s false
 xfconf-query -c xfce4-screensaver -p /saver/idle-activation/enabled -n -t bool -s false
 xfconf-query -c xfce4-session -p /general/SaveOnExit -n -t bool -s false
+xfconf-query -c xfce4-terminal -p /background-darkness -n -t double -s 0.8
+xfconf-query -c xfce4-terminal -p /background-mode -n -t string -s TERMINAL_BACKGROUND_TRANSPARENT
+xfconf-query -c xfce4-terminal -p /color-palette -n -t string -s '#3f3f3f;#705050;#60b48a;#dfaf8f;#9ab8d7;#dc8cc3;#8cd0d3;#dcdcdc;#709080;#dca3a3;#72d5a3;#f0dfaf;#94bff3;#ec93d3;#93e0e3;#ffffff'
+xfconf-query -c xfce4-terminal -p /dropdown-always-show-tabs -n -t bool -s false
+xfconf-query -c xfce4-terminal -p /dropdown-animation-time -n -t int -s 100
+xfconf-query -c xfce4-terminal -p /dropdown-keep-open-default -n -t bool -s true
+xfconf-query -c xfce4-terminal -p /dropdown-status-icon -n -t bool -s false
+xfconf-query -c xfce4-terminal -p /dropdown-width -n -t int -s 100
+xfconf-query -c xfce4-terminal -p /font-name -n -t string -s 'FiraCode Nerd Font 10'
+xfconf-query -c xfce4-terminal -p /misc-show-unsafe-paste-dialog -n -t bool -s false
+xfconf-query -c xfce4-terminal -p /tab-activity-color -n -t string -s '#ffffff'
 xfconf-query -c xfwm4 -p /general/button_layout -n -t string -s 'CMH|O'
 xfconf-query -c xfwm4 -p /general/frame_opacity -n -t int -s 60
 xfconf-query -c xfwm4 -p /general/mousewheel_rollup -n -t bool -s true
