@@ -1,13 +1,17 @@
-#!/bin/bash
+s!/bin/bash
 set -ex
 sudo add-apt-repository ppa:numix/ppa
 sudo add-apt-repository ppa:xubuntu-dev/extras
-curl -sS https://download.spotify.com/debian/pubkey_6224F9941A8AA6D1.gpg | sudo gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/spotify.gpg
+wget -O - https://download.spotify.com/debian/pubkey_6224F9941A8AA6D1.gpg | sudo gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/spotify.gpg
 echo 'deb http://repository.spotify.com stable non-free' | sudo tee /etc/apt/sources.list.d/spotify.list
 sudo apt update
-sudo apt purge thunar-volman vim-tiny xfce4-whiskermenu-plugin xpdf
+sudo apt purge xfce4-whiskermenu-plugin
 sudo apt --no-install-recommends install gnome-control-center gnome-session vim-gtk3
-sudo apt install arc-theme blender blueman conky-all cryptsetup deja-dup ffmpeg gimp git gnome-disk-utility gnupg2 gparted guvcview inkscape lmms mate-calc nodejs numix-icon-theme-circle redshift spotify-client steam-installer ubuntustudio-fonts virtualbox-ext-pack virtualbox-guest-additions-iso xarchiver xcalib xfce4-docklike-plugin xfce4-places-plugin zathura cm-super-x11-
+sudo apt install arc-theme blender blueman conky-all cryptsetup curl deja-dup firefox ffmpeg gimp git gnome-disk-utility gnupg2 gparted guvcview inkscape lmms mate-calc nodejs numix-icon-theme-circle redshift spotify-client ubuntustudio-fonts virtualbox-ext-pack virtualbox-guest-additions-iso xarchiver xcalib xfce4-docklike-plugin xfce4-places-plugin zathura cm-super-x11-
+curl -fLo steam_latest.deb https://repo.steampowered.com/steam/archive/stable/steam_latest.deb
+sudo dpkg -i steam_latest.deb
+sudo apt install -f
+rm -f steam_latest.deb
 sudo usermod -aG vboxusers $USER
 sudo ln -fs $(pwd)/config/71-synaptics.conf /usr/share/X11/xorg.conf.d/71-synaptics.conf
 sudo ln -fs $(pwd)/config/lightdm-gtk-greeter.conf /etc/lightdm/lightdm-gtk-greeter.conf
@@ -20,6 +24,7 @@ sudo curl --create-dirs -JLO --output-dir /opt/beeper https://download.beeper.co
 sudo chown -R $USER:$USER /opt/beeper
 chmod -R +x /opt/beeper
 ln -fs $(pwd)/config/beeper.sh /opt/beeper/beeper.sh
+mkdir -p ~/.local/share/xfce4/helpers
 ln -fs $(pwd)/config/custom-MailReader.desktop ~/.local/share/xfce4/helpers/custom-MailReader.desktop
 rsync -Ir config/autostart config/guvcview2 config/gtk-3.0 config/Thunar config/xarchiver config/xfce4 config/zathura ~/.config
 sed -Ei'' "s/\\\$USER\b/$USER/g" ~/.config/gtk-3.0/bookmarks
@@ -159,6 +164,6 @@ sudo update-alternatives --set x-cursor-theme /usr/share/icons/DMZ-Black/cursor.
 curl -fLo install-tl-unx.tar.gz https://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz
 tar -xzf install-tl-unx.tar.gz
 sudo perl install-tl-*/install-tl --no-interaction
-rm -fr install-tl-*
+rm -fr install-tl*
 sudo cpan -i File::HomeDir
 source setup_server.sh
