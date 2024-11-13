@@ -28,7 +28,6 @@ mkdir -p ~/.local/share/xfce4/helpers
 ln -fs $(pwd)/config/custom-MailReader.desktop ~/.local/share/xfce4/helpers/custom-MailReader.desktop
 rsync -Ir config/autostart config/guvcview2 config/gtk-3.0 config/Thunar config/xarchiver config/xfce4 config/zathura ~/.config
 sed -Ei'' "s/\\\$USER\b/$USER/g" ~/.config/gtk-3.0/bookmarks
-LANGUAGE=fr_FR xdg-user-dirs-update --force
 gsettings set org.gnome.DejaDup backend google
 gsettings set org.gnome.DejaDup include-list "['/media/$USER/ZERO/LiberKey/MyDocuments', '/media/$USER/ONE/LiberKey/MyDocuments']"
 gsettings set org.gnome.DejaDup periodic true
