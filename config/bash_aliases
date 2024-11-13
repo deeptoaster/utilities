@@ -1,12 +1,18 @@
+if command -v setopt > /dev/null; then
+  setopt +o nomatch
+fi
+if command -v shopt > /dev/null && shopt | grep -q '^globstar\b'; then
+  shopt -s globstar
+fi
 cacc() {
   catkin build -DCMAKE_EXPORT_COMPILE_COMMANDS=1 "$@" && \
   roscd && \
-  jq --slurp 'map(.[])' ../build/*/compile_commands.json > ../compile_commands.json && \
+  jq -s 'map(.[])' ../build/*/compile_commands.json > ../compile_commands.json && \
   echo "{ \"extraPaths\": [ \"$(sed -En 's/^__extended_path = '\''([^'\'']*).*$/\1/p' lib/python3/dist-packages/*/__init__.py | sed ':x N;s/\n/", "/;bx')\" ] }" > ../pyrightconfig.json
 }
 alias glag='git log --all --date-order --graph'
 glep() {
-  grep --color=always --line-number --no-messages "$@" | less --quit-if-one-screen --RAW-CONTROL-CHARS
+  grep -ns --color=always "$@" | less -FR
 }
 inwm() {
   while inotifywait --event modify --quiet "$(pwd)/$1" || true; do
@@ -14,11 +20,8 @@ inwm() {
   done
 }
 pand() {
-  pandoc -t ~/.lua/scripts/terminal.lua "$@" | less --quit-if-one-screen --RAW-CONTROL-CHARS
+  pandoc -t ~/.lua/scripts/terminal.lua "$@" | less -FR
 }
 alias venc='python3 -m venv --system-site-packages .venv'
 alias venv='source .venv/bin/activate'
 export PATH="$(ls -dr /usr/local/texlive/*/bin/x86_64-linux 2> /dev/null | head -n 1):$PATH"
-if command -v shopt > /dev/null && shopt | grep --quiet '^globstar\b'; then
-  shopt -s globstar
-fi
