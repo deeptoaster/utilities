@@ -7,7 +7,7 @@ echo 'deb http://repository.spotify.com stable non-free' | sudo tee /etc/apt/sou
 sudo apt update
 sudo apt purge xfce4-whiskermenu-plugin
 sudo apt --no-install-recommends install gnome-control-center gnome-session vim-gtk3
-sudo apt install arc-theme blender blueman conky-all cryptsetup curl deja-dup firefox ffmpeg gimp git gnome-disk-utility gnupg2 gparted guvcview inkscape lmms mate-calc nodejs numix-icon-theme-circle redshift spotify-client ubuntustudio-fonts virtualbox-ext-pack virtualbox-guest-additions-iso xarchiver xcalib xfce4-docklike-plugin xfce4-places-plugin zathura
+sudo apt install arc-theme blender blueman conky-all cryptsetup curl deja-dup firefox ffmpeg gimp git gnome-disk-utility gnome-power-manager gnupg2 gparted guvcview inkscape lmms mate-calc nodejs numix-icon-theme-circle redshift spotify-client ubuntustudio-fonts virtualbox-ext-pack virtualbox-guest-additions-iso xarchiver xcalib xfce4-docklike-plugin xfce4-places-plugin zathura
 curl -fLo steam_latest.deb https://repo.steampowered.com/steam/archive/stable/steam_latest.deb
 sudo dpkg -i steam_latest.deb
 sudo apt install -f
@@ -44,9 +44,16 @@ xfconf-query -c keyboard-layout -p /Default/XkbVariant -n -t string -s mac,mac
 xfconf-query -c thunar -p /last-location-bar -n -t string -s ThunarLocationButtons
 xfconf-query -c thunar -p /last-show-hidden -n -t bool -s true
 xfconf-query -c thunar -p /last-view -n -t string -s ThunarDetailsView
+xfconf-query -c xfce4-desktop -p /backdrop/screen0 -Rr
 xfconf-query -c xfce4-desktop -p /desktop-icons/style -n -t uint -s 0
 xfconf-query -c xfce4-desktop -p /desktop-menu/show -n -t bool -s false
 xfconf-query -c xfce4-desktop -p /windowlist-menu/show -n -t bool -s false
+xfdesktop -Q
+xfdesktop&
+sleep 1
+for property in $(xfconf-query -c xfce4-desktop -p /backdrop/screen0 -l | grep '\blast-image'); do
+  xfconf-query -c xfce4-desktop -p $property -n -t string -s $(pwd)/backdrops/city.png
+done
 xfconf-query -c xfce4-keyboard-shortcuts -p '/commands/custom/<Alt>Pause' -r
 xfconf-query -c xfce4-keyboard-shortcuts -p '/commands/custom/<Primary>Escape' -r
 xfconf-query -c xfce4-keyboard-shortcuts -p '/xfwm4/custom/<Super>KP_Down' -r

@@ -12,7 +12,7 @@ cacc() {
 }
 alias glag='git log --all --date-order --graph'
 glep() {
-  grep -ns --color=always "$@" | less -FR
+  grep -nrs --color=always "$@" | less -FR
 }
 inwm() {
   while inotifywait --event modify --quiet "$(pwd)/$1" || true; do

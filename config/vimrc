@@ -12,7 +12,7 @@ set expandtab
 set nofileignorecase
 set foldmethod=syntax
 set formatoptions=tcqj
-set grepprg=grep\ -ns\ $*\ /dev/null
+set grepprg=grep\ -nrs\ $*\ /dev/null
 set hlsearch
 set incsearch
 set nojoinspaces
