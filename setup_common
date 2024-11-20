@@ -46,6 +46,7 @@ curl -fLo ~/.vim/colors/sierra.vim -S https://raw.githubusercontent.com/Alessand
 curl -fLo ~/.vim/plugin/argtextobj.vim -S 'https://www.vim.org/scripts/download_script.php?src_id=11985'
 ln -fns $(pwd)/config/after/compiler ~/.vim/after/compiler
 ln -fns $(pwd)/config/compiler ~/.vim/compiler
+ln -fns $(pwd)/config/filetype.vim ~/.vim/filetype.vim
 (echo "0 0 * * * $(pwd)/backdrops.py"; echo "0 * * * * $(pwd)/power.sh") | crontab -
 curl -fLo fonts-main.tar.gz -S https://github.com/google/fonts/archive/master.tar.gz
 tar -xzf fonts-main.tar.gz
