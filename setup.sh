@@ -6,8 +6,8 @@ wget -O - https://download.spotify.com/debian/pubkey_6224F9941A8AA6D1.gpg | sudo
 echo 'deb http://repository.spotify.com stable non-free' | sudo tee /etc/apt/sources.list.d/spotify.list
 sudo apt update
 sudo apt purge xfce4-whiskermenu-plugin
-sudo apt --no-install-recommends install gnome-control-center gnome-session vim-gtk3
-sudo apt install arc-theme blender blueman conky-all cryptsetup curl deja-dup firefox ffmpeg gimp git gnome-disk-utility gnome-power-manager gnupg2 gparted guvcview inkscape lmms mate-calc nodejs numix-icon-theme-circle redshift spotify-client ubuntustudio-fonts virtualbox-ext-pack virtualbox-guest-additions-iso xarchiver xcalib xfce4-docklike-plugin xfce4-places-plugin zathura
+sudo apt --no-install-recommends install gnome-session vim-gtk3
+sudo apt install arc-theme blender blueman conky-all cryptsetup curl deja-dup firefox ffmpeg gimp git gnome-disk-utility gnome-power-manager gnupg2 gparted guvcview inkscape lmms mate-calc nodejs numix-icon-theme-circle redshift ristretto spotify-client ubuntustudio-fonts virtualbox-ext-pack virtualbox-guest-additions-iso xarchiver xcalib xfce4-docklike-plugin xfce4-places-plugin zathura
 curl -fLo steam_latest.deb https://repo.steampowered.com/steam/archive/stable/steam_latest.deb
 sudo dpkg -i steam_latest.deb
 sudo apt install -f
