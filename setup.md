@@ -18,7 +18,7 @@ Launch with `sudo tilp`.
 ## Alternative Python versions
 
 1.  `sudo add-apt-repository ppa:deadsnakes/ppa`
-2.  `sudo apt install python$OTHER_VERSION-dev python$OTHER_VERSION-distutils`
+2.  `sudo apt install python$OTHER_VERSION-dev python$OTHER_VERSION-venv`
 3.  `sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python$OTHER_VERSION 1`
 4.  `sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python$CURRENT_VERSION 2`
 
