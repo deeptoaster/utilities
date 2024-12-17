@@ -3,4 +3,5 @@ source /etc/zprofile
 source ~/.bash_aliases
 autoload -U compinit
 bindkey -v
+bindkey '^R' history-incremental-pattern-search-backward
 compinit
