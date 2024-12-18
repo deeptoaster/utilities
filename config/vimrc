@@ -128,8 +128,9 @@ function CodeActionDetailHover(data, menu)
 endfunction
 function DrawerFind()
   let l:bufnr = bufnr()
+  let l:winid = win_getid()
   if !g:NERDTree.IsOpen()
-    call DrawerToggle()
+    call s:DrawerOpen()
   endif
   execute l:bufnr 'bufdo NERDTreeFind'
   if !empty(FugitiveGitDir(l:bufnr))
@@ -138,26 +139,32 @@ function DrawerFind()
     Gedit :
     normal zR
   endif
+  call win_gotoid(l:winid)
+endfunction
+function s:DrawerOpen()
+  let l:bufnr = bufnr()
+  NERDTreeFocus
+  if !empty(FugitiveGitDir(l:bufnr))
+    execute 'belowright sbuffer' l:bufnr
+    Gedit :
+    normal zR
+  endif
 endfunction
 function DrawerToggle()
-  let l:bufnr = bufnr()
+  let l:winid = win_getid()
   if g:NERDTree.IsOpen()
     NERDTreeClose
     call s:FugitiveClose()
   else
-    NERDTreeFocus
-    if !empty(FugitiveGitDir(l:bufnr))
-      execute 'belowright sbuffer' l:bufnr
-      Gedit :
-      normal zR
-    endif
+    call s:DrawerOpen()
   endif
+  call win_gotoid(l:winid)
 endfunction
 function s:EchoPandocMessages(bufnr, _timer)
   let l:pandoc_messages = getbufvar(a:bufnr, 'pandoc_messages')
   call setqflist(l:pandoc_messages)
   if !empty(l:pandoc_messages)
-    call RepositionList()
+    call s:QuickfixOpen()
   endif
   call setbufvar(a:bufnr, 'pandoc_messages', [])
 endfunction
@@ -174,19 +181,6 @@ function GoToDefinition()
   catch
     ALEGoToDefinition
   endtry
-endfunction
-function QuickFixDifferentFile(operator)
-  let l:qflist = getqflist({'id': 0, 'idx': 0, 'items': [], 'size': 0})
-  let l:current = l:qflist.idx - 1
-  let l:bufnr = l:qflist.items[l:current].bufnr
-  for l:delta in range(1, l:qflist.size - 1)
-    let l:other =
-        \ (a:operator(l:current, l:delta) + l:qflist.size) % l:qflist.size
-    if l:qflist.items[l:other].bufnr != l:bufnr
-      execute 'cc' l:other + 1
-      return
-    endif
-  endfor
 endfunction
 function GoToTerminal()
   for l:winnr in range(1, winnr('$'))
@@ -252,12 +246,45 @@ function s:PersistAndCloseTerminals()
     endfor
   endif
 endfunction
-function s:ReopenTerminalsAsync()
+function QuickFixDifferentFile(operator)
+  let l:qflist = getqflist({'id': 0, 'idx': 0, 'items': [], 'size': 0})
+  let l:current = l:qflist.idx - 1
+  let l:bufnr = l:qflist.items[l:current].bufnr
+  for l:delta in range(1, l:qflist.size - 1)
+    let l:other =
+        \ (a:operator(l:current, l:delta) + l:qflist.size) % l:qflist.size
+    if l:qflist.items[l:other].bufnr != l:bufnr
+      execute 'cc' l:other + 1
+      return
+    endif
+  endfor
+endfunction
+function s:QuickfixOpen()
+  let l:winid = win_getid()
+  cclose
+  wincmd b
+  wincmd v
+  copen
+  wincmd k
+  quit
+  call win_gotoid(l:winid)
+endfunction
+function QuickfixToggle()
+  for l:winnr in range(1, winnr('$'))
+    if getbufvar(winbufnr(l:winnr), '&buftype') ==# 'quickfix'
+      cclose
+      return
+    endif
+  endfor
+  call s:QuickfixOpen()
+endfunction
+function s:RestoreLayout()
   call timer_stop(get(s:, 'terminals_timer', 0))
   let s:terminals_timer = timer_start(200, function('s:ReopenTerminals'))
+  call s:FugitiveClose()
 endfunction
 function s:ReopenTerminals(_timer)
-  let l:winnr = winnr()
+  let l:winid = win_getid()
   for l:bufnr in range(1, bufnr('$'))
     if getbufvar(l:bufnr, '&buftype') ==# 'terminal' ||
         \ bufname(l:bufnr)[0:6] ==# 'term://' && bufwinnr(l:bufnr) != -1
@@ -270,18 +297,8 @@ function s:ReopenTerminals(_timer)
       endif
     endif
   endfor
-  execute l:winnr 'wincmd w'
+  call win_gotoid(l:winid)
   call s:BufClean()
-endfunction
-function RepositionList()
-  let l:winnr = winnr()
-  cclose
-  wincmd b
-  wincmd v
-  copen
-  wincmd k
-  quit
-  execute l:winnr 'wincmd w'
 endfunction
 function TogglePandocWorker()
   if get(b:, 'pandoc_job', v:null) is v:null
@@ -336,7 +353,7 @@ augroup squiffles
   autocmd FileType markdown noremap <buffer> <Leader>ll :call TogglePandocWorker()<CR>
   autocmd FileType php setlocal foldmethod=indent
   autocmd FileType python setlocal foldmethod=indent
-  autocmd SessionLoadPost * call s:ReopenTerminalsAsync()
+  autocmd SessionLoadPost * call s:RestoreLayout()
   if has('nvim')
     autocmd TermOpen * setlocal nonumber
   endif
@@ -362,7 +379,7 @@ noremap <C-]> :call GoToDefinition()<CR>
 noremap <Leader>c :call GoToTerminal()<CR>
 noremap <Leader>f :call DrawerFind()<CR>
 noremap <Leader>l$ :call AddAlignment()<CR>
-noremap <Leader>q :noautocmd call RepositionList()<CR>
+noremap <Leader>q :noautocmd call QuickfixToggle()<CR>
 noremap <Leader>t :call DrawerToggle()<CR>
 noremap [g :GitGutterPrevHunk<CR>
 noremap ]g :GitGutterNextHunk<CR>
