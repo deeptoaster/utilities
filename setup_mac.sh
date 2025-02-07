@@ -22,7 +22,4 @@ defaults write com.apple.universalaccess closeViewPanningMode -integer 0
 defaults write com.apple.universalaccess closeViewScrollWheelToggle -bool true
 open -a Terminal config/Vim.terminal
 ln -fs $(pwd)/config/zshenv ~/.zshenv
-git clone https://github.com/dense-analysis/ale ~/.vim/pack/foo/opt/ale
-git clone https://github.com/ctrlpvim/ctrlp.vim ~/.vim/pack/foo/opt/ctrlp
-git clone https://github.com/airblade/vim-gitgutter ~/.vim/pack/foo/start/vim-gitgutter
 source setup_common
