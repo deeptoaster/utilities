@@ -374,8 +374,8 @@ if has('nvim')
   inoremap <C-Space> <C-\><C-O>:call HoverFunctionCall()<CR>
   tnoremap <C-W> <C-\><C-N><C-W>
 endif
-tmap <C-W>: <C-\><C-N>:vertical terminal<CR>
-noremap <C-W>; :call GoToTerminal()<CR>
+tmap <C-W>: <C-\><C-N>:vertical terminal<CR><C-\><C-N>i
+noremap <C-W>; :call GoToTerminal()<CR><C-\><C-N>i<Esc>a
 noremap <C-]> :call GoToDefinition()<CR>
 noremap <Leader>f :call DrawerFind()<CR>
 noremap <Leader>l$ :call AddAlignment()<CR>
