@@ -80,7 +80,7 @@ function AddAlignment()
     execute l:end . 'substitute/\$\$/\\end{align*}/'
     if l:end - l:begin >= 2
       execute (l:begin + 1) . ',' . (l:end - 1) .
-          \ 'substitute/\v:?\=|\<\>|\\[gln]e|\\approx|\\in|\\propto|\\sim|\\subset(eq)?/\& \0/'
+          \ 'substitute/\v:?\=|\<\>|\\[gln]e|\\approx|\\in|\\propto|\\sim|\\subset(eq)?/\&\0/'
     endif
     if l:end - l:begin >= 3
       execute (l:begin + 1) . ',' . (l:end - 2) . 'substitute/$/ \\\\/'
