@@ -42,7 +42,6 @@ git clone https://github.com/tpope/vim-surround ~/.vim/pack/foo/start/vim-surrou
 git clone https://github.com/lervag/vimtex ~/.vim/pack/foo/start/vimtex
 mkdir -p ~/.vim/after/syntax ~/.vim/colors ~/.vim/plugin
 curl -fLo ~/.vim/after/syntax/python.vim -S https://raw.githubusercontent.com/ehamberg/vim-cute-python/moresymbols/after/syntax/python.vim
-curl -fLo ~/.vim/colors/gruvbox.vim -S https://raw.githubusercontent.com/morhetz/gruvbox/master/colors/gruvbox.vim
 curl -fLo ~/.vim/colors/monokai.vim -S https://raw.githubusercontent.com/ErichDonGubler/vim-sublime-monokai/master/colors/sublimemonokai.vim
 curl -fLo ~/.vim/colors/seoul256.vim -S https://raw.githubusercontent.com/junegunn/seoul256.vim/master/colors/seoul256.vim
 curl -fLo ~/.vim/colors/sierra.vim -S https://raw.githubusercontent.com/AlessandroYorba/Sierra/master/colors/sierra.vim
