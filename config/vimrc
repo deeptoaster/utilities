@@ -117,13 +117,12 @@ function s:BufClean()
     endif
   endfor
 endfunction
-function CodeActionDetailHover(data, menu)
-  if !empty(a:menu)
-    ALECodeAction
-  elseif !empty(ale#util#FindItemAtCursor(bufnr())[1])
+function DetailHoverCodeAction()
+  if !empty(ale#util#FindItemAtCursor(bufnr())[1])
     ALEDetail
   else
-    call HoverFunctionCall()
+    ALEHover
+    ALECodeAction
   endif
 endfunction
 function DrawerFind()
@@ -366,12 +365,10 @@ cabbrev glag GLAG
 if has('nvim')
   cabbrev terminal split \| terminal
 endif
-noremap <C-@> :call ale#codefix#Execute(mode() ==# 'v' \|\| mode() ==# "\<lt>C-V>", function('CodeActionDetailHover'))<CR>
-inoremap <C-@> <C-\><C-O>:call HoverFunctionCall()<CR>
+noremap <C-L> :call DetailHoverCodeAction()<CR>
+inoremap <C-L> <C-\><C-O>:call HoverFunctionCall()<CR>
 noremap <C-LeftMouse> <LeftMouse>:call GoToDefinition()<CR>
 if has('nvim')
-  noremap <C-Space> :call ale#codefix#Execute(mode() ==# 'v' \|\| mode() ==# "\<lt>C-V>", function('CodeActionDetailHover'))<CR>
-  inoremap <C-Space> <C-\><C-O>:call HoverFunctionCall()<CR>
   tnoremap <C-W> <C-\><C-N><C-W>
 endif
 tmap <C-W>: <C-\><C-N>:vertical terminal<CR><C-\><C-N>i
