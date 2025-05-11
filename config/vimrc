@@ -25,6 +25,7 @@ set regexpengine=0
 set sessionoptions-=blank sessionoptions-=buffers sessionoptions-=options
 set showcmd
 set shiftwidth=2
+set spell
 set tabstop=2
 set viewoptions-=options
 set wildmenu
@@ -355,6 +356,7 @@ augroup squiffles
   autocmd SessionLoadPost * call s:RestoreLayout()
   if has('nvim')
     autocmd TermOpen * setlocal nonumber
+    autocmd TermOpen * setlocal nospell
   endif
 augroup end
 command BC call s:BufClean()
