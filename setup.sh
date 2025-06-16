@@ -2,7 +2,7 @@ s!/bin/bash
 set -ex
 sudo add-apt-repository ppa:numix/ppa
 sudo add-apt-repository ppa:xubuntu-dev/extras
-wget -O - https://download.spotify.com/debian/pubkey_6224F9941A8AA6D1.gpg | sudo gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/spotify.gpg
+wget -O - https://download.spotify.com/debian/pubkey_C85668DF69375001.gpg | sudo gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/spotify.gpg
 echo 'deb http://repository.spotify.com stable non-free' | sudo tee /etc/apt/sources.list.d/spotify.list
 sudo apt update
 sudo apt purge xfce4-whiskermenu-plugin
@@ -15,6 +15,7 @@ rm -f steam_latest.deb
 sudo usermod -aG vboxusers $USER
 sudo ln -fs $(pwd)/config/71-synaptics.conf /usr/share/X11/xorg.conf.d/71-synaptics.conf
 sudo ln -fs $(pwd)/config/lightdm-gtk-greeter.conf /etc/lightdm/lightdm-gtk-greeter.conf
+echo 'export MOZ_USE_XINPUT2=1' | sudo tee /etc/profile.d/mozilla.sh
 PWD_ESCAPED=$(sed 's/[&/\]/\\&/g' <<< $(pwd))
 sed -E "s/\\\$PWD\b/$PWD_ESCAPED/g" config/power.service | sudo tee /lib/systemd/system/power.service
 sudo systemctl enable power.service
