@@ -1,0 +1,4 @@
+OUTPUT_DIRECTORY       = "/tmp"
+TAB_SIZE               = 2
+RECURSIVE              = YES
+GENERATE_HTML          = NO

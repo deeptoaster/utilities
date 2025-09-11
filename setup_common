@@ -18,6 +18,7 @@ git config --global user.email deeptoaster@gmail.com
 git config --global user.name 'Deep Toaster'
 git config --global user.signingkey ~/.ssh/id_ed25519.pub
 touch ~/.ssh/allowed_signers
+ln -fs $(pwd)/config/Doxyfile ~/Doxyfile
 ln -fs $(pwd)/config/bash_aliases ~/.bash_aliases
 ln -fs $(pwd)/config/eslintrc.json ~/.eslintrc.json
 ln -fs $(pwd)/config/face ~/.face
