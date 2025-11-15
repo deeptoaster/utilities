@@ -1,10 +1,10 @@
 [Desktop Entry]
-NoDisplay=true
-Version=1.0
 Encoding=UTF-8
+Icon=/home/woot/.local/share/icons/beeper.png
+Name=Beeper
+NoDisplay=true
 Type=X-XFCE-Helper
+Version=1.0
 X-XFCE-Category=MailReader
-X-XFCE-CommandsWithParameter=/opt/beeper/beeper.sh "%s"
-Icon=beeper.sh
-Name=beeper.sh
-X-XFCE-Commands=/opt/beeper/beeper.sh
+X-XFCE-CommandsWithParameter=/opt/beeper/Beeper.AppImage --no-sandbox "%s"
+X-XFCE-Commands=/opt/beeper/Beeper.AppImage --no-sandbox
