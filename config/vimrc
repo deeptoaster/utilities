@@ -236,6 +236,8 @@ function s:PersistAndCloseTerminals()
         \ getbufvar(bufnr, '&modified') &&
         \ getbufvar(bufnr, '&buftype') !=# 'terminal'
   \ }))
+    let l:bufclosed =
+        \ &buftype ==# 'terminal' || get(b:, 'fugitive_type', '') ==# 'index'
     call s:FugitiveClose()
     execute 'mksession!' v:this_session
     sleep 100m
@@ -244,6 +246,9 @@ function s:PersistAndCloseTerminals()
         execute 'bdelete!' l:bufnr
       endif
     endfor
+    if l:bufclosed
+      noautocmd qall
+    endif
   endif
 endfunction
 function QuickFixDifferentFile(operator)
