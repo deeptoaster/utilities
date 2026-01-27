@@ -118,6 +118,15 @@ function s:BufClean()
     endif
   endfor
 endfunction
+function CopilotChatToggle()
+  for l:winnr in range(1, winnr('$'))
+    if getbufvar(winbufnr(l:winnr), '&filetype') ==# 'copilot_chat'
+      CopilotChatFocus
+      break
+    endif
+  endfor
+  CopilotChatToggle
+endfunction
 function DetailHoverCodeAction()
   if !empty(ale#util#FindItemAtCursor(bufnr())[1])
     ALEDetail
@@ -225,87 +234,7 @@ function s:HoverOperator(view, type)
   let l:operatorpos = getpos("'[")
   call s:Hover(l:operatorpos[1], l:operatorpos[2])
 endfunction
-function s:Persist()
-  if !empty(v:this_session) && !exists('g:SessionLoad')
-    silent! execute 'mksession!' v:this_session
-  endif
-endfunction
-function s:PersistAndCloseTerminals()
-  if !empty(v:this_session) && empty(filter(range(1, bufnr('$')), {
-    \ _index, bufnr ->
-        \ getbufvar(bufnr, '&modified') &&
-        \ getbufvar(bufnr, '&buftype') !=# 'terminal'
-  \ }))
-    let l:bufclosed =
-        \ &buftype ==# 'terminal' || get(b:, 'fugitive_type', '') ==# 'index'
-    call s:FugitiveClose()
-    execute 'mksession!' v:this_session
-    sleep 100m
-    for l:bufnr in range(1, bufnr('$'))
-      if getbufvar(l:bufnr, '&buftype') ==# 'terminal'
-        execute 'bdelete!' l:bufnr
-      endif
-    endfor
-    if l:bufclosed
-      noautocmd qall
-    endif
-  endif
-endfunction
-function QuickFixDifferentFile(operator)
-  let l:qflist = getqflist({'id': 0, 'idx': 0, 'items': [], 'size': 0})
-  let l:current = l:qflist.idx - 1
-  let l:bufnr = l:qflist.items[l:current].bufnr
-  for l:delta in range(1, l:qflist.size - 1)
-    let l:other =
-        \ (a:operator(l:current, l:delta) + l:qflist.size) % l:qflist.size
-    if l:qflist.items[l:other].bufnr != l:bufnr
-      execute 'cc' l:other + 1
-      return
-    endif
-  endfor
-endfunction
-function s:QuickfixOpen()
-  let l:winid = win_getid()
-  cclose
-  wincmd b
-  wincmd v
-  copen
-  wincmd k
-  quit
-  call win_gotoid(l:winid)
-endfunction
-function QuickfixToggle()
-  for l:winnr in range(1, winnr('$'))
-    if getbufvar(winbufnr(l:winnr), '&buftype') ==# 'quickfix'
-      cclose
-      return
-    endif
-  endfor
-  call s:QuickfixOpen()
-endfunction
-function s:RestoreLayout()
-  call timer_stop(get(s:, 'terminals_timer', 0))
-  let s:terminals_timer = timer_start(200, function('s:ReopenTerminals'))
-  call s:FugitiveClose()
-endfunction
-function s:ReopenTerminals(_timer)
-  let l:winid = win_getid()
-  for l:bufnr in range(1, bufnr('$'))
-    if getbufvar(l:bufnr, '&buftype') ==# 'terminal' ||
-        \ bufname(l:bufnr)[0:6] ==# 'term://' && bufwinnr(l:bufnr) != -1
-      execute bufwinnr(l:bufnr) 'wincmd w'
-      if has('nvim')
-        terminal
-      else
-        enew!
-        terminal ++curwin
-      endif
-    endif
-  endfor
-  call win_gotoid(l:winid)
-  call s:BufClean()
-endfunction
-function TogglePandocWorker()
+function PandocWorkerToggle()
   if get(b:, 'pandoc_job', v:null) is v:null
     let l:bufnr = bufnr()
     let l:source = expand('%:t')
@@ -351,11 +280,88 @@ function TogglePandocWorker()
     cclose
   endif
 endfunction
+function s:Persist()
+  if !empty(v:this_session) && !exists('g:SessionLoad')
+    silent! execute 'mksession!' v:this_session
+  endif
+endfunction
+function s:PersistAndCloseTerminals()
+  if !empty(v:this_session) && empty(filter(range(1, bufnr('$')), {
+    \ _index, bufnr ->
+        \ getbufvar(bufnr, '&modified') &&
+        \ getbufvar(bufnr, '&buftype') !=# 'terminal'
+  \ }))
+    let l:bufclosed =
+        \ &buftype ==# 'terminal' || get(b:, 'fugitive_type', '') ==# 'index'
+    call s:FugitiveClose()
+    execute 'mksession!' v:this_session
+    sleep 100m
+    for l:bufnr in range(1, bufnr('$'))
+      if getbufvar(l:bufnr, '&buftype') ==# 'terminal'
+        execute 'bdelete!' l:bufnr
+      endif
+    endfor
+    if l:bufclosed
+      noautocmd qall
+    endif
+  endif
+endfunction
+function QuickFixDifferentFile(operator)
+  let l:qflist = getqflist({'id': 0, 'idx': 0, 'items': [], 'size': 0})
+  let l:current = l:qflist.idx - 1
+  let l:bufnr = l:qflist.items[l:current].bufnr
+  for l:delta in range(1, l:qflist.size - 1)
+    let l:other =
+        \ (a:operator(l:current, l:delta) + l:qflist.size) % l:qflist.size
+    if l:qflist.items[l:other].bufnr != l:bufnr
+      execute 'cc' l:other + 1
+      return
+    endif
+  endfor
+endfunction
+function s:QuickfixOpen()
+  let l:winid = win_getid()
+  cclose
+  wincmd b
+  vertical rightbelow copen 80
+  call win_gotoid(l:winid)
+endfunction
+function QuickfixToggle()
+  for l:winnr in range(1, winnr('$'))
+    if getbufvar(winbufnr(l:winnr), '&buftype') ==# 'quickfix'
+      cclose
+      return
+    endif
+  endfor
+  call s:QuickfixOpen()
+endfunction
+function s:RestoreLayout()
+  call timer_stop(get(s:, 'terminals_timer', 0))
+  let s:terminals_timer = timer_start(200, function('s:ReopenTerminals'))
+  call s:FugitiveClose()
+endfunction
+function s:ReopenTerminals(_timer)
+  let l:winid = win_getid()
+  for l:bufnr in range(1, bufnr('$'))
+    if getbufvar(l:bufnr, '&buftype') ==# 'terminal' ||
+        \ bufname(l:bufnr)[0:6] ==# 'term://' && bufwinnr(l:bufnr) != -1
+      execute bufwinnr(l:bufnr) 'wincmd w'
+      if has('nvim')
+        terminal
+      else
+        enew!
+        terminal ++curwin
+      endif
+    endif
+  endfor
+  call win_gotoid(l:winid)
+  call s:BufClean()
+endfunction
 augroup squiffles
   autocmd BufEnter * call s:Persist()
   autocmd CompleteDone * call s:HoverOneBack()
   autocmd ExitPre * call s:PersistAndCloseTerminals()
-  autocmd FileType markdown noremap <buffer> <Leader>ll :call TogglePandocWorker()<CR>
+  autocmd FileType markdown noremap <buffer> <Leader>ll :call PandocWorkerToggle()<CR>
   autocmd FileType php setlocal foldmethod=indent
   autocmd FileType python setlocal foldmethod=indent
   autocmd SessionLoadPost * call s:RestoreLayout()
@@ -367,9 +373,11 @@ augroup end
 command BC call s:BufClean()
 cabbrev bc BC
 cabbrev ccc CtrlPClearAllCaches
+cabbrev ccr CopilotChatReset
 command GLAG Git log --all --date-order --decorate --graph
 cabbrev glag GLAG
 if has('nvim')
+  cabbrev term split \| terminal
   cabbrev terminal split \| terminal
 endif
 noremap <C-L> :call DetailHoverCodeAction()<CR>
@@ -381,6 +389,8 @@ endif
 tmap <C-W>: <C-\><C-N>:vertical terminal<CR><C-\><C-N>i
 noremap <C-W>; :call GoToTerminal()<CR><C-\><C-N>i<Esc>a
 noremap <C-]> :call GoToDefinition()<CR>
+noremap <Leader>cc :call CopilotChatToggle()<CR>
+vmap <Leader>cs <Plug>CopilotChatAddSelection
 noremap <Leader>f :call DrawerFind()<CR>
 noremap <Leader>l$ :call AddAlignment()<CR>
 noremap <Leader>q :noautocmd call QuickfixToggle()<CR>
@@ -392,4 +402,4 @@ noremap ]Q :call QuickFixDifferentFile({a, b -> a + b})<CR>
 noremap [q :try <Bar> cprev <Bar> catch <Bar> clast <Bar> endtry<CR>
 noremap ]q :try <Bar> cnext <Bar> catch <Bar> cfirst <Bar> endtry<CR>
 noremap Y y$
-noremap y% :let @* = @% <Bar> let @+ = @%<CR>
+noremap y<C-R>% :let @" = @% <Bar> let @* = @% <Bar> let @+ = @%<CR>

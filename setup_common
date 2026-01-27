@@ -31,6 +31,7 @@ mkdir -p ~/.lua/scripts
 curl -fLo ~/.lua/scripts/terminal.lua -S https://raw.githubusercontent.com/Orange-OpenSource/pandoc-terminal-writer/master/terminal.lua
 git clone https://github.com/dense-analysis/ale ~/.vim/pack/foo/start/ale
 git clone https://github.com/github/copilot.vim ~/.vim/pack/foo/start/copilot
+git clone -b v1.8.1 https://github.com/DanBradbury/copilot-chat.vim ~/.vim/pack/foo/start/copilot-chat
 git clone https://github.com/ctrlpvim/ctrlp.vim ~/.vim/pack/foo/start/ctrlp
 git clone https://github.com/preservim/nerdtree ~/.vim/pack/foo/opt/nerdtree
 git clone https://github.com/Xuyuanp/nerdtree-git-plugin ~/.vim/pack/foo/opt/nerdtree-git-plugin
