@@ -113,7 +113,7 @@ function s:AppendPandocMessage(bufnr, _channel, data, ...)
 endfunction
 function s:BufClean()
   for l:bufnr in range(1, bufnr('$'))
-    if buflisted(l:bufnr) && bufwinnr(l:bufnr) == -1
+    if buflisted(l:bufnr) && empty(win_findbuf(l:bufnr))
       execute 'bdelete!' l:bufnr
     endif
   endfor
@@ -182,7 +182,8 @@ function s:EchoPandocMessages(bufnr, _timer)
   call setbufvar(a:bufnr, 'pandoc_messages', [])
 endfunction
 function s:FugitiveClose()
-  for l:bufnr in range(1, bufnr('$'))
+  for l:winnr in range(1, winnr('$'))
+    let l:bufnr = winbufnr(l:winnr)
     if getbufvar(l:bufnr, 'fugitive_type') ==# 'index'
       execute 'bdelete' l:bufnr
     endif
@@ -297,7 +298,11 @@ function s:PersistAndCloseTerminals()
   \ }))
     let l:bufclosed =
         \ &buftype ==# 'terminal' || get(b:, 'fugitive_type', '') ==# 'index'
-    call s:FugitiveClose()
+    for l:bufnr in range(1, bufnr('$'))
+      if getbufvar(l:bufnr, 'fugitive_type') ==# 'index'
+        execute 'bdelete' l:bufnr
+      endif
+    endfor
     execute 'mksession!' v:this_session
     sleep 100m
     for l:bufnr in range(1, bufnr('$'))
@@ -342,20 +347,21 @@ endfunction
 function s:RestoreLayout()
   call timer_stop(get(s:, 'terminals_timer', 0))
   let s:terminals_timer = timer_start(200, function('s:ReopenTerminals'))
-  call s:FugitiveClose()
 endfunction
 function s:ReopenTerminals(_timer)
   let l:winid = win_getid()
   for l:bufnr in range(1, bufnr('$'))
     if getbufvar(l:bufnr, '&buftype') ==# 'terminal' ||
-        \ bufname(l:bufnr)[0:6] ==# 'term://' && bufwinnr(l:bufnr) != -1
-      execute bufwinnr(l:bufnr) 'wincmd w'
-      if has('nvim')
-        terminal
-      else
-        enew!
-        terminal ++curwin
-      endif
+        \ bufname(l:bufnr)[0:6] ==# 'term://'
+      for l:bufwinid in win_findbuf(l:bufnr)
+        call win_gotoid(l:bufwinid)
+        if has('nvim')
+          terminal
+        else
+          enew!
+          terminal ++curwin
+        endif
+      endfor
     endif
   endfor
   call win_gotoid(l:winid)
