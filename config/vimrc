@@ -119,17 +119,20 @@ function s:BufClean()
   endfor
 endfunction
 function CopilotChatToggle()
-  for l:winnr in range(1, winnr('$'))
-    if getbufvar(winbufnr(l:winnr), '&filetype') ==# 'copilot_chat'
-      CopilotChatFocus
-      CopilotChatToggle
-      return
-    endif
-  endfor
-  wincmd b
-  CopilotChatToggle
-  normal G
-  startinsert
+  let l:winnr = bufwinnr(g:copilot_chat_active_buffer)
+  if l:winnr != -1
+    execute l:winnr 'close'
+  else
+    let l:curwinid = win_getid()
+    for l:winid in win_findbuf(g:copilot_chat_active_buffer)
+      call win_gotoid(l:winid)
+      close
+    endfor
+    call win_gotoid(l:curwinid)
+    CopilotChatToggle
+    normal G
+    startinsert
+  endif
 endfunction
 function DetailHoverCodeAction()
   if !empty(ale#util#FindItemAtCursor(bufnr())[1])
@@ -141,7 +144,7 @@ function DetailHoverCodeAction()
 endfunction
 function DrawerFind()
   let l:bufnr = bufnr()
-  let l:winid = win_getid()
+  let l:curwinid = win_getid()
   if !g:NERDTree.IsOpen()
     call s:DrawerOpen()
   endif
@@ -152,7 +155,7 @@ function DrawerFind()
     Gedit :
     normal zR
   endif
-  call win_gotoid(l:winid)
+  call win_gotoid(l:curwinid)
 endfunction
 function s:DrawerOpen()
   let l:bufnr = bufnr()
@@ -164,14 +167,14 @@ function s:DrawerOpen()
   endif
 endfunction
 function DrawerToggle()
-  let l:winid = win_getid()
+  let l:curwinid = win_getid()
   if g:NERDTree.IsOpen()
     NERDTreeClose
     call s:FugitiveClose()
   else
     call s:DrawerOpen()
   endif
-  call win_gotoid(l:winid)
+  call win_gotoid(l:curwinid)
 endfunction
 function s:EchoPandocMessages(bufnr, _timer)
   let l:pandoc_messages = getbufvar(a:bufnr, 'pandoc_messages')
@@ -329,11 +332,11 @@ function QuickFixDifferentFile(operator)
   endfor
 endfunction
 function s:QuickFixOpen()
-  let l:winid = win_getid()
+  let l:curwinid = win_getid()
   cclose
   wincmd b
   vertical rightbelow copen 80
-  call win_gotoid(l:winid)
+  call win_gotoid(l:curwinid)
 endfunction
 function QuickFixToggle()
   for l:winnr in range(1, winnr('$'))
@@ -349,7 +352,7 @@ function s:RestoreLayout()
   let s:terminals_timer = timer_start(200, function('s:ReopenTerminals'))
 endfunction
 function s:ReopenTerminals(_timer)
-  let l:winid = win_getid()
+  let l:curwinid = win_getid()
   for l:bufnr in range(1, bufnr('$'))
     if getbufvar(l:bufnr, '&buftype') ==# 'terminal' ||
         \ bufname(l:bufnr)[0:6] ==# 'term://'
@@ -364,7 +367,7 @@ function s:ReopenTerminals(_timer)
       endfor
     endif
   endfor
-  call win_gotoid(l:winid)
+  call win_gotoid(l:curwinid)
   call s:BufClean()
 endfunction
 augroup squiffles
