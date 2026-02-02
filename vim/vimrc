@@ -21,12 +21,10 @@ set incsearch
 set nojoinspaces
 set mouse=a
 set number
-if has('nvim')
-  let &packpath = &runtimepath
-endif
 set regexpengine=0
 if has('nvim')
   set runtimepath^=~/.vim runtimepath+=~/.vim/after
+  let &packpath = &runtimepath
 endif
 set sessionoptions-=blank sessionoptions-=buffers sessionoptions-=options
 set showcmd
