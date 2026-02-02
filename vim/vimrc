@@ -13,15 +13,21 @@ set nofileignorecase
 set foldmethod=syntax
 set formatoptions=tcqj
 set grepprg=grep\ -nrs\ $*\ /dev/null
-set hlsearch
-set incsearch
-set nojoinspaces
 if has('nvim')
   set nohidden
 endif
+set hlsearch
+set incsearch
+set nojoinspaces
 set mouse=a
 set number
+if has('nvim')
+  let &packpath = &runtimepath
+endif
 set regexpengine=0
+if has('nvim')
+  set runtimepath^=~/.vim runtimepath+=~/.vim/after
+endif
 set sessionoptions-=blank sessionoptions-=buffers sessionoptions-=options
 set showcmd
 set shiftwidth=2

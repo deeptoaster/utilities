@@ -1,3 +1,42 @@
 [submodule "conky-rings"]
 	path = conky-rings
 	url = ssh://git@github.com/deeptoaster/conky-rings
+[submodule "vim/pack/age/start/ale"]
+	path = vim/pack/age/start/ale
+	url = https://github.com/dense-analysis/ale
+[submodule "vim/pack/age/start/copilot"]
+	path = vim/pack/age/start/copilot
+	url = https://github.com/github/copilot.vim
+[submodule "vim/pack/age/start/ctrlp"]
+	path = vim/pack/age/start/ctrlp
+	url = https://github.com/ctrlpvim/ctrlp.vim
+[submodule "vim/pack/age/opt/nerdtree"]
+	path = vim/pack/age/opt/nerdtree
+	url = https://github.com/preservim/nerdtree
+[submodule "vim/pack/age/opt/nerdtree-git-plugin"]
+	path = vim/pack/age/opt/nerdtree-git-plugin
+	url = https://github.com/Xuyuanp/nerdtree-git-plugin
+[submodule "vim/pack/age/start/vim-airline"]
+	path = vim/pack/age/start/vim-airline
+	url = https://github.com/vim-airline/vim-airline
+[submodule "vim/pack/age/start/vim-airline-themes"]
+	path = vim/pack/age/start/vim-airline-themes
+	url = https://github.com/vim-airline/vim-airline-themes
+[submodule "vim/pack/age/opt/vim-devicons"]
+	path = vim/pack/age/opt/vim-devicons
+	url = https://github.com/ryanoasis/vim-devicons
+[submodule "vim/pack/age/start/vim-fugitive"]
+	path = vim/pack/age/start/vim-fugitive
+	url = https://github.com/tpope/vim-fugitive
+[submodule "vim/pack/age/start/vim-gitgutter"]
+	path = vim/pack/age/start/vim-gitgutter
+	url = https://github.com/airblade/vim-gitgutter
+[submodule "vim/pack/age/start/vim-surround"]
+	path = vim/pack/age/start/vim-surround
+	url = https://github.com/tpope/vim-surround
+[submodule "vim/pack/age/start/vimtex"]
+	path = vim/pack/age/start/vimtex
+	url = https://github.com/lervag/vimtex
+[submodule "vim/pack/age/start/copilot-chat"]
+	path = vim/pack/age/start/copilot-chat
+	url = https://github.com/DanBradbury/copilot-chat.vim
