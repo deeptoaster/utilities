@@ -7,7 +7,7 @@ echo 'deb http://repository.spotify.com stable non-free' | sudo tee /etc/apt/sou
 sudo apt update
 sudo apt purge xfce4-whiskermenu-plugin
 sudo apt --no-install-recommends install gnome-session vim-gtk3
-sudo apt install arc-theme blender blueman conky-all cryptsetup curl deja-dup firefox ffmpeg gimp git gnome-disk-utility gnome-power-manager gnupg2 gparted guvcview inkscape lmms mate-calc nodejs numix-icon-theme-circle redshift ristretto spotify-client ubuntustudio-fonts virtualbox-ext-pack virtualbox-guest-additions-iso xarchiver xcalib xfce4-docklike-plugin xfce4-places-plugin zathura
+sudo apt install arc-theme blender blueman conky-all cryptsetup curl deja-dup firefox ffmpeg foliate gimp git gnome-disk-utility gnome-power-manager gnupg2 gparted guvcview inkscape lmms mate-calc nodejs numix-icon-theme-circle redshift ristretto spotify-client ubuntustudio-fonts virtualbox-ext-pack virtualbox-guest-additions-iso xarchiver xcalib xfce4-docklike-plugin xfce4-places-plugin zathura
 curl -fLo steam_latest.deb https://repo.steampowered.com/steam/archive/stable/steam_latest.deb
 sudo dpkg -i steam_latest.deb
 sudo apt install -f
@@ -28,10 +28,18 @@ mkdir -p ~/.local/share/xfce4/helpers
 ln -fs $(pwd)/config/custom-MailReader.desktop ~/.local/share/xfce4/helpers/custom-MailReader.desktop
 rsync -Ir config/autostart config/guvcview2 config/gtk-3.0 config/Thunar config/xarchiver config/xfce4 config/zathura ~/.config
 sed -Ei'' "s/\\\$USER\b/$USER/g" ~/.config/gtk-3.0/bookmarks
+gsettings set com.github.johnfactotum.Foliate color-scheme 1
+gsettings set com.github.johnfactotum.Foliate.viewer fold-sidebar true
+gsettings set com.github.johnfactotum.Foliate.viewer translate-target-language en
+gsettings set com.github.johnfactotum.Foliate.viewer.font default-size 30
+gsettings set com.github.johnfactotum.Foliate.viewer.font serif Literata
+gsettings set com.github.johnfactotum.Foliate.viewer.view max-inline-size 960
+gsettings set com.github.johnfactotum.Foliate.viewer.view theme solarized
+gsettings set com.github.johnfactotum.Foliate.window fullscreened true
 gsettings set org.gnome.DejaDup backend google
 gsettings set org.gnome.DejaDup include-list "['/media/$USER/ZERO/LiberKey/MyDocuments', '/media/$USER/ONE/LiberKey/MyDocuments']"
 gsettings set org.gnome.DejaDup periodic true
-gsettings set org.gnome.DejaDup.Google folder 'deja-dup'
+gsettings set org.gnome.DejaDup.Google folder deja-dup
 gsettings set org.gnome.settings-daemon.plugins.media-keys custom-keybindings "['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/']"
 gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ binding F1
 gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ command 'xfce4-terminal --drop-down'
