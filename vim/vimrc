@@ -363,6 +363,9 @@ endfunction
 function s:RestoreLayout()
   call timer_stop(get(s:, 'terminals_timer', 0))
   let s:terminals_timer = timer_start(200, function('s:ReopenTerminals'))
+  if !empty(v:this_session)
+    call rename(v:this_session, v:this_session . '~')
+  endif
 endfunction
 function s:ReopenTerminals(_timer)
   let l:curwinid = win_getid()
