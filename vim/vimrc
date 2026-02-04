@@ -146,6 +146,15 @@ function DetailHoverCodeAction()
     ALECodeAction
   endif
 endfunction
+function DiffDisk()
+  vertical new
+  setlocal buftype=nofile
+  read ++edit #
+  1delete _
+  diffthis
+  wincmd p
+  diffthis
+endfunction
 function DrawerFind()
   let l:bufnr = bufnr()
   let l:curwinid = win_getid()
@@ -383,14 +392,15 @@ augroup squiffles
   autocmd FileType python setlocal foldmethod=indent
   autocmd SessionLoadPost * call s:RestoreLayout()
   if has('nvim')
-    autocmd TermOpen * setlocal nonumber
-    autocmd TermOpen * setlocal nospell
+    autocmd TermOpen * setlocal nonumber nospell
   endif
 augroup end
 command BC call s:BufClean()
 cabbrev bc BC
 cabbrev ccc CtrlPClearAllCaches
 cabbrev ccr CopilotChatReset
+command DD call DiffDisk()
+cabbrev dd DD
 command GLAG Git log --all --date-order --decorate --graph
 cabbrev glag GLAG
 if has('nvim')
