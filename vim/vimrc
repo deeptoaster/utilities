@@ -312,22 +312,27 @@ function s:PersistAndCloseTerminals()
         \ getbufvar(bufnr, '&modified') &&
         \ getbufvar(bufnr, '&buftype') !=# 'terminal'
   \ }))
-    let l:bufclosed =
-        \ &buftype ==# 'terminal' || get(b:, 'fugitive_type', '') ==# 'index'
+    augroup squiffles
+      autocmd! BufEnter *
+    augroup end
     for l:bufnr in range(1, bufnr('$'))
       if getbufvar(l:bufnr, 'fugitive_type') ==# 'index'
         execute 'bdelete' l:bufnr
       endif
     endfor
     execute 'mksession!' v:this_session
-    sleep 100m
-    for l:bufnr in range(1, bufnr('$'))
-      if getbufvar(l:bufnr, '&buftype') ==# 'terminal'
-        execute 'bdelete!' l:bufnr
-      endif
-    endfor
-    if l:bufclosed
-      noautocmd qall
+    if !has('nvim')
+      for l:bufnr in range(1, bufnr('$'))
+        if getbufvar(l:bufnr, '&buftype') ==# 'terminal'
+          call term_sendkeys(l:bufnr, "\<C-D>")
+        endif
+      endfor
+      sleep 100m
+      for l:bufnr in range(1, bufnr('$'))
+        if stridx(term_getstatus(l:bufnr), 'running') != -1
+          execute 'bdelete!' l:bufnr
+        endif
+      endfor
     endif
   endif
 endfunction

@@ -1,5 +1,6 @@
 .DS_Store
 .venv
 Session.vim
+Session.vim~
 Sessionx.vim
 indent.log
