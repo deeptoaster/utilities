@@ -64,7 +64,8 @@ endif
 let g:ale_set_balloons = 1
 let g:ale_virtualtext_cursor = 0
 let g:ctrlp_custom_ignore =
-    \ '\v[\/](\.\w*cache|\.catkin_tools|\.clangd\/index|\.git|\.venv|__pycache__|build|devel|dist|logs|node_modules)$'
+    \ '\v\/((([^\/]*[^A-Za-z])?build|devel|dist|logs)|\.\w*cache|\.catkin_tools|\.clangd\/index|\.git|\.venv|__pycache__|node_modules|third_?party)$'
+let g:ctrlp_max_files = 100000
 let g:ctrlp_show_hidden = 1
 let g:ctrlp_working_path_mode = 0
 let g:DevIconsEnableFoldersOpenClose = 1
