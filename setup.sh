@@ -133,7 +133,8 @@ xfconf-query -c xfce4-panel -p /plugins/plugin-6 -n -t string -s notification-pl
 xfconf-query -c xfce4-panel -p /plugins/plugin-7 -n -t string -s pulseaudio
 xfconf-query -c xfce4-panel -p /plugins/plugin-8 -n -t string -s power-manager-plugin
 xfconf-query -c xfce4-panel -p /plugins/plugin-9 -n -t string -s clock
-xfconf-query -c xfce4-panel -p /plugins/plugin-9/digital-format -n -t string -s '%_H:%M  '
+xfconf-query -c xfce4-panel -p /plugins/plugin-9/digital-format -n -t string -s '  %_H:%M  '
+xfconf-query -c xfce4-panel -p /plugins/plugin-9/digital-time-font -n -t string -s 'Sans 9'
 xfconf-query -c xfce4-panel -p /plugins/plugin-10 -n -t string -s pager
 xfconf-query -c xfce4-panel -p /plugins/plugin-10/rows -n -t uint -s 2
 xfconf-query -c xfce4-power-manager -p /xfce4-power-manager/blank-on-ac -n -t uint -s 0
@@ -144,6 +145,7 @@ xfconf-query -c xfce4-power-manager -p /xfce4-power-manager/dpms-on-battery-off 
 xfconf-query -c xfce4-power-manager -p /xfce4-power-manager/dpms-on-battery-sleep -n -t uint -s 0
 xfconf-query -c xfce4-power-manager -p /xfce4-power-manager/general-notification -n -t bool -s true
 xfconf-query -c xfce4-power-manager -p /xfce4-power-manager/inactivity-on-battery -n -t uint -s 15
+xfconf-query -c xfce4-power-manager -p /xfce4-power-manager/show-panel-label -n -t uint -s 1
 xfconf-query -c xfce4-screensaver -p /saver/enabled -n -t bool -s false
 xfconf-query -c xfce4-screensaver -p /saver/idle-activation/enabled -n -t bool -s false
 xfconf-query -c xfce4-session -p /general/SaveOnExit -n -t bool -s false
