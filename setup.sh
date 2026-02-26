@@ -2,8 +2,9 @@ s!/bin/bash
 set -ex
 sudo add-apt-repository ppa:numix/ppa
 sudo add-apt-repository ppa:xubuntu-dev/extras
-wget -O - https://download.spotify.com/debian/pubkey_C85668DF69375001.gpg | sudo gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/spotify.gpg
+wget -O - https://download.spotify.com/debian/pubkey_5384CE82BA52C83A.gpg | sudo gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/spotify.gpg
 echo 'deb http://repository.spotify.com stable non-free' | sudo tee /etc/apt/sources.list.d/spotify.list
+sudo apt modernize-sources
 sudo apt update
 sudo apt purge xfce4-whiskermenu-plugin
 sudo apt --no-install-recommends install gnome-session vim-gtk3
@@ -129,8 +130,8 @@ xfconf-query -c xfce4-panel -p /plugins/plugin-4/expand -n -t bool -s true
 xfconf-query -c xfce4-panel -p /plugins/plugin-4/style -n -t uint -s 0
 xfconf-query -c xfce4-panel -p /plugins/plugin-5 -n -t string -s indicator
 xfconf-query -c xfce4-panel -p /plugins/plugin-6 -n -t string -s notification-plugin
-xfconf-query -c xfce4-panel -p /plugins/plugin-7 -n -t string -s power-manager-plugin
-xfconf-query -c xfce4-panel -p /plugins/plugin-8 -n -t string -s pulseaudio
+xfconf-query -c xfce4-panel -p /plugins/plugin-7 -n -t string -s pulseaudio
+xfconf-query -c xfce4-panel -p /plugins/plugin-8 -n -t string -s power-manager-plugin
 xfconf-query -c xfce4-panel -p /plugins/plugin-9 -n -t string -s clock
 xfconf-query -c xfce4-panel -p /plugins/plugin-9/digital-format -n -t string -s '%_H:%M  '
 xfconf-query -c xfce4-panel -p /plugins/plugin-10 -n -t string -s pager

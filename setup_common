@@ -6,8 +6,6 @@ sudo ln -fns ~/Public $DOCUMENT_ROOT
 chmod o+rx ~
 sudo apachectl restart
 ssh-keygen -C deeptoaster@gmail.com -t ed25519
-eval "$(ssh-agent -s)"
-ssh-add ~/.ssh/id_ed25519
 git config --global commit.gpgSign true
 git config --global core.excludesFile ~/.gitignore
 git config --global diff.tool vimdiff
