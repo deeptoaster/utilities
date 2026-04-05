@@ -28,6 +28,16 @@ Launch with `sudo tilp`.
 2.  Append `Path=/usr/share/fritzing/parts` to
     /usr/share/applications/fritzing.desktop.
 
+## Ollama and Open WebUI
+
+1.  `curl -fLsS https://ollama.com/install.sh | bash`
+2.  `ollama pull gemma3n:e4b`
+3.  `pipx install --python=python3.11 open-webui`
+4.  Append `Environment="OLLAMA_CONTEXT_LENGTH=64000"` to the `[Service]`
+    section of /etc/systemd/system/ollama.service.
+
+5.  Start with `open-webui serve`.
+
 # Media
 
 ## Audacious
