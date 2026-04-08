@@ -6,6 +6,7 @@ if !has('nvim')
 endif
 set conceallevel=2
 set cursorline
+set diffopt+=iwhiteall
 set directory=/tmp
 set display=lastline
 set expandtab
@@ -120,6 +121,13 @@ function s:BufClean()
   for l:bufnr in range(1, bufnr('$'))
     if buflisted(l:bufnr) && empty(win_findbuf(l:bufnr))
       execute 'bdelete!' l:bufnr
+    endif
+  endfor
+endfunction
+function s:CloseFugitiveIndices()
+  for l:bufnr in range(1, bufnr('$'))
+    if getbufvar(l:bufnr, 'fugitive_type') ==# 'index'
+      execute 'bdelete' l:bufnr
     endif
   endfor
 endfunction
@@ -316,11 +324,7 @@ function s:PersistAndCloseTerminals()
     augroup squiffles
       autocmd! BufEnter *
     augroup end
-    for l:bufnr in range(1, bufnr('$'))
-      if getbufvar(l:bufnr, 'fugitive_type') ==# 'index'
-        execute 'bdelete' l:bufnr
-      endif
-    endfor
+    call s:CloseFugitiveIndices()
     execute 'mksession!' v:this_session
     if !has('nvim')
       for l:bufnr in range(1, bufnr('$'))
@@ -367,6 +371,7 @@ function QuickFixToggle()
   call s:QuickFixOpen()
 endfunction
 function s:RestoreLayout()
+  call s:CloseFugitiveIndices()
   call timer_stop(get(s:, 'terminals_timer', 0))
   let s:terminals_timer = timer_start(200, function('s:ReopenTerminals'))
   if !empty(v:this_session)
