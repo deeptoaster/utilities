@@ -35,7 +35,6 @@ Launch with `sudo tilp`.
 3.  `pipx install --python=python3.11 open-webui`
 4.  Append `Environment="OLLAMA_CONTEXT_LENGTH=64000"` to the `[Service]`
     section of /etc/systemd/system/ollama.service.
-
 5.  Start with `open-webui serve`.
 
 # Media
