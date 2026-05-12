@@ -391,6 +391,8 @@
 	YABrAHgAfgCLAKAApwCxALwAvgDAAMIAyQDPANkA2wDdAN8C+wMAAwsDFAMhAyQDMQM6
 	Az8DRwAAAAAAAAIBAAAAAAAAACgAAAAAAAAAAAAAAAAAAANK
 	</data>
+	<key>BlinkText</key>
+	<false/>
 	<key>CommandString</key>
 	<string>vim</string>
 	<key>Font</key>
