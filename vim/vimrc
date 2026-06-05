@@ -427,7 +427,7 @@ noremap <C-LeftMouse> <LeftMouse>:call GoToDefinition()<CR>
 if has('nvim')
   tnoremap <C-W> <C-\><C-N><C-W>
 endif
-tmap <C-W>: <C-\><C-N>:vertical terminal<CR><C-\><C-N>i
+tmap <C-W>: <C-\><C-N>:vertical terminal<CR><C-\><C-N><C-W>li<C-W>hi
 noremap <C-W>; :call GoToTerminal()<CR><C-\><C-N>i<Esc>a
 noremap <C-]> :call GoToDefinition()<CR>
 noremap <Leader>cc :call CopilotChatToggle()<CR>
