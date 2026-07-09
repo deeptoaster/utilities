@@ -15,7 +15,7 @@ docs() {
   make -C /tmp/latex
   zathura /tmp/latex/refman.pdf
 }
-alias glag='git log --all --date-order --graph'
+alias glag='git log --date-order --format=glag --graph'
 glep() {
   grep -nrs --color=always "$@" | less -FR
 }

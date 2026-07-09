@@ -415,7 +415,7 @@ cabbrev ccc CtrlPClearAllCaches
 cabbrev ccr CopilotChatReset
 command DD call DiffDisk()
 cabbrev dd DD
-command GLAG Git log --all --date-order --decorate --graph
+command GLAG Git log --date-order --format=glag --graph
 cabbrev glag GLAG
 if has('nvim')
   cabbrev term split \| terminal

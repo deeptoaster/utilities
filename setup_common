@@ -11,6 +11,7 @@ git config --global core.excludesFile ~/.gitignore
 git config --global diff.tool vimdiff
 git config --global gpg.format ssh
 git config --global gpg.ssh.allowedSignersFile ~/.ssh/allowed_signers
+git config --global pretty.glag '%C(red)commit%C(reset) %C(auto)%h%d%C(reset) (%s)%n%C(red)Author:%C(reset) %C(green)%an%C(reset) <> %C(magenta)%ad%C(reset)'
 git config --global pull.rebase false
 git config --global user.email deeptoaster@gmail.com
 git config --global user.name 'Deep Toaster'
@@ -37,7 +38,7 @@ ln -fs $(pwd)/vim/vimrc ~/.config/nvim/init.vim
 ln -fns $(pwd)/vim/after/compiler ~/.vim/after/compiler
 ln -fns $(pwd)/vim/compiler ~/.vim/compiler
 ln -fs $(pwd)/vim/filetype.vim ~/.vim/filetype.vim
-ln -fns $(pwd)/vim/pack/squiffles ~/.vim/pack/squiffles
+ln -fns $(pwd)/vim/pack/age ~/.vim/pack/age
 (echo "0 0 * * * $(pwd)/backdrops.py"; echo "0 * * * * $(pwd)/power.sh") | crontab -
 curl -fLo fonts-main.tar.gz -S https://github.com/google/fonts/archive/master.tar.gz
 tar -xzf fonts-main.tar.gz
