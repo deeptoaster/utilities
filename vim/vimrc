@@ -264,49 +264,50 @@ function s:HoverOperator(view, type)
   let l:operatorpos = getpos("'[")
   call s:Hover(l:operatorpos[1], l:operatorpos[2])
 endfunction
-function PandocWorkerToggle()
-  if get(b:, 'pandoc_job', v:null) is v:null
-    let l:bufnr = bufnr()
-    let l:source = expand('%:t')
-    let l:target = '/tmp/' . fnamemodify(l:source, ':r') . '.pdf'
-    let l:pandoc_command =
-        \ 'inwm ' . l:source . ' pandoc -o ' . l:target . ' ' . l:source
-    let l:zathura_command =
-        \ 'inotifywait --event modify --quiet ' . l:target . ' && zathura ' .
-        \ l:target
-    let b:pandoc_messages = []
-    call system('touch ' . l:target)
-    if has('nvim')
-      let b:pandoc_job = jobstart(
-        \ l:pandoc_command,
-        \ {
-          \ 'cwd': expand('%:h'),
-          \ 'on_stderr': function('s:AppendPandocMessage', [l:bufnr])
-        \ }
-      \ )
-      let b:zathura_job = jobstart(l:zathura_command)
-    else
-      let b:pandoc_job = job_start(
-        \ ['bash', '-c', l:pandoc_command],
-        \ {
-          \ 'cwd': expand('%:h'),
-          \ 'err_cb': function('s:AppendPandocMessage', [l:bufnr])
-        \ }
-      \ )
-      let b:zathura_job = job_start(['bash', '-c', l:zathura_command])
-    endif
-    let b:ale_fix_on_save = 0
-    call timer_start(200, function('execute', [l:bufnr . 'bufdo write']))
+function s:PandocBuild()
+  let l:bufnr = bufnr()
+  let l:command = ['pandoc', '-o', b:pandoc_target, expand('%:t')]
+  let l:options = {'cwd': expand('%:h')}
+  if has('nvim')
+    let l:options.on_exit = function('s:PandocView', [l:bufnr])
+    let l:options.on_stderr = function('s:AppendPandocMessage', [l:bufnr])
+    call jobstart(l:command, l:options)
   else
-    if has('nvim')
-      call jobstop(b:pandoc_job)
-      call jobstop(b:zathura_job)
-    else
-      call job_stop(b:pandoc_job)
-      call job_stop(b:zathura_job)
-    endif
-    let b:pandoc_job = v:null
-    unlet b:ale_fix_on_save
+    let l:options.err_cb = function('s:AppendPandocMessage', [l:bufnr])
+    let l:options.exit_cb = function('s:PandocView', [l:bufnr])
+    call job_start(l:command, l:options)
+  endif
+endfunction
+function s:PandocView(bufnr, _job, status, ...)
+  if a:status != 0 || getbufvar(a:bufnr, 'pandoc_viewed', 1)
+    return
+  endif
+  call setbufvar(a:bufnr, 'pandoc_viewed', 1)
+  let l:command = [
+    \ executable('zathura') ? 'zathura' : 'open',
+    \ getbufvar(a:bufnr, 'pandoc_target')
+  \ ]
+  if has('nvim')
+    call jobstart(l:command)
+  else
+    call job_start(l:command)
+  endif
+endfunction
+function PandocWorkerToggle()
+  if empty(get(b:, 'pandoc_target', ''))
+    let b:ale_fix_on_save = 0
+    let b:pandoc_messages = []
+    let b:pandoc_target = '/tmp/' . expand('%:t:r') . '.pdf'
+    let b:pandoc_viewed = 0
+    augroup squiffles
+      autocmd BufWritePost <buffer> call s:PandocBuild()
+    augroup end
+    write
+  else
+    augroup squiffles
+      autocmd! BufWritePost <buffer>
+    augroup end
+    unlet b:ale_fix_on_save b:pandoc_target b:pandoc_viewed
     cclose
   endif
 endfunction
