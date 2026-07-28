@@ -28,8 +28,8 @@ if has('nvim')
   let &packpath = &runtimepath
 endif
 set sessionoptions-=blank sessionoptions-=buffers sessionoptions-=options
-set showcmd
 set shiftwidth=2
+set showcmd
 set spell
 set tabstop=2
 set viewoptions-=options
@@ -370,14 +370,6 @@ function QuickFixToggle()
   endfor
   call s:QuickFixOpen()
 endfunction
-function s:RestoreLayout()
-  call s:CloseFugitiveIndices()
-  call timer_stop(get(s:, 'terminals_timer', 0))
-  let s:terminals_timer = timer_start(200, function('s:ReopenTerminals'))
-  if !empty(v:this_session)
-    call rename(v:this_session, v:this_session . '~')
-  endif
-endfunction
 function s:ReopenTerminals(_timer)
   let l:curwinid = win_getid()
   for l:bufnr in range(1, bufnr('$'))
@@ -397,7 +389,16 @@ function s:ReopenTerminals(_timer)
   call win_gotoid(l:curwinid)
   call s:BufClean()
 endfunction
+function s:RestoreLayout()
+  call s:CloseFugitiveIndices()
+  call timer_stop(get(s:, 'terminals_timer', 0))
+  let s:terminals_timer = timer_start(200, function('s:ReopenTerminals'))
+  if !empty(v:this_session)
+    call rename(v:this_session, v:this_session . '~')
+  endif
+endfunction
 augroup squiffles
+  autocmd!
   autocmd BufEnter * call s:Persist()
   autocmd CompleteDone * call s:HoverOneBack()
   autocmd ExitPre * call s:PersistAndCloseTerminals()
@@ -415,7 +416,8 @@ cabbrev ccc CtrlPClearAllCaches
 cabbrev ccr CopilotChatReset
 command DD call DiffDisk()
 cabbrev dd DD
-command GLAG Git log --date-order --format=glag --graph
+command -complete=customlist,fugitive#LogComplete -nargs=* GLAG
+    \ Git log --date-order --format=glag --graph <args>
 cabbrev glag GLAG
 if has('nvim')
   cabbrev term split \| terminal
