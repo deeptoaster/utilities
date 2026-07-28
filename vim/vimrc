@@ -402,7 +402,7 @@ augroup squiffles
   autocmd BufEnter * call s:Persist()
   autocmd CompleteDone * call s:HoverOneBack()
   autocmd ExitPre * call s:PersistAndCloseTerminals()
-  autocmd FileType markdown noremap <buffer> <Leader>ll :call PandocWorkerToggle()<CR>
+  autocmd FileType markdown noremap <buffer> <Leader>ll <Cmd>call PandocWorkerToggle()<CR>
   autocmd FileType php setlocal foldmethod=indent
   autocmd FileType python setlocal foldmethod=indent
   autocmd SessionLoadPost * call s:RestoreLayout()
@@ -423,26 +423,26 @@ if has('nvim')
   cabbrev term split \| terminal
   cabbrev terminal split \| terminal
 endif
-noremap <C-L> :call DetailHoverCodeAction()<CR>
+noremap <C-L> <Cmd>call DetailHoverCodeAction()<CR>
 inoremap <C-L> <C-\><C-O>:call HoverFunctionCall()<CR>
-noremap <C-LeftMouse> <LeftMouse>:call GoToDefinition()<CR>
+noremap <C-LeftMouse> <LeftMouse><Cmd>call GoToDefinition()<CR>
 if has('nvim')
   tnoremap <C-W> <C-\><C-N><C-W>
 endif
 tmap <C-W>: <C-\><C-N>:vertical terminal<CR><C-\><C-N><C-W>li<C-W>hi
-noremap <C-W>; :call GoToTerminal()<CR><C-\><C-N>i<Esc>a
-noremap <C-]> :call GoToDefinition()<CR>
-noremap <Leader>cc :call CopilotChatToggle()<CR>
+noremap <C-W>; <Cmd>call GoToTerminal()<CR><C-\><C-N>i<Esc>a
+noremap <C-]> <Cmd>call GoToDefinition()<CR>
+noremap <Leader>cc <Cmd>call CopilotChatToggle()<CR>
 vmap <Leader>cs <Plug>CopilotChatAddSelection
-noremap <Leader>f :call DrawerFind()<CR>
-noremap <Leader>l$ :call AddAlignment()<CR>
-noremap <Leader>q :noautocmd call QuickFixToggle()<CR>
-noremap <Leader>t :call DrawerToggle()<CR>
-noremap [l :try <Bar> lprev <Bar> catch <Bar> try <Bar> llast <Bar> catch <Bar> ALEPreviousWrap <Bar> endtry <Bar> endtry<CR>
-noremap ]l :try <Bar> lnext <Bar> catch <Bar> try <Bar> lfirst <Bar> catch <Bar> ALENextWrap <Bar> endtry <Bar> endtry<CR>
-noremap [Q :call QuickFixDifferentFile({a, b -> a - b})<CR>
-noremap ]Q :call QuickFixDifferentFile({a, b -> a + b})<CR>
-noremap [q :try <Bar> cprev <Bar> catch <Bar> clast <Bar> endtry<CR>
-noremap ]q :try <Bar> cnext <Bar> catch <Bar> cfirst <Bar> endtry<CR>
-noremap Y y$
-noremap y<C-R>% :let @" = @% <Bar> let @* = @% <Bar> let @+ = @%<CR>
+noremap <Leader>f <Cmd>call DrawerFind()<CR>
+noremap <Leader>l$ <Cmd>call AddAlignment()<CR>
+noremap <Leader>q <Cmd>noautocmd call QuickFixToggle()<CR>
+noremap <Leader>t <Cmd>call DrawerToggle()<CR>
+noremap [l <Cmd>try <Bar> lprev <Bar> catch <Bar> try <Bar> llast <Bar> catch <Bar> ALEPreviousWrap <Bar> endtry <Bar> endtry<CR>
+noremap ]l <Cmd>try <Bar> lnext <Bar> catch <Bar> try <Bar> lfirst <Bar> catch <Bar> ALENextWrap <Bar> endtry <Bar> endtry<CR>
+noremap [Q <Cmd>call QuickFixDifferentFile({a, b -> a - b})<CR>
+noremap ]Q <Cmd>call QuickFixDifferentFile({a, b -> a + b})<CR>
+noremap [q <Cmd>try <Bar> cprev <Bar> catch <Bar> clast <Bar> endtry<CR>
+noremap ]q <Cmd>try <Bar> cnext <Bar> catch <Bar> cfirst <Bar> endtry<CR>
+nnoremap Y y$
+nnoremap y<C-R>% <Cmd>let @" = @% <Bar> let @* = @% <Bar> let @+ = @%<CR>
