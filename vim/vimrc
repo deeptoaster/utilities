@@ -94,40 +94,10 @@ function AddAlignment()
     endif
   endif
 endfunction
-function s:AppendPandocMessage(bufnr, _channel, data, ...)
-  call timer_stop(getbufvar(a:bufnr, 'pandoc_timer', 0))
-  let l:pandoc_messages = getbufvar(a:bufnr, 'pandoc_messages')
-  if has('nvim')
-    if a:data !=# ['']
-      if empty(l:pandoc_messages)
-        call add(l:pandoc_messages, {'text': ''})
-      endif
-      let l:pandoc_messages[-1].text .= a:data[0]
-      call extend(
-        \ l:pandoc_messages,
-        \ map(a:data[1:], {_index, message -> {'text': message}})
-      \ )
-    endif
-  else
-    call add(l:pandoc_messages, {'text': a:data})
-  endif
-  call setbufvar(
-    \ a:bufnr,
-    \ 'pandoc_timer',
-    \ timer_start(600, function('s:EchoPandocMessages', [a:bufnr]))
-  \ )
-endfunction
 function s:BufClean()
   for l:bufnr in range(1, bufnr('$'))
     if buflisted(l:bufnr) && empty(win_findbuf(l:bufnr))
       execute 'bdelete!' l:bufnr
-    endif
-  endfor
-endfunction
-function s:CloseFugitiveIndices()
-  for l:bufnr in range(1, bufnr('$'))
-    if getbufvar(l:bufnr, 'fugitive_type') ==# 'index'
-      execute 'bdelete' l:bufnr
     endif
   endfor
 endfunction
@@ -157,6 +127,7 @@ function DetailHoverCodeAction()
 endfunction
 function DiffDisk()
   vertical new
+  setlocal bufhidden=wipe
   setlocal buftype=nofile
   read ++edit #
   1delete _
@@ -192,21 +163,20 @@ function DrawerToggle()
   let l:curwinid = win_getid()
   if g:NERDTree.IsOpen()
     NERDTreeClose
-    call s:FugitiveClose()
+    call s:FugitiveCloseTabIndices()
   else
     call s:DrawerOpen()
   endif
   call win_gotoid(l:curwinid)
 endfunction
-function s:EchoPandocMessages(bufnr, _timer)
-  let l:pandoc_messages = getbufvar(a:bufnr, 'pandoc_messages')
-  call setqflist(l:pandoc_messages)
-  if !empty(l:pandoc_messages)
-    call s:QuickFixOpen()
-  endif
-  call setbufvar(a:bufnr, 'pandoc_messages', [])
+function s:FugitiveCloseIndices()
+  for l:bufnr in range(1, bufnr('$'))
+    if getbufvar(l:bufnr, 'fugitive_type') ==# 'index'
+      execute 'bdelete' l:bufnr
+    endif
+  endfor
 endfunction
-function s:FugitiveClose()
+function s:FugitiveCloseTabIndices()
   for l:winnr in range(1, winnr('$'))
     let l:bufnr = winbufnr(l:winnr)
     if getbufvar(l:bufnr, 'fugitive_type') ==# 'index'
@@ -264,52 +234,136 @@ function s:HoverOperator(view, type)
   let l:operatorpos = getpos("'[")
   call s:Hover(l:operatorpos[1], l:operatorpos[2])
 endfunction
-function s:PandocBuild()
+function s:PandocPdfAppendMessage(bufnr, _channel, data, ...)
+  let l:pandoc_pdf_messages = getbufvar(a:bufnr, 'pandoc_pdf_messages', v:null)
+  if l:pandoc_pdf_messages is v:null
+    return
+  endif
+  call timer_stop(getbufvar(a:bufnr, 'pandoc_pdf_timer', 0))
+  if has('nvim')
+    if a:data !=# ['']
+      if empty(l:pandoc_pdf_messages)
+        call add(l:pandoc_pdf_messages, {'text': ''})
+      endif
+      let l:pandoc_pdf_messages[-1].text .= a:data[0]
+      call extend(
+        \ l:pandoc_pdf_messages,
+        \ map(a:data[1:], {_index, message -> {'text': message}})
+      \ )
+    endif
+  else
+    call add(l:pandoc_pdf_messages, {'text': a:data})
+  endif
+  call setbufvar(
+    \ a:bufnr,
+    \ 'pandoc_pdf_timer',
+    \ timer_start(600, function('s:PandocPdfEchoMessages', [a:bufnr]))
+  \ )
+endfunction
+function s:PandocPdfBuild()
   let l:bufnr = bufnr()
-  let l:command = ['pandoc', '-o', b:pandoc_target, expand('%:t')]
+  let l:command = ['pandoc', '-o', b:pandoc_pdf_target, expand('%:t')]
   let l:options = {'cwd': expand('%:h')}
   if has('nvim')
-    let l:options.on_exit = function('s:PandocView', [l:bufnr])
-    let l:options.on_stderr = function('s:AppendPandocMessage', [l:bufnr])
+    let l:options.on_exit = function('s:PandocPdfOpen', [l:bufnr])
+    let l:options.on_stderr = function('s:PandocPdfAppendMessage', [l:bufnr])
     call jobstart(l:command, l:options)
   else
-    let l:options.err_cb = function('s:AppendPandocMessage', [l:bufnr])
-    let l:options.exit_cb = function('s:PandocView', [l:bufnr])
+    let l:options.err_cb = function('s:PandocPdfAppendMessage', [l:bufnr])
+    let l:options.exit_cb = function('s:PandocPdfOpen', [l:bufnr])
     call job_start(l:command, l:options)
   endif
 endfunction
-function s:PandocView(bufnr, _job, status, ...)
-  if a:status != 0 || getbufvar(a:bufnr, 'pandoc_viewed', 1)
+function s:PandocPdfEchoMessages(bufnr, _timer)
+  let l:pandoc_pdf_messages = getbufvar(a:bufnr, 'pandoc_pdf_messages')
+  call setqflist(l:pandoc_pdf_messages)
+  if !empty(l:pandoc_pdf_messages)
+    call s:QuickFixOpen()
+  endif
+  call setbufvar(a:bufnr, 'pandoc_pdf_messages', [])
+endfunction
+function s:PandocPdfOpen(bufnr, _job, status, ...)
+  if a:status != 0 || getbufvar(a:bufnr, 'pandoc_pdf_viewed', 1)
     return
   endif
-  call setbufvar(a:bufnr, 'pandoc_viewed', 1)
+  call setbufvar(a:bufnr, 'pandoc_pdf_viewed', 1)
   let l:command = [
     \ executable('zathura') ? 'zathura' : 'open',
-    \ getbufvar(a:bufnr, 'pandoc_target')
+    \ getbufvar(a:bufnr, 'pandoc_pdf_target')
   \ ]
-  if has('nvim')
-    call jobstart(l:command)
-  else
-    call job_start(l:command)
-  endif
+  call setbufvar(
+    \ a:bufnr,
+    \ 'pandoc_pdf_viewer',
+    \ has('nvim') ? jobstart(l:command) : job_start(l:command)
+  \ )
 endfunction
-function PandocWorkerToggle()
-  if empty(get(b:, 'pandoc_target', ''))
+function PandocPdfToggle()
+  if !exists('b:pandoc_pdf_messages')
     let b:ale_fix_on_save = 0
-    let b:pandoc_messages = []
-    let b:pandoc_target = '/tmp/' . expand('%:t:r') . '.pdf'
-    let b:pandoc_viewed = 0
+    let b:pandoc_pdf_messages = []
+    let b:pandoc_pdf_target = '/tmp/' . expand('%:t:r') . '.pdf'
+    let b:pandoc_pdf_viewed = 0
     augroup squiffles
-      autocmd BufWritePost <buffer> call s:PandocBuild()
+      autocmd BufWritePost <buffer> call s:PandocPdfBuild()
     augroup end
     write
   else
     augroup squiffles
       autocmd! BufWritePost <buffer>
     augroup end
-    unlet b:ale_fix_on_save b:pandoc_target b:pandoc_viewed
+    call timer_stop(get(b:, 'pandoc_pdf_timer', 0))
+    unlet! b:pandoc_pdf_timer
+    if exists('b:pandoc_pdf_viewer')
+      if has('nvim')
+        call jobstop(b:pandoc_pdf_viewer)
+      else
+        call job_stop(b:pandoc_pdf_viewer)
+      endif
+      unlet b:pandoc_pdf_viewer
+    endif
+    unlet b:ale_fix_on_save b:pandoc_pdf_messages b:pandoc_pdf_target b:pandoc_pdf_viewed
     cclose
   endif
+endfunction
+function s:PandocPreviewRefresh()
+  let l:preview_bufnr = get(b:, 'pandoc_preview_bufnr', -1)
+  if !bufexists(l:preview_bufnr)
+    return
+  endif
+  let l:raw_lines = systemlist(
+    \ 'COLUMNS=' . winwidth(win_findbuf(l:preview_bufnr)[0]) . ' pandoc --to='
+    \ . expand('~/.lua/scripts/terminal.lua') . ' 2> /dev/null',
+    \ getline(1, '$')
+  \ )
+  call setbufvar(l:preview_bufnr, '&modifiable', 1)
+  silent call deletebufline(l:preview_bufnr, 1, '$')
+  call setbufline(l:preview_bufnr, 1, map(
+    \ l:raw_lines,
+    \ {_index, line -> substitute(line, '\e\[[0-9;]*m', '', 'g')}
+  \ ))
+  call setbufvar(l:preview_bufnr, '&modifiable', 0)
+  call setbufvar(l:preview_bufnr, '&modified', 0)
+endfunction
+function PandocPreviewToggle()
+  let l:preview_bufnr = get(b:, 'pandoc_preview_bufnr', -1)
+  unlet! b:pandoc_preview_bufnr
+  setlocal noscrollbind
+  if bufexists(l:preview_bufnr)
+    execute 'bdelete' l:preview_bufnr
+    return
+  endif
+  rightbelow vertical new
+  setlocal bufhidden=wipe
+  setlocal buftype=nofile
+  setlocal nonumber
+  setlocal scrollbind
+  setlocal signcolumn=no
+  let l:preview_bufnr = bufnr()
+  wincmd p
+  let b:pandoc_preview_bufnr = l:preview_bufnr
+  setlocal scrollbind
+  call s:PandocPreviewRefresh()
+  syncbind
 endfunction
 function s:Persist()
   if !empty(v:this_session) && !exists('g:SessionLoad')
@@ -325,7 +379,7 @@ function s:PersistAndCloseTerminals()
     augroup squiffles
       autocmd! BufEnter *
     augroup end
-    call s:CloseFugitiveIndices()
+    call s:FugitiveCloseIndices()
     execute 'mksession!' v:this_session
     if !has('nvim')
       for l:bufnr in range(1, bufnr('$'))
@@ -391,7 +445,7 @@ function s:ReopenTerminals(_timer)
   call s:BufClean()
 endfunction
 function s:RestoreLayout()
-  call s:CloseFugitiveIndices()
+  call s:FugitiveCloseIndices()
   call timer_stop(get(s:, 'terminals_timer', 0))
   let s:terminals_timer = timer_start(200, function('s:ReopenTerminals'))
   if !empty(v:this_session)
@@ -401,9 +455,11 @@ endfunction
 augroup squiffles
   autocmd!
   autocmd BufEnter * call s:Persist()
+  autocmd BufWritePost * call s:PandocPreviewRefresh()
   autocmd CompleteDone * call s:HoverOneBack()
   autocmd ExitPre * call s:PersistAndCloseTerminals()
-  autocmd FileType markdown noremap <buffer> <Leader>ll <Cmd>call PandocWorkerToggle()<CR>
+  autocmd FileType markdown noremap <buffer> <Leader>ll <Cmd>call PandocPdfToggle()<CR>
+  autocmd FileType markdown noremap <buffer> <Leader>lv <Cmd>call PandocPreviewToggle()<CR>
   autocmd FileType php setlocal foldmethod=indent
   autocmd FileType python setlocal foldmethod=indent
   autocmd SessionLoadPost * call s:RestoreLayout()
@@ -425,7 +481,7 @@ if has('nvim')
   cabbrev terminal split \| terminal
 endif
 noremap <C-L> <Cmd>call DetailHoverCodeAction()<CR>
-inoremap <C-L> <C-\><C-O>:call HoverFunctionCall()<CR>
+inoremap <C-L> <Cmd>call HoverFunctionCall()<CR>
 noremap <C-LeftMouse> <LeftMouse><Cmd>call GoToDefinition()<CR>
 if has('nvim')
   tnoremap <C-W> <C-\><C-N><C-W>
