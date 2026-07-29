@@ -335,12 +335,16 @@ function s:PandocPreviewRefresh()
     \ . expand('~/.lua/scripts/terminal.lua') . ' 2> /dev/null',
     \ getline(1, '$')
   \ )
-  call setbufvar(l:preview_bufnr, '&modifiable', 1)
-  silent call deletebufline(l:preview_bufnr, 1, '$')
-  call setbufline(l:preview_bufnr, 1, map(
+  let l:lines = map(
     \ l:raw_lines,
     \ {_index, line -> substitute(line, '\e\[[0-9;]*m', '', 'g')}
-  \ ))
+  \ )
+  let l:linecount = getbufinfo(l:preview_bufnr)[0].linecount
+  call setbufvar(l:preview_bufnr, '&modifiable', 1)
+  call setbufline(l:preview_bufnr, 1, l:lines)
+  if len(l:lines) < l:linecount
+    call deletebufline(l:preview_bufnr, len(l:lines) + 1, l:linecount)
+  endif
   call setbufvar(l:preview_bufnr, '&modifiable', 0)
   call setbufvar(l:preview_bufnr, '&modified', 0)
 endfunction
@@ -459,7 +463,7 @@ augroup squiffles
   autocmd CompleteDone * call s:HoverOneBack()
   autocmd ExitPre * call s:PersistAndCloseTerminals()
   autocmd FileType markdown noremap <buffer> <Leader>ll <Cmd>call PandocPdfToggle()<CR>
-  autocmd FileType markdown noremap <buffer> <Leader>lv <Cmd>call PandocPreviewToggle()<CR>
+  autocmd FileType markdown noremap <buffer> <Leader>lp <Cmd>call PandocPreviewToggle()<CR>
   autocmd FileType php setlocal foldmethod=indent
   autocmd FileType python setlocal foldmethod=indent
   autocmd SessionLoadPost * call s:RestoreLayout()
