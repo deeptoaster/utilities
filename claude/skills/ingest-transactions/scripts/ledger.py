@@ -1,0 +1,253 @@
+#!/usr/bin/env python3
+"""Format ledger rows as TSV that pastes straight into the Expenses, Income, and Transfers sheets.
+
+Usage:
+    ledger.py split TOTAL TAX_RATE
+    ledger.py format {expenses,income,transfers} ROWS.json --first-row N [--first-column B] [--header]
+
+ROWS.json is a list of objects. Common keys: date ("25 Sep" or "2026-09-25"), debit, credit.
+    expenses:  category, total, tax_rate (e.g. "0.08875"); optional tax (exact amount from a receipt),
+               cash_back (integer percent), and is_date (split into a normal half and a Gifts half)
+    income:    subtotal or total, optional tax (default 0)
+    transfers: total, optional cash_back
+Amounts should be given as strings so that they are read exactly. The accounts referenced by the
+output (not vendors or income sources) are listed on stderr for the user to check.
+"""
+
+from __future__ import annotations
+
+import json
+import sys
+from argparse import ArgumentParser, RawDescriptionHelpFormatter
+from dataclasses import dataclass
+from datetime import date
+from decimal import ROUND_CEILING, ROUND_DOWN, ROUND_FLOOR, ROUND_HALF_UP, Decimal
+from typing import Union
+
+CENT = Decimal("0.01")
+
+COLUMNS = {
+    "expenses": [
+        "Date",
+        "Debit account",
+        "Credit account",
+        "Category",
+        "Subtotal",
+        "Tax",
+        "Total",
+        "Cash back",
+    ],
+    "income": ["Date", "Debit account", "Credit account", "Subtotal", "Tax", "Total"],
+    "transfers": ["Date", "Debit account", "Credit account", "Total", "Cash back"],
+}
+
+FIRST_COLUMNS = {"expenses": "B", "income": "K", "transfers": "R"}
+ACCOUNT_KEYS = {
+    "expenses": ["credit"],
+    "income": ["debit"],
+    "transfers": ["debit", "credit"],
+}
+
+InputRow = dict[str, Union[str, bool]]
+Row = dict[str, str]
+
+
+@dataclass
+class TaxSplit:
+    subtotal: Decimal
+    tax: Decimal
+    is_formula_safe: bool
+
+
+def round_cents(value: Decimal | str, rounding: str = ROUND_HALF_UP) -> Decimal:
+    return Decimal(value).quantize(CENT, rounding=rounding)
+
+
+def is_formula_safe(subtotal: Decimal, tax: Decimal, tax_rate: Decimal) -> bool:
+    """Whether ROUND(subtotal * tax_rate, 2) reproduces the tax exactly.
+
+    A half-cent tie is treated as unsafe, since spreadsheets may round it differently.
+    """
+    exact_tax = subtotal * tax_rate
+    is_tie = abs(exact_tax * 100) % 1 == Decimal("0.5")
+    return tax_rate != 0 and round_cents(exact_tax) == tax and not is_tie
+
+
+def split_total(
+    total: Decimal | str, tax_rate: Decimal | str, tax: Decimal | str | None = None
+) -> TaxSplit:
+    """Split a tax-inclusive total into subtotal and tax.
+
+    With a known tax, the subtotal is simply total - tax. Otherwise, if the rounded
+    subtotal gives a formula-safe tax, use it; else round the subtotal down instead
+    and give the residual to the tax.
+    """
+    total, tax_rate = Decimal(total), Decimal(tax_rate)
+    exact_subtotal = total / (1 + tax_rate)
+    subtotal = total - Decimal(tax) if tax is not None else round_cents(exact_subtotal)
+    formula_safe = is_formula_safe(subtotal, total - subtotal, tax_rate)
+    if tax is None and not formula_safe:
+        subtotal = round_cents(exact_subtotal, ROUND_DOWN)
+    return TaxSplit(subtotal, total - subtotal, formula_safe)
+
+
+def format_amount(value: Decimal | str) -> str:
+    return f"{Decimal(value):,.2f}"
+
+
+def format_date(value: str) -> str:
+    parsed = date.fromisoformat(value) if "-" in value else None
+    return f"{parsed.day} {parsed:%b}" if parsed else value
+
+
+def format_cash_back(value: str) -> str:
+    return value if value.endswith("%") else f"{int(Decimal(value))}%"
+
+
+def column_letter(ledger: str, column_name: str, first_column: str) -> str:
+    return chr(ord(first_column) + COLUMNS[ledger].index(column_name))
+
+
+def expand_dates(rows: list[InputRow]) -> list[Row]:
+    """Split rows flagged is_date into a normal half (rounded up) and a Gifts half (rounded down)."""
+    expanded = []
+    for row in rows:
+        text_row = {key: value for key, value in row.items() if isinstance(value, str)}
+        if row.get("is_date"):
+            half_total = Decimal(text_row["total"]) / 2
+            halves = [(ROUND_CEILING, text_row["category"]), (ROUND_FLOOR, "Gifts")]
+            for rounding, category in halves:
+                half_row = {
+                    **text_row,
+                    "total": str(round_cents(half_total, rounding)),
+                    "category": category,
+                }
+                if "tax" in text_row:
+                    half_row["tax"] = str(
+                        round_cents(Decimal(text_row["tax"]) / 2, rounding)
+                    )
+                expanded.append(half_row)
+        else:
+            expanded.append(text_row)
+    return expanded
+
+
+def build_money_cells(
+    ledger: str, row: Row, sheet_row: int, first_column: str
+) -> list[str]:
+    subtotal_cell = f"{column_letter(ledger, 'Subtotal', first_column)}{sheet_row}"
+    tax_cell = f"{column_letter(ledger, 'Tax', first_column)}{sheet_row}"
+    if ledger == "income":
+        tax = Decimal(row.get("tax", "0"))
+        subtotal = (
+            Decimal(row["subtotal"])
+            if "subtotal" in row
+            else Decimal(row["total"]) + tax
+        )
+        cells = [
+            format_amount(subtotal),
+            format_amount(tax),
+            f"={subtotal_cell}-{tax_cell}",
+        ]
+    else:
+        tax_rate = row.get("tax_rate", "0")
+        split = split_total(row["total"], tax_rate, row.get("tax"))
+        tax_text = (
+            f"=ROUND({subtotal_cell}*{Decimal(tax_rate)},2)"
+            if split.is_formula_safe
+            else format_amount(split.tax)
+        )
+        cells = [
+            format_amount(split.subtotal),
+            tax_text,
+            f"={subtotal_cell}+{tax_cell}",
+        ]
+    return cells
+
+
+def build_cells(ledger: str, row: Row, sheet_row: int, first_column: str) -> list[str]:
+    cells = [format_date(row["date"]), row["debit"], row["credit"]]
+    if "Category" in COLUMNS[ledger]:
+        cells.append(row["category"])
+    if "Subtotal" in COLUMNS[ledger]:
+        cells.extend(build_money_cells(ledger, row, sheet_row, first_column))
+    else:
+        cells.append(format_amount(row["total"]))
+    if "Cash back" in COLUMNS[ledger]:
+        cells.append(format_cash_back(row.get("cash_back", "0")))
+    return cells
+
+
+def format_rows(
+    ledger: str,
+    rows: list[InputRow],
+    first_row: int,
+    first_column: str | None = None,
+    header: bool = False,
+) -> str:
+    column = first_column or FIRST_COLUMNS[ledger]
+    lines = ["\t".join(COLUMNS[ledger])] if header else []
+    for offset, row in enumerate(expand_dates(rows)):
+        lines.append("\t".join(build_cells(ledger, row, first_row + offset, column)))
+    return "\n".join(lines) + "\n"
+
+
+def report_accounts(ledger: str, rows: list[InputRow]) -> None:
+    """List on stderr the accounts the output references, excluding vendors and income sources."""
+    accounts = sorted({str(row[key]) for row in rows for key in ACCOUNT_KEYS[ledger]})
+    print(f"Accounts referenced: {', '.join(accounts)}", file=sys.stderr)
+
+
+def load_rows(path: str) -> list[InputRow]:
+    with open(path) if path != "-" else sys.stdin as handle:
+        return json.load(handle, parse_float=str, parse_int=str)
+
+
+def main() -> None:
+    parser = ArgumentParser(
+        description=__doc__, formatter_class=RawDescriptionHelpFormatter
+    )
+    subparsers = parser.add_subparsers(dest="command", required=True)
+    split_parser = subparsers.add_parser(
+        "split", help="split one total into subtotal and tax"
+    )
+    split_parser.add_argument("total")
+    split_parser.add_argument("tax_rate")
+    format_parser = subparsers.add_parser(
+        "format", help="format JSON rows as paste-ready TSV"
+    )
+    format_parser.add_argument("ledger", choices=sorted(COLUMNS))
+    format_parser.add_argument("rows", help="JSON file of rows, or - for stdin")
+    format_parser.add_argument(
+        "--first-row",
+        type=int,
+        required=True,
+        help="sheet row the first output row will be pasted into",
+    )
+    format_parser.add_argument(
+        "--first-column",
+        help="sheet column of the Date column (default: where the ledger sits in the sheet)",
+    )
+    format_parser.add_argument("--header", action="store_true")
+    arguments = parser.parse_args()
+    if arguments.command == "split":
+        split = split_total(arguments.total, arguments.tax_rate)
+        print(
+            f"subtotal={split.subtotal} tax={split.tax} formula_safe={split.is_formula_safe}"
+        )
+    else:
+        rows = load_rows(arguments.rows)
+        sys.stdout.write(
+            format_rows(
+                arguments.ledger,
+                rows,
+                arguments.first_row,
+                arguments.first_column,
+                arguments.header,
+            )
+        )
+        report_accounts(arguments.ledger, rows)
+
+
+if __name__ == "__main__":
+    main()
