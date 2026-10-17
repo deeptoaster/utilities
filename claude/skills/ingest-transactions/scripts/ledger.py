@@ -20,7 +20,7 @@ import json
 import sys
 from dataclasses import dataclass
 from datetime import date
-from decimal import ROUND_CEILING, ROUND_FLOOR, ROUND_HALF_UP, Decimal
+from decimal import ROUND_CEILING, ROUND_DOWN, ROUND_FLOOR, ROUND_HALF_UP, Decimal
 from typing import Union
 
 CENT = Decimal("0.01")
@@ -63,15 +63,18 @@ def split_total(total: Decimal | str, tax_rate: Decimal | str) -> TaxSplit:
 
     The tax is formula-safe when ROUND(subtotal * tax_rate, 2) reproduces it exactly and
     is not a half-cent tie (which spreadsheets may round differently from Decimal).
-    Otherwise the residual goes to the tax.
+    Otherwise the subtotal is rounded down instead and the residual goes to the tax.
     """
     total, tax_rate = Decimal(total), Decimal(tax_rate)
-    subtotal = round_cents(total / (1 + tax_rate))
+    exact_subtotal = total / (1 + tax_rate)
+    subtotal = round_cents(exact_subtotal)
     exact_tax = subtotal * tax_rate
     is_tie = abs(exact_tax * 100) % 1 == Decimal("0.5")
     is_formula_safe = (
         tax_rate != 0 and subtotal + round_cents(exact_tax) == total and not is_tie
     )
+    if not is_formula_safe:
+        subtotal = round_cents(exact_subtotal, ROUND_DOWN)
     return TaxSplit(subtotal, total - subtotal, tax_rate, is_formula_safe)
 
 

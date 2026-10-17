@@ -160,8 +160,9 @@ whole tables) computes:
 2.  tax = ROUND(subtotal × tax rate, 2)
 3.  If subtotal + tax = total, the Tax cell is the formula
     `=ROUND(<Subtotal cell>*<tax rate>,2)`.
-4.  Otherwise the subtotal stands and the residual goes to the tax: the Tax
-    cell is the plain number total − subtotal.
+4.  Otherwise the subtotal is rounded down (toward zero) instead and the
+    residual goes to the tax: the Tax cell is the plain number total −
+    subtotal. For example, 23.00 at 8.875% gives 21.12 and 1.88.
 
 A half-cent tie in step 2 is treated as unsafe for a formula, because
 spreadsheet floating point may round it the other way. When the tax amount is
