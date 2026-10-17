@@ -69,7 +69,7 @@ The expense table consists of eight columns:
 2.  Debit account (the vendor's human-readable name, as it would appear on
     Google Maps, in ASCII characters with no diacritics)
 3.  Credit account (the user's account associated with the transaction)
-4.  Category—one of:
+4.  Category---one of:
     - Class (includes instruction time, museum visits, gym memberships, etc.)
     - Dining (includes restaurants, takeout, food delivery, and Too Good To Go)
     - Gifts (includes half of transactions paid for on dates; see below)
@@ -97,8 +97,8 @@ The income table consists of six columns:
     the provider paid by a payroll deduction)
 3.  Credit account (the source of the income)
 4.  Subtotal (total plus tax)
-5.  Tax (zero unless the user indicates otherwise; negative for a tax refund,
-    e.g. from `IRS`)
+5.  Tax (the amount withheld, as on an earnings statement, or zero; negative
+    for a tax refund, e.g. from `IRS`)
 6.  Total (formula `=<Subtotal cell>-<Tax cell>`; it must evaluate to the
     amount received)
 
@@ -113,7 +113,7 @@ dated with the advice date and credited to the employer:
   earnings item (`GTL`, `LTD Imputed Inc`), debited to the provider (`VSP`,
   `Aetna`, `Unum`, `T. Rowe Price 401(k)`, ...) with zero tax.
 
-`scripts/parse_earnings.py` does this and checks that earnings total − taxes −
+`scripts/parse_earnings.py` does this and checks that earnings total - taxes -
 those items = net pay, refusing to produce output otherwise. The account
 mappings live at the top of the script; an unmapped item is emitted with a
 `TODO` debit account and reported on stderr, and must be resolved with the user
@@ -144,17 +144,16 @@ foreign transactions, record 0.
 Given a total and a tax rate, `scripts/ledger.py` computes:
 
 1.  subtotal = ROUND(total / (1 + tax rate), 2)
-2.  tax = ROUND(subtotal × tax rate, 2)
-3.  If subtotal + tax = total, the Tax cell is the formula
-    `=ROUND(<Subtotal cell>*<tax rate>,2)`.
+2.  tax = ROUND(subtotal * tax rate, 2)
+3.  If subtotal + tax = total, and the product in step 2 was not a half-cent
+    tie (which spreadsheet floating point may round the other way), the Tax
+    cell is the formula `=ROUND(<Subtotal cell>*<tax rate>,2)`.
 4.  Otherwise the subtotal is rounded down (toward zero) instead and the
-    residual goes to the tax: the Tax cell is the plain number total −
+    residual goes to the tax: the Tax cell is the plain number total -
     subtotal. For example, 23.00 at 8.875% gives 21.12 and 1.88.
 
-A half-cent tie in step 2 is treated as unsafe for a formula, because
-spreadsheet floating point may round it the other way. When the tax amount is
-known exactly (from a receipt), give `tax` instead of `tax_rate` and it is
-recorded as a plain number.
+When the tax amount is known exactly (from a receipt), give `tax` instead of
+`tax_rate` and it is recorded as a plain number.
 
 Purchases at grocery stores are usually not taxed, although this may vary by
 jurisdiction.
@@ -249,6 +248,10 @@ Unless otherwise specified, cash back values are as below.
 
 - 2% back on everything
 
+#### Gold Card
+
+- 3% back on everything
+
 ## Vendor name normalization
 
 Statement descriptors often reflect the payment processor (e.g. `SQ *`, `TST*`,
@@ -258,9 +261,9 @@ business name as it would appear on Google Maps, in ASCII with no diacritics.
 Some statement descriptors are systematically wrong and should always be
 replaced:
 
-- `TWP*` → `The Washington Post` (Gifts, 0% tax, 1% cash back)
-- `Cafe Hugo` → `Felix Roasting`
-- `TST* STOUT NYC - AMITY` → `Amity Hall`
+- `TWP*` -> `The Washington Post` (Gifts, 0% tax, 1% cash back)
+- `Cafe Hugo` -> `Felix Roasting`
+- `TST* STOUT NYC - AMITY` -> `Amity Hall`
 
 ### Too Good To Go
 
