@@ -152,8 +152,9 @@ Given a total and a tax rate, `scripts/ledger.py` computes:
     residual goes to the tax: the Tax cell is the plain number total -
     subtotal. For example, 23.00 at 8.875% gives 21.12 and 1.88.
 
-When the tax amount is known exactly (from a receipt), give `tax` instead of
-`tax_rate` and it is recorded as a plain number.
+When the tax amount is known exactly (from a receipt), give `tax` as well: the
+subtotal is then total - tax, and the Tax cell is still the formula when it
+reproduces that tax, and the plain number otherwise.
 
 Purchases at grocery stores are usually not taxed, although this may vary by
 jurisdiction.
@@ -349,9 +350,9 @@ optionally `--first-column`.
   Write one JSON file per ledger; amounts and rates are strings so that they
   are read exactly. Keys per row:
     - all ledgers: `date` (`"25 Sep"` or `"2026-09-25"`), `debit`, `credit`
-    - expenses: `category`, `total`, and either `tax_rate` (e.g. `"0.08875"`)
-      or `tax` (exact amount); optional `cash_back` (integer percent) and
-      `is_date`
+    - expenses: `category`, `total`, `tax_rate` (e.g. `"0.08875"`), and
+      optionally `tax` (exact amount from a receipt), `cash_back` (integer
+      percent), and `is_date`
     - transfers: `total`, optional `cash_back`
     - income: `subtotal` (or `total`), optional `tax`
 - `parse_earnings.py` (needs the `pdftotext` command from poppler):

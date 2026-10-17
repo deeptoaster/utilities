@@ -6,8 +6,8 @@ Usage:
     ledger.py format {expenses,income,transfers} ROWS.json --first-row N [--first-column B] [--header]
 
 ROWS.json is a list of objects. Common keys: date ("25 Sep" or "2026-09-25"), debit, credit.
-    expenses:  category, total, and one of tax_rate (e.g. "0.08875") or tax (explicit amount);
-               optional cash_back (integer percent) and is_date (split into a normal half and a Gifts half)
+    expenses:  category, total, tax_rate (e.g. "0.08875"); optional tax (exact amount from a receipt),
+               cash_back (integer percent), and is_date (split into a normal half and a Gifts half)
     income:    subtotal or total, optional tax (default 0)
     transfers: total, optional cash_back
 Amounts should be given as strings so that they are read exactly.
@@ -50,7 +50,6 @@ Row = dict[str, str]
 class TaxSplit:
     subtotal: Decimal
     tax: Decimal
-    tax_rate: Decimal
     is_formula_safe: bool
 
 
@@ -58,24 +57,32 @@ def round_cents(value: Decimal | str, rounding: str = ROUND_HALF_UP) -> Decimal:
     return Decimal(value).quantize(CENT, rounding=rounding)
 
 
-def split_total(total: Decimal | str, tax_rate: Decimal | str) -> TaxSplit:
+def is_formula_safe(subtotal: Decimal, tax: Decimal, tax_rate: Decimal) -> bool:
+    """Whether ROUND(subtotal * tax_rate, 2) reproduces the tax exactly.
+
+    A half-cent tie is treated as unsafe, since spreadsheets may round it differently.
+    """
+    exact_tax = subtotal * tax_rate
+    is_tie = abs(exact_tax * 100) % 1 == Decimal("0.5")
+    return tax_rate != 0 and round_cents(exact_tax) == tax and not is_tie
+
+
+def split_total(
+    total: Decimal | str, tax_rate: Decimal | str, tax: Decimal | str | None = None
+) -> TaxSplit:
     """Split a tax-inclusive total into subtotal and tax.
 
-    The tax is formula-safe when ROUND(subtotal * tax_rate, 2) reproduces it exactly and
-    is not a half-cent tie (which spreadsheets may round differently from Decimal).
-    Otherwise the subtotal is rounded down instead and the residual goes to the tax.
+    With a known tax, the subtotal is simply total - tax. Otherwise, if the rounded
+    subtotal gives a formula-safe tax, use it; else round the subtotal down instead
+    and give the residual to the tax.
     """
     total, tax_rate = Decimal(total), Decimal(tax_rate)
     exact_subtotal = total / (1 + tax_rate)
-    subtotal = round_cents(exact_subtotal)
-    exact_tax = subtotal * tax_rate
-    is_tie = abs(exact_tax * 100) % 1 == Decimal("0.5")
-    is_formula_safe = (
-        tax_rate != 0 and subtotal + round_cents(exact_tax) == total and not is_tie
-    )
-    if not is_formula_safe:
+    subtotal = total - Decimal(tax) if tax is not None else round_cents(exact_subtotal)
+    formula_safe = is_formula_safe(subtotal, total - subtotal, tax_rate)
+    if tax is None and not formula_safe:
         subtotal = round_cents(exact_subtotal, ROUND_DOWN)
-    return TaxSplit(subtotal, total - subtotal, tax_rate, is_formula_safe)
+    return TaxSplit(subtotal, total - subtotal, formula_safe)
 
 
 def format_amount(value: Decimal | str) -> str:
@@ -136,17 +143,11 @@ def build_money_cells(
             format_amount(tax),
             f"={subtotal_cell}-{tax_cell}",
         ]
-    elif "tax" in row:
-        tax = Decimal(row["tax"])
-        cells = [
-            format_amount(Decimal(row["total"]) - tax),
-            format_amount(tax),
-            f"={subtotal_cell}+{tax_cell}",
-        ]
     else:
-        split = split_total(row["total"], row.get("tax_rate", "0"))
+        tax_rate = row.get("tax_rate", "0")
+        split = split_total(row["total"], tax_rate, row.get("tax"))
         tax_text = (
-            f"=ROUND({subtotal_cell}*{split.tax_rate},2)"
+            f"=ROUND({subtotal_cell}*{Decimal(tax_rate)},2)"
             if split.is_formula_safe
             else format_amount(split.tax)
         )
