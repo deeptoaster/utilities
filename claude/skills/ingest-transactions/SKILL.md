@@ -159,8 +159,7 @@ whole tables) computes:
 1.  subtotal = ROUND(total / (1 + tax rate), 2)
 2.  tax = ROUND(subtotal × tax rate, 2)
 3.  If subtotal + tax = total, the Tax cell is the formula
-    `=ROUND(<Subtotal cell>*<tax rate>,2)`. A subtotal one cent lower is also
-    tried.
+    `=ROUND(<Subtotal cell>*<tax rate>,2)`.
 4.  Otherwise the subtotal stands and the residual goes to the tax: the Tax
     cell is the plain number total − subtotal.
 

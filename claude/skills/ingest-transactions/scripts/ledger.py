@@ -63,19 +63,16 @@ def split_total(total: Decimal | str, tax_rate: Decimal | str) -> TaxSplit:
 
     The tax is formula-safe when ROUND(subtotal * tax_rate, 2) reproduces it exactly and
     is not a half-cent tie (which spreadsheets may round differently from Decimal).
-    A subtotal one cent lower is also tried; otherwise the residual goes to the tax.
+    Otherwise the residual goes to the tax.
     """
     total, tax_rate = Decimal(total), Decimal(tax_rate)
     base_subtotal = round_cents(total / (1 + tax_rate))
-    result = TaxSplit(base_subtotal, total - base_subtotal, tax_rate, False)
-    if tax_rate != 0:
-        for subtotal in (base_subtotal, base_subtotal - CENT):
-            exact_tax = subtotal * tax_rate
-            is_tie = abs(exact_tax * 100) % 1 == Decimal("0.5")
-            if subtotal + round_cents(exact_tax) == total and not is_tie:
-                result = TaxSplit(subtotal, round_cents(exact_tax), tax_rate, True)
-                break
-    return result
+    exact_tax = base_subtotal * tax_rate
+    is_tie = abs(exact_tax * 100) % 1 == Decimal("0.5")
+    is_formula_safe = (
+        tax_rate != 0 and base_subtotal + round_cents(exact_tax) == total and not is_tie
+    )
+    return TaxSplit(base_subtotal, total - base_subtotal, tax_rate, is_formula_safe)
 
 
 def format_amount(value: Decimal | str) -> str:
