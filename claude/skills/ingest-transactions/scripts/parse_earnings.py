@@ -31,6 +31,8 @@ ACCOUNT_ORDER = {
     "Dental": "Aetna",
     "GTL": "Unum",
     "LTD Imputed Inc": "Unum",
+    "401K-Pretax": "T. Rowe Price 401(k)",
+    "Roth": "T. Rowe Price 401(k)",
 }
 IMPUTED_INCOME_ITEMS = {"GTL", "LTD Imputed Inc"}
 LEFT_TABLES = ["earnings", "pre_tax_deductions"]
@@ -193,7 +195,7 @@ def main() -> None:
         type=int,
         help="sheet row the first output row will be pasted into",
     )
-    parser.add_argument("--first-column", default="A")
+    parser.add_argument("--first-column")
     parser.add_argument(
         "--json",
         action="store_true",

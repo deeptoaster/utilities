@@ -32,7 +32,20 @@ In general, the user will paste a table containing transaction data from the
 account's website, which will be in whatever format that account's institution
 uses. The user should also provide you with the name of the account to
 associate with the transactions. Income arrives as ADP earnings statement PDFs
-(e.g. `earnings_2026-09-25.pdf`); see **Earnings statements** below.
+(e.g. `earnings_2026-09-25.pdf`); see **Earnings statements** below. Credit
+card statements may also arrive as PDFs (e.g. `October 13.pdf`, a Citi
+statement); extract their text with `pdftotext -layout`. In the transaction
+lines, the first two columns are the transaction date and the post date (a line
+with one date has only the post date), followed by the statement descriptor and
+the amount.
+
+The user may also provide a CSV exported from the sheet (e.g.
+`Q3 2026 - Transactions.csv`) to compare the output against. It has the same
+column layout as the sheet, contains every account rather than only the one
+being ingested, shows negative amounts in parentheses, and exports computed
+values rather than formulas. It was entered by hand, so a disagreement may be a
+typo in the sheet rather than an error in the output: report every disagreement
+instead of silently matching the sheet.
 
 # Output format
 
@@ -41,8 +54,10 @@ rows, so it is produced as tab-separated values (TSV) with no header row.
 Google Sheets splits pasted tab-separated text into cells and evaluates pasted
 cells that begin with `=` as formulas; pasted CSV would land in a single
 column. Because the formulas use A1 references, ask the user for the sheet row
-into which the first output row will be pasted (`--first-row`); the Date column
-is assumed to be column A unless the user says otherwise.
+into which the first output row will be pasted (`--first-row`). The three
+ledgers sit side by side in one sheet per quarter, with the Date column of
+Expenses in column B, Income in column K, and Transfers in column R; the
+scripts default to these columns and `--first-column` overrides them.
 
 Always produce the TSV with the scripts in `scripts/` (see **Scripts**), which
 do all arithmetic and formula generation. Present each ledger in two forms: a
@@ -93,7 +108,8 @@ The income table consists of six columns:
     the provider paid by a payroll deduction)
 3.  Credit account (the source of the income)
 4.  Subtotal (total plus tax)
-5.  Tax (zero unless the user indicates otherwise)
+5.  Tax (zero unless the user indicates otherwise; negative for a tax refund,
+    e.g. from `IRS`)
 6.  Total (formula `=<Subtotal cell>-<Tax cell>`; it must evaluate to the
     amount received)
 
@@ -106,7 +122,7 @@ dated with the advice date and credited to the employer:
   withheld, tax = taxes withheld;
 - one row per non-zero deduction (pre- and post-tax) and per imputed-income
   earnings item (`GTL`, `LTD Imputed Inc`), debited to the provider (`VSP`,
-  `Aetna`, `Unum`, ...) with zero tax.
+  `Aetna`, `Unum`, `T. Rowe Price 401(k)`, ...) with zero tax.
 
 `scripts/parse_earnings.py` does this and checks that earnings total − taxes −
 those items = net pay, refusing to produce output otherwise. The account
@@ -143,10 +159,10 @@ whole tables) computes:
 1.  subtotal = ROUND(total / (1 + tax rate), 2)
 2.  tax = ROUND(subtotal × tax rate, 2)
 3.  If subtotal + tax = total, the Tax cell is the formula
-    `=ROUND(<Subtotal cell>*<tax rate>,2)`. Subtotals one cent either side of
-    the back-calculated one are also tried.
-4.  Otherwise the subtotal stands and the Tax cell is the plain number total −
-    subtotal.
+    `=ROUND(<Subtotal cell>*<tax rate>,2)`. A subtotal one cent lower is also
+    tried.
+4.  Otherwise the subtotal stands and the residual goes to the tax: the Tax
+    cell is the plain number total − subtotal.
 
 A half-cent tie in step 2 is treated as unsafe for a formula, because
 spreadsheet floating point may round it the other way. When the tax amount is

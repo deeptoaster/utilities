@@ -3,7 +3,7 @@
 
 Usage:
     ledger.py split TOTAL TAX_RATE
-    ledger.py format {expenses,income,transfers} ROWS.json --first-row N [--first-column A] [--header]
+    ledger.py format {expenses,income,transfers} ROWS.json --first-row N [--first-column B] [--header]
 
 ROWS.json is a list of objects. Common keys: date ("25 Sep" or "2026-09-25"), debit, credit.
     expenses:  category, total, and one of tax_rate (e.g. "0.08875") or tax (explicit amount);
@@ -21,7 +21,7 @@ import sys
 from dataclasses import dataclass
 from datetime import date
 from decimal import ROUND_CEILING, ROUND_FLOOR, ROUND_HALF_UP, Decimal
-from typing import Union
+from typing import Optional, Union
 
 CENT = Decimal("0.01")
 
@@ -39,6 +39,8 @@ COLUMNS = {
     "income": ["Date", "Debit account", "Credit account", "Subtotal", "Tax", "Total"],
     "transfers": ["Date", "Debit account", "Credit account", "Total", "Cash back"],
 }
+
+FIRST_COLUMNS = {"expenses": "B", "income": "K", "transfers": "R"}
 
 InputRow = dict[str, Union[str, bool]]
 Row = dict[str, str]
@@ -61,13 +63,13 @@ def split_total(total: Decimal | str, tax_rate: Decimal | str) -> TaxSplit:
 
     The tax is formula-safe when ROUND(subtotal * tax_rate, 2) reproduces it exactly and
     is not a half-cent tie (which spreadsheets may round differently from Decimal).
-    Subtotals one cent either side of the back-calculated one are tried before giving up.
+    A subtotal one cent lower is also tried; otherwise the residual goes to the tax.
     """
     total, tax_rate = Decimal(total), Decimal(tax_rate)
     base_subtotal = round_cents(total / (1 + tax_rate))
     result = TaxSplit(base_subtotal, total - base_subtotal, tax_rate, False)
     if tax_rate != 0:
-        for subtotal in (base_subtotal, base_subtotal - CENT, base_subtotal + CENT):
+        for subtotal in (base_subtotal, base_subtotal - CENT):
             exact_tax = subtotal * tax_rate
             is_tie = abs(exact_tax * 100) % 1 == Decimal("0.5")
             if subtotal + round_cents(exact_tax) == total and not is_tie:
@@ -174,14 +176,13 @@ def format_rows(
     ledger: str,
     rows: list[InputRow],
     first_row: int,
-    first_column: str = "A",
+    first_column: Optional[str] = None,
     header: bool = False,
 ) -> str:
+    column = first_column or FIRST_COLUMNS[ledger]
     lines = ["\t".join(COLUMNS[ledger])] if header else []
     for offset, row in enumerate(expand_dates(rows)):
-        lines.append(
-            "\t".join(build_cells(ledger, row, first_row + offset, first_column))
-        )
+        lines.append("\t".join(build_cells(ledger, row, first_row + offset, column)))
     return "\n".join(lines) + "\n"
 
 
@@ -212,7 +213,8 @@ def main() -> None:
         help="sheet row the first output row will be pasted into",
     )
     format_parser.add_argument(
-        "--first-column", default="A", help="sheet column of the Date column"
+        "--first-column",
+        help="sheet column of the Date column (default: where the ledger sits in the sheet)",
     )
     format_parser.add_argument("--header", action="store_true")
     arguments = parser.parse_args()
