@@ -10,14 +10,15 @@ ROWS.json is a list of objects. Common keys: date ("25 Sep" or "2026-09-25"), de
                cash_back (integer percent), and is_date (split into a normal half and a Gifts half)
     income:    subtotal or total, optional tax (default 0)
     transfers: total, optional cash_back
-Amounts should be given as strings so that they are read exactly.
+Amounts should be given as strings so that they are read exactly. The accounts referenced by the
+output (not vendors or income sources) are listed on stderr for the user to check.
 """
 
 from __future__ import annotations
 
-import argparse
 import json
 import sys
+from argparse import ArgumentParser, RawDescriptionHelpFormatter
 from dataclasses import dataclass
 from datetime import date
 from decimal import ROUND_CEILING, ROUND_DOWN, ROUND_FLOOR, ROUND_HALF_UP, Decimal
@@ -41,6 +42,11 @@ COLUMNS = {
 }
 
 FIRST_COLUMNS = {"expenses": "B", "income": "K", "transfers": "R"}
+ACCOUNT_KEYS = {
+    "expenses": ["credit"],
+    "income": ["debit"],
+    "transfers": ["debit", "credit"],
+}
 
 InputRow = dict[str, Union[str, bool]]
 Row = dict[str, str]
@@ -186,14 +192,20 @@ def format_rows(
     return "\n".join(lines) + "\n"
 
 
+def report_accounts(ledger: str, rows: list[InputRow]) -> None:
+    """List on stderr the accounts the output references, excluding vendors and income sources."""
+    accounts = sorted({str(row[key]) for row in rows for key in ACCOUNT_KEYS[ledger]})
+    print(f"Accounts referenced: {', '.join(accounts)}", file=sys.stderr)
+
+
 def load_rows(path: str) -> list[InputRow]:
     with open(path) if path != "-" else sys.stdin as handle:
         return json.load(handle, parse_float=str, parse_int=str)
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(
-        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
+    parser = ArgumentParser(
+        description=__doc__, formatter_class=RawDescriptionHelpFormatter
     )
     subparsers = parser.add_subparsers(dest="command", required=True)
     split_parser = subparsers.add_parser(
@@ -224,15 +236,17 @@ def main() -> None:
             f"subtotal={split.subtotal} tax={split.tax} formula_safe={split.is_formula_safe}"
         )
     else:
+        rows = load_rows(arguments.rows)
         sys.stdout.write(
             format_rows(
                 arguments.ledger,
-                load_rows(arguments.rows),
+                rows,
                 arguments.first_row,
                 arguments.first_column,
                 arguments.header,
             )
         )
+        report_accounts(arguments.ledger, rows)
 
 
 if __name__ == "__main__":

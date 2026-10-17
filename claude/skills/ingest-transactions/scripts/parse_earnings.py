@@ -13,16 +13,16 @@ and reported on stderr.
 
 from __future__ import annotations
 
-import argparse
 import json
 import re
 import subprocess
 import sys
+from argparse import ArgumentParser, RawDescriptionHelpFormatter
 from decimal import Decimal
 from pathlib import Path
 from typing import TypedDict
 
-from ledger import Row, format_rows
+from ledger import Row, format_rows, report_accounts
 
 DEPOSIT_ACCOUNTS = {"6945": "Citi Savings"}
 EMPLOYERS = {"CoStar Realty Information, Inc.": "CoStar"}
@@ -192,8 +192,8 @@ def build_rows(statement: Statement) -> list[Row]:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(
-        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
+    parser = ArgumentParser(
+        description=__doc__, formatter_class=RawDescriptionHelpFormatter
     )
     parser.add_argument("statements", nargs="+", type=Path)
     parser.add_argument(
@@ -224,6 +224,7 @@ def main() -> None:
         sys.stdout.write(
             format_rows("income", rows, arguments.first_row, arguments.first_column)
         )
+        report_accounts("income", rows)
 
 
 if __name__ == "__main__":

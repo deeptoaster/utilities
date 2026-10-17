@@ -57,7 +57,11 @@ Always produce the TSV with the scripts (see **Scripts**). Present each ledger
 as a Markdown table in chat for review and pipe the raw TSV to `pbcopy` so that
 the user can paste it with a single cell selected. If the clipboard is
 unavailable, write a `.tsv` file in the working directory instead; copying a
-table out of the chat does not preserve tabs.
+table out of the chat does not preserve tabs. Also report the list of accounts
+the output references, which the scripts print on stderr, so that the user can
+check that every account that should be tracked is being tracked. Vendors and
+income sources are not accounts: the list covers the credit account of
+expenses, the debit account of income, and both sides of transfers.
 
 ## Expense table
 
