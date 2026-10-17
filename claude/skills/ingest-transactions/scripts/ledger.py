@@ -21,7 +21,7 @@ import sys
 from dataclasses import dataclass
 from datetime import date
 from decimal import ROUND_CEILING, ROUND_FLOOR, ROUND_HALF_UP, Decimal
-from typing import Optional, Union
+from typing import Union
 
 CENT = Decimal("0.01")
 
@@ -66,13 +66,13 @@ def split_total(total: Decimal | str, tax_rate: Decimal | str) -> TaxSplit:
     Otherwise the residual goes to the tax.
     """
     total, tax_rate = Decimal(total), Decimal(tax_rate)
-    base_subtotal = round_cents(total / (1 + tax_rate))
-    exact_tax = base_subtotal * tax_rate
+    subtotal = round_cents(total / (1 + tax_rate))
+    exact_tax = subtotal * tax_rate
     is_tie = abs(exact_tax * 100) % 1 == Decimal("0.5")
     is_formula_safe = (
-        tax_rate != 0 and base_subtotal + round_cents(exact_tax) == total and not is_tie
+        tax_rate != 0 and subtotal + round_cents(exact_tax) == total and not is_tie
     )
-    return TaxSplit(base_subtotal, total - base_subtotal, tax_rate, is_formula_safe)
+    return TaxSplit(subtotal, total - subtotal, tax_rate, is_formula_safe)
 
 
 def format_amount(value: Decimal | str) -> str:
@@ -84,9 +84,8 @@ def format_date(value: str) -> str:
     return f"{parsed.day} {parsed:%b}" if parsed else value
 
 
-def format_cash_back(value: str | int) -> str:
-    text = str(value)
-    return text if text.endswith("%") else f"{int(Decimal(text))}%"
+def format_cash_back(value: str) -> str:
+    return value if value.endswith("%") else f"{int(Decimal(value))}%"
 
 
 def column_letter(ledger: str, column_name: str, first_column: str) -> str:
@@ -165,7 +164,7 @@ def build_cells(ledger: str, row: Row, sheet_row: int, first_column: str) -> lis
     else:
         cells.append(format_amount(row["total"]))
     if "Cash back" in COLUMNS[ledger]:
-        cells.append(format_cash_back(row.get("cash_back", 0)))
+        cells.append(format_cash_back(row.get("cash_back", "0")))
     return cells
 
 
@@ -173,7 +172,7 @@ def format_rows(
     ledger: str,
     rows: list[InputRow],
     first_row: int,
-    first_column: Optional[str] = None,
+    first_column: str | None = None,
     header: bool = False,
 ) -> str:
     column = first_column or FIRST_COLUMNS[ledger]

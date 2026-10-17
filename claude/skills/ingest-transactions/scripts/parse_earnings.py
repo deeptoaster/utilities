@@ -113,9 +113,11 @@ def parse_statement(pdf_path: Path) -> Statement:
         ),
         None,
     )
-    if not (advice_date and deposit and employer):
+    earnings_total = tables["earnings"].pop("Earnings Total", None)
+    taxes_total = tables["employee_taxes"].pop("Taxes Total", None)
+    if not (advice_date and deposit and employer and earnings_total and taxes_total):
         raise SystemExit(
-            f"{pdf_path}: could not find advice date, deposit line, or employer"
+            f"{pdf_path}: could not find advice date, deposit line, employer, or totals"
         )
     month, day, year = advice_date.groups()
     return {
@@ -123,8 +125,8 @@ def parse_statement(pdf_path: Path) -> Statement:
         "deposit_suffix": deposit.group(1),
         "net_pay": Decimal(deposit.group(2).replace(",", "")),
         "employer": employer,
-        "earnings_total": tables["earnings"].pop("Earnings Total"),
-        "taxes_total": tables["employee_taxes"].pop("Taxes Total"),
+        "earnings_total": earnings_total,
+        "taxes_total": taxes_total,
         "imputed_income": {
             key: value
             for key, value in tables["earnings"].items()
@@ -153,29 +155,33 @@ def build_rows(statement: Statement) -> list[Row]:
         statement["deposit_suffix"],
         f"TODO: account ending {statement['deposit_suffix']}",
     )
-    rows = [
-        {
-            "date": statement["date"],
-            "debit": deposit_account,
-            "credit": statement["employer"],
-            "subtotal": str(statement["net_pay"] + statement["taxes_total"]),
-            "tax": str(statement["taxes_total"]),
-        }
-    ]
     ordered = [
         description for description in ACCOUNT_ORDER if description in nonzero
     ] + [description for description in nonzero if description not in ACCOUNT_ORDER]
-    for description in ordered:
-        account = ACCOUNT_ORDER.get(description, f"TODO: {description}")
-        rows.append(
-            {
-                "date": statement["date"],
-                "debit": account,
-                "credit": statement["employer"],
-                "subtotal": str(nonzero[description]),
-                "tax": "0",
-            }
+    entries = [
+        (
+            deposit_account,
+            statement["net_pay"] + statement["taxes_total"],
+            statement["taxes_total"],
         )
+    ] + [
+        (
+            ACCOUNT_ORDER.get(description, f"TODO: {description}"),
+            nonzero[description],
+            Decimal(0),
+        )
+        for description in ordered
+    ]
+    rows = [
+        {
+            "date": statement["date"],
+            "debit": account,
+            "credit": statement["employer"],
+            "subtotal": str(subtotal),
+            "tax": str(tax),
+        }
+        for account, subtotal, tax in entries
+    ]
     todo = [row["debit"] for row in rows if row["debit"].startswith("TODO")]
     if todo:
         print(
@@ -195,7 +201,10 @@ def main() -> None:
         type=int,
         help="sheet row the first output row will be pasted into",
     )
-    parser.add_argument("--first-column")
+    parser.add_argument(
+        "--first-column",
+        help="sheet column of the Date column (default: where Income sits in the sheet)",
+    )
     parser.add_argument(
         "--json",
         action="store_true",
