@@ -21,10 +21,8 @@ Transfers) whose entries are aggregated into accounts including:
 - balances on Venmo and other payment systems
 - friends (balance receivable minus payable)
 
-The user needs to ingest data from numerous sources, including Splitwise
-records, bank and credit card statements, earnings statement PDFs, and manually
-recorded cash transactions. Your goal is to generate pristine and accurate rows
-from these transactions that can be pasted directly into the user's ledgers.
+Your goal is to turn transaction data from many sources into accurate rows that
+can be pasted directly into these ledgers.
 
 # Input format
 
@@ -34,10 +32,7 @@ uses. The user should also provide you with the name of the account to
 associate with the transactions. Income arrives as ADP earnings statement PDFs
 (e.g. `earnings_2026-09-25.pdf`); see **Earnings statements** below. Credit
 card statements may also arrive as PDFs (e.g. `October 13.pdf`, a Citi
-statement); extract their text with `pdftotext -layout`. In the transaction
-lines, the first two columns are the transaction date and the post date (a line
-with one date has only the post date), followed by the statement descriptor and
-the amount.
+statement); extract their text with `pdftotext -layout`.
 
 The user may also provide a CSV exported from the sheet (e.g.
 `Q3 2026 - Transactions.csv`) to compare the output against. It has the same
@@ -50,25 +45,19 @@ instead of silently matching the sheet.
 # Output format
 
 The output is pasted directly into the Google Sheet, interleaved with existing
-rows, so it is produced as tab-separated values (TSV) with no header row.
-Google Sheets splits pasted tab-separated text into cells and evaluates pasted
-cells that begin with `=` as formulas; pasted CSV would land in a single
-column. Because the formulas use A1 references, ask the user for the sheet row
-into which the first output row will be pasted (`--first-row`). The three
+rows, so it is tab-separated values (TSV) with no header row: Google Sheets
+splits pasted tabs into cells and evaluates pasted cells that begin with `=` as
+formulas. Because the formulas use A1 references, ask the user for the sheet
+row into which the first output row will be pasted (`--first-row`). The three
 ledgers sit side by side in one sheet per quarter, with the Date column of
 Expenses in column B, Income in column K, and Transfers in column R; the
 scripts default to these columns and `--first-column` overrides them.
 
-Always produce the TSV with the scripts in `scripts/` (see **Scripts**), which
-do all arithmetic and formula generation. Present each ledger in two forms: a
-Markdown table in chat for review, and the raw TSV piped to `pbcopy` so that
-the user can paste it straight into the sheet with a single cell selected. If
-the clipboard is unavailable, write the TSV to a `.tsv` file in the working
-directory and point the user at it; copying a table out of the chat does not
-preserve tabs reliably.
-
-Output consists of one or more of the three tables below, each with their own
-specific format.
+Always produce the TSV with the scripts (see **Scripts**). Present each ledger
+as a Markdown table in chat for review and pipe the raw TSV to `pbcopy` so that
+the user can paste it with a single cell selected. If the clipboard is
+unavailable, write a `.tsv` file in the working directory instead; copying a
+table out of the chat does not preserve tabs.
 
 ## Expense table
 
@@ -132,7 +121,7 @@ before the output is presented.
 
 ## Transfer table
 
-Purchases on behalf of friends, for which the user can reasonably expect to
+Purchases on behalf of friends, for which the user can reasonably expect to be
 paid back, should go in the transfer table. So should transfers between the
 user's accounts, such as credit card payments, and transfers between the user
 and other users, such as settling of debts.
@@ -152,9 +141,7 @@ The transfer table consists of five columns:
 Record location-dependent US sales tax, rounded to the nearest cent. For
 foreign transactions, record 0.
 
-Given a total and a tax rate, `split_total` in `scripts/ledger.py`
-(`ledger.py split TOTAL RATE` for one value; `ledger.py format` applies it to
-whole tables) computes:
+Given a total and a tax rate, `scripts/ledger.py` computes:
 
 1.  subtotal = ROUND(total / (1 + tax rate), 2)
 2.  tax = ROUND(subtotal × tax rate, 2)
@@ -172,16 +159,16 @@ recorded as a plain number.
 Purchases at grocery stores are usually not taxed, although this may vary by
 jurisdiction.
 
-### Brick-and mortar purchases (restaurants, bars, in-person retail, etc.)
+### Brick-and-mortar purchases (restaurants, bars, in-person retail, etc.)
 
 Apply the flat sales tax rate for the physical location of purchase. Some
 common tax rates:
 
-    -   New York City: 8.875%
-    -   San Francisco: 8.625%
-    -   Oregon: 0%
-    -   Boston: 7%
-    -   Sunnyvale: 9.125%
+- New York City: 8.875%
+- San Francisco: 8.625%
+- Oregon: 0%
+- Boston: 7%
+- Sunnyvale: 9.125%
 
 ### Online purchases (flights, e-retailers, etc.)
 
@@ -199,8 +186,7 @@ Discounts are not taxed.
 
 The cash back column contains the percentage of the total cost the user can
 expect to receive back on the transaction, whether it's an expense or transfer,
-counting credit card points and merchant offer rewards. See below for a
-description of merchant offers.
+counting credit card points and merchant offer rewards.
 
 If there is a cash back column (which may be indicated as "rewards" or
 "points") in the input table, compute cash back = ((points / 100 + merchant
@@ -265,8 +251,8 @@ Unless otherwise specified, cash back values are as below.
 
 ## Vendor name normalization
 
-Statement descriptors often reflect the payment processor (e.g. "SQ _", "TST_",
-"Too Good To Go Inc.") rather than the actual establishment. Use the real
+Statement descriptors often reflect the payment processor (e.g. `SQ *`, `TST*`,
+`Too Good To Go Inc.`) rather than the actual establishment. Use the real
 business name as it would appear on Google Maps, in ASCII with no diacritics.
 
 Some statement descriptors are systematically wrong and should always be
@@ -290,7 +276,7 @@ The snippet alone contains all needed information: the restaurant name appears
 as "Your order for [Name] has been successfully placed!" and the transaction
 date immediately follows as the collection date. No full email fetch is needed.
 If multiple TGTG charges fall on the same date, distinguish them first by
-amount, then by collection time..
+amount, then by collection time.
 
 TGTG charges ending in `.99` are typically untaxed digital transactions; all
 others use the standard rate for the pickup location (usually NYC).
@@ -306,10 +292,10 @@ For brick-and-mortar transactions, cross-reference Google Calendar to find the
 actual visit date:
 
 1.  At the start of ingestion, fetch the full calendar event list between two
-    days before the first earliest post date in the batch (`startTime`) and the
-    last post date in the batch (`endTime`), using
-    `Google Calendar:list_events` with `orderBy: startTime`. Fetch from the
-    three calendars Default, Job, and School.
+    days before the earliest post date in the batch (`startTime`) and the last
+    post date in the batch (`endTime`), using `Google Calendar:list_events`
+    with `orderBy: startTime`. Fetch from the three calendars Default, Job, and
+    School.
 2.  For each brick-and-mortar transaction, find the calendar event whose
     location or summary matches the vendor and whose start date is within two
     days before the post date, if available. Use that event's start date as the
@@ -329,9 +315,8 @@ unclear about the data, all questions should be compiled and asked to the user
 together. Wait until all questions are resolved before presenting the output
 table(s).
 
-Numerical accuracy is absolutely essential. Never compute amounts by hand:
-write the rows as JSON and let `scripts/ledger.py` compute subtotals, taxes,
-date splits, and formulas.
+Never compute amounts by hand: write the rows as JSON and let
+`scripts/ledger.py` compute subtotals, taxes, date splits, and formulas.
 
 If corrections are requested, confirm with the user that all corrections have
 been made before presenting the output table(s) again.
@@ -353,9 +338,8 @@ negative amounts.
 
 # Scripts
 
-Both scripts live in `scripts/` next to this file and take `--first-row N` (the
-sheet row of the first pasted row) and optionally `--first-column` (default
-`A`).
+Both scripts live in `scripts/` next to this file and take `--first-row N` and
+optionally `--first-column`.
 
 - `ledger.py` (standard library only):
   `python3 scripts/ledger.py format LEDGER rows.json --first-row N | pbcopy`.
@@ -371,28 +355,3 @@ sheet row of the first pasted row) and optionally `--first-column` (default
   `python3 scripts/parse_earnings.py --first-row N earnings_*.pdf | pbcopy`.
   Pass `--json` instead to get `ledger.py` income rows for inspection or
   merging with other income.
-
-Example expense rows:
-
-```json
-[
-    {
-        "date": "2026-10-03",
-        "debit": "Amity Hall",
-        "credit": "Prestige Card",
-        "category": "Dining",
-        "total": "54.43",
-        "tax_rate": "0.08875",
-        "cash_back": 5
-    },
-    {
-        "date": "5 Oct",
-        "debit": "Delta Air Lines",
-        "credit": "Prestige Card",
-        "category": "Transportation",
-        "total": "312.60",
-        "tax": "23.40",
-        "cash_back": 5
-    }
-]
-```
