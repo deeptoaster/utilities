@@ -38,7 +38,7 @@ gsettings set com.github.johnfactotum.Foliate.viewer.view max-inline-size 960
 gsettings set com.github.johnfactotum.Foliate.viewer.view theme solarized
 gsettings set com.github.johnfactotum.Foliate.window fullscreened true
 gsettings set org.gnome.DejaDup backend google
-gsettings set org.gnome.DejaDup include-list "['/media/$USER/ZERO/LiberKey/MyDocuments', '/media/$USER/ONE/LiberKey/MyDocuments']"
+gsettings set org.gnome.DejaDup include-list "['/run/media/$USER/ZERO/LiberKey/MyDocuments', '/run/media/$USER/ONE/LiberKey/MyDocuments']"
 gsettings set org.gnome.DejaDup periodic true
 gsettings set org.gnome.DejaDup.Google folder deja-dup
 gsettings set org.gnome.settings-daemon.plugins.media-keys custom-keybindings "['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/']"

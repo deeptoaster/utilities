@@ -5,5 +5,5 @@ file:///home/$USER/Pictures
 file:///home/$USER/Public
 file:///home/$USER/Templates
 file:///home/$USER/Videos
-file:///media/$USER/ZERO/LiberKey/MyDocuments
-file:///media/$USER/ONE/LiberKey/MyDocuments
+file:///run/media/$USER/ZERO/LiberKey/MyDocuments
+file:///run/media/$USER/ONE/LiberKey/MyDocuments
