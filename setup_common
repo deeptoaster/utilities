@@ -25,6 +25,9 @@ ln -fs $(pwd)/config/gitignore ~/.gitignore
 ln -fs $(pwd)/config/latexindent.yaml ~/latexindent.yaml
 ln -fs $(pwd)/config/pam_environment ~/.pam_environment
 ln -fs $(pwd)/config/pyrightconfig.json ~/pyrightconfig.json
+mkdir -p ~/.claude/skills
+ln -fs $(pwd)/claude/CLAUDE.md ~/.claude/CLAUDE.md
+ln -fs $(pwd)/claude/skills/ingest-transactions ~/.claude/skills/ingest-transactions
 mkdir -p ~/.lua/scripts
 curl -fLo ~/.lua/scripts/terminal.lua -S https://raw.githubusercontent.com/Orange-OpenSource/pandoc-terminal-writer/master/terminal.lua
 mkdir -p ~/.vim/after/syntax ~/.vim/colors ~/.vim/pack ~/.vim/plugin ~/.config/nvim
